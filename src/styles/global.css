@@ -1,0 +1,166 @@
+:root {
+  /* Base */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a2e;
+  --text-primary: #e0e0e8;
+  --text-secondary: #8888a0;
+
+  /* Section accent colors */
+  --cyan: #00e5ff;
+  --pink: #ff2d7b;
+  --gold: #ffc107;
+  --green: #00e676;
+  --purple: #b388ff;
+
+  /* Typography */
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Sizing for classroom readability */
+  --slide-title: clamp(2.5rem, 6vw, 5rem);
+  --slide-subtitle: clamp(1.5rem, 3.5vw, 2.8rem);
+  --slide-body: clamp(1.2rem, 2.5vw, 2rem);
+  --slide-small: clamp(0.9rem, 1.5vw, 1.2rem);
+  --slide-huge: clamp(4rem, 12vw, 10rem);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glow text utilities */
+.glow-cyan { text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan); color: var(--cyan); }
+.glow-pink { text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink); color: var(--pink); }
+.glow-gold { text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold); color: var(--gold); }
+.glow-green { text-shadow: 0 0 20px var(--green), 0 0 40px var(--green); color: var(--green); }
+.glow-purple { text-shadow: 0 0 20px var(--purple), 0 0 40px var(--purple); color: var(--purple); }
+
+/* Grammar highlight styles */
+.grammar-modal {
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: underline;
+  text-decoration-color: var(--cyan);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+.grammar-purpose {
+  font-weight: 700;
+  color: var(--pink);
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+/* Keyframe animations */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes draw-line {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes number-count {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Particle canvas overlay (for ambient effects) */
+.particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Slide transition wrapper */
+.slide-enter {
+  animation: fade-in 0.5s ease forwards;
+}
+
+/* Responsive helpers */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Game canvas styles */
+.game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* Scrollbar hide */
+::-webkit-scrollbar {
+  display: none;
+}
