@@ -9,6 +9,8 @@ export default defineSchema({
         type: v.union(
           v.literal("dropTest_vacuum"),
           v.literal("dropTest_air"),
+          v.literal("dropShow_vacuum"),
+          v.literal("dropShow_air"),
           v.literal("moveSpotter"),
           v.literal("rooftopRun"),
           v.literal("planetaryParkour"),

@@ -36,23 +36,24 @@ export function generateAhead(
   config: GameConfig
 ): void {
   if (platforms.length === 0) return;
-  const lastPlatform = platforms[platforms.length - 1];
   const generateUntil = cameraX + canvasWidth * 3;
 
-  while (lastPlatform.x + lastPlatform.width < generateUntil) {
+  let last = platforms[platforms.length - 1];
+  while (last.x + last.width < generateUntil) {
     const gap = config.gapMinWidth + Math.random() * (config.gapMaxWidth - config.gapMinWidth);
     const width = config.platformMinWidth + Math.random() * (config.platformMaxWidth - config.platformMinWidth);
     const baseY = config.canvasHeight * 0.75;
     const yVariation = (Math.random() - 0.5) * 50;
 
     const newPlatform: Platform = {
-      x: lastPlatform.x + lastPlatform.width + gap,
+      x: last.x + last.width + gap,
       y: baseY + yVariation,
       width,
       height: 400,
     };
 
     platforms.push(newPlatform);
+    last = newPlatform;
   }
 }
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import LookUp from "./components/LookUp";
 import WaitingScreen from "./components/WaitingScreen";
 import DropTest from "./components/DropTest";
-import MoveSpotter from "./components/MoveSpotter";
+import VideoQuiz from "./components/VideoQuiz";
 import PollView from "./components/PollView";
 import RooftopRun from "../games/RooftopRun";
 import PlanetaryParkour from "../games/PlanetaryParkour";
@@ -29,6 +29,8 @@ export default function StudentView() {
 
   const event = session.activeEvent;
   if (!event) {
+    // First slide (title) = play while waiting. Other slides = look at the screen.
+    if (session.slideIndex === 0) return <WaitingScreen />;
     return <LookUp />;
   }
 
@@ -37,10 +39,14 @@ export default function StudentView() {
       return <LookUp />;
     case "dropTest_vacuum":
       return <DropTest mode="vacuum" />;
+    case "dropShow_vacuum":
+      return <DropTest mode="vacuum" showDrop />;
     case "dropTest_air":
       return <DropTest mode="air" />;
+    case "dropShow_air":
+      return <DropTest mode="air" showDrop />;
     case "moveSpotter":
-      return <MoveSpotter />;
+      return <VideoQuiz />;
     case "rooftopRun":
       return <RooftopRun />;
     case "planetaryParkour":

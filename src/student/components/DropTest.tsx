@@ -1,7 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface DropTestProps {
   mode: "vacuum" | "air";
+  showDrop?: boolean;
 }
 
 interface DropObject {
@@ -25,7 +26,7 @@ function ObjectIcon({ id, color }: { id: string; color: string }) {
     case "feather":
       return (
         <div style={{
-          width: 40, height: 12, borderRadius: "50%",
+          width: 50, height: 15, borderRadius: "50%",
           background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
           boxShadow: `0 0 10px ${color}`,
           transform: "rotate(-15deg)",
@@ -34,43 +35,43 @@ function ObjectIcon({ id, color }: { id: string; color: string }) {
     case "bowling":
       return (
         <div style={{
-          width: 36, height: 36, borderRadius: "50%",
+          width: 44, height: 44, borderRadius: "50%",
           background: `radial-gradient(circle at 40% 40%, #888, ${color})`,
           position: "relative",
         }}>
-          <div style={{ position: "absolute", top: 10, left: 12, width: 4, height: 4, borderRadius: "50%", background: "#333" }} />
-          <div style={{ position: "absolute", top: 10, left: 20, width: 4, height: 4, borderRadius: "50%", background: "#333" }} />
-          <div style={{ position: "absolute", top: 16, left: 16, width: 4, height: 4, borderRadius: "50%", background: "#333" }} />
+          <div style={{ position: "absolute", top: 12, left: 15, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
+          <div style={{ position: "absolute", top: 12, left: 24, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
+          <div style={{ position: "absolute", top: 20, left: 20, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
         </div>
       );
     case "cat":
       return (
-        <div style={{ position: "relative", width: 36, height: 36 }}>
+        <div style={{ position: "relative", width: 44, height: 44 }}>
           {/* Ears */}
           <div style={{ position: "absolute", left: 4, top: 0, width: 0, height: 0,
-            borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-            borderBottom: `10px solid ${color}` }} />
+            borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
+            borderBottom: `12px solid ${color}` }} />
           <div style={{ position: "absolute", right: 4, top: 0, width: 0, height: 0,
-            borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-            borderBottom: `10px solid ${color}` }} />
+            borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
+            borderBottom: `12px solid ${color}` }} />
           {/* Head */}
-          <div style={{ position: "absolute", top: 6, left: 3, width: 30, height: 26, borderRadius: "50%", background: color }} />
+          <div style={{ position: "absolute", top: 7, left: 4, width: 36, height: 32, borderRadius: "50%", background: color }} />
           {/* Eyes */}
-          <div style={{ position: "absolute", top: 15, left: 11, width: 5, height: 5, borderRadius: "50%", background: "#0a0a0f" }} />
-          <div style={{ position: "absolute", top: 15, left: 20, width: 5, height: 5, borderRadius: "50%", background: "#0a0a0f" }} />
+          <div style={{ position: "absolute", top: 19, left: 13, width: 6, height: 6, borderRadius: "50%", background: "#0a0a0f" }} />
+          <div style={{ position: "absolute", top: 19, left: 25, width: 6, height: 6, borderRadius: "50%", background: "#0a0a0f" }} />
         </div>
       );
     case "brick":
       return (
         <div style={{
-          width: 44, height: 24, background: color, borderRadius: 3,
+          width: 54, height: 30, background: color, borderRadius: 3,
           border: "1px solid rgba(0,0,0,0.3)",
           boxShadow: `inset 0 -2px 0 rgba(0,0,0,0.2)`,
         }} />
       );
     case "human":
       return (
-        <svg width="30" height="40" viewBox="0 0 30 40">
+        <svg width="38" height="50" viewBox="0 0 30 40">
           <circle cx="15" cy="6" r="5" fill={color} />
           <line x1="15" y1="11" x2="15" y2="28" stroke={color} strokeWidth="2" />
           <line x1="15" y1="16" x2="5" y2="22" stroke={color} strokeWidth="2" />
@@ -84,17 +85,20 @@ function ObjectIcon({ id, color }: { id: string; color: string }) {
   }
 }
 
-export default function DropTest({ mode }: DropTestProps) {
+export default function DropTest({ mode, showDrop }: DropTestProps) {
   const [order, setOrder] = useState(() => [...objects].sort(() => Math.random() - 0.5));
   const [dropped, setDropped] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragState, setDragState] = useState<{ index: number; startY: number; currentY: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleDrop = useCallback(() => {
-    setDropped(true);
-    // Show result after animation
-    setTimeout(() => setShowResult(true), mode === "vacuum" ? 2000 : 3000);
-  }, [mode]);
+  // Auto-drop when presenter triggers the show event
+  useEffect(() => {
+    if (showDrop && !dropped) {
+      setDropped(true);
+      setTimeout(() => setShowResult(true), mode === "vacuum" ? 2000 : 3000);
+    }
+  }, [showDrop, dropped, mode]);
 
   const moveItem = (fromIdx: number, toIdx: number) => {
     const newOrder = [...order];
@@ -109,17 +113,17 @@ export default function DropTest({ mode }: DropTestProps) {
       <div style={{
         width: "100vw", height: "100vh", background: "#0a0a0f",
         display: "flex", flexDirection: "column", alignItems: "center",
-        justifyContent: "flex-start", padding: "2rem",
+        justifyContent: "flex-start", padding: "1rem",
       }}>
         <div style={{
-          fontSize: "1.5rem", color: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
+          fontSize: "clamp(1.4rem, 4vw, 2rem)", color: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
           fontWeight: 700, marginBottom: "2rem",
           textShadow: `0 0 15px ${mode === "vacuum" ? "#00e5ff" : "#ff2d7b"}`,
         }}>
           {mode === "vacuum" ? "VACUUM DROP" : "AIR RESISTANCE DROP"}
         </div>
         <div style={{
-          flex: 1, width: "100%", maxWidth: "400px",
+          flex: 1, width: "100%", maxWidth: "min(95vw, 600px)",
           display: "flex", justifyContent: "space-around", alignItems: "flex-start",
           position: "relative",
         }}>
@@ -136,7 +140,7 @@ export default function DropTest({ mode }: DropTestProps) {
                 }}
               >
                 <ObjectIcon id={obj.id} color={obj.color} />
-                <span style={{ fontSize: "0.7rem", color: obj.color }}>{obj.name}</span>
+                <span style={{ fontSize: "0.85rem", color: obj.color }}>{obj.name}</span>
               </div>
             );
           })}
@@ -176,83 +180,127 @@ export default function DropTest({ mode }: DropTestProps) {
   }
 
   // Prediction phase -- drag to reorder
+  const ROW_HEIGHT = 78; // larger cards + slightly smaller gap
+
+  const getDragTargetIndex = (fromIndex: number, deltaY: number) => {
+    const rawTarget = fromIndex + Math.round(deltaY / ROW_HEIGHT);
+    return Math.max(0, Math.min(order.length - 1, rawTarget));
+  };
+
+  const getShiftForIndex = (cardIndex: number) => {
+    if (!dragState) return 0;
+    const dragFrom = dragState.index;
+    const deltaY = dragState.currentY - dragState.startY;
+    const targetIndex = getDragTargetIndex(dragFrom, deltaY);
+    if (dragFrom < targetIndex && cardIndex > dragFrom && cardIndex <= targetIndex) {
+      return -ROW_HEIGHT;
+    }
+    if (dragFrom > targetIndex && cardIndex >= targetIndex && cardIndex < dragFrom) {
+      return ROW_HEIGHT;
+    }
+    return 0;
+  };
+
   return (
     <div style={{
       width: "100vw", height: "100vh", background: "#0a0a0f",
       display: "flex", flexDirection: "column", alignItems: "center",
-      padding: "1.5rem",
+      padding: "1rem",
     }}>
       <div style={{
-        fontSize: "clamp(1.2rem, 3vw, 1.6rem)",
+        fontSize: "clamp(1.4rem, 4vw, 2rem)",
         color: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
-        fontWeight: 700, textAlign: "center", marginBottom: "0.5rem",
+        fontWeight: 700, textAlign: "center", marginBottom: "0.3rem",
         textShadow: `0 0 15px ${mode === "vacuum" ? "#00e5ff" : "#ff2d7b"}`,
       }}>
         {mode === "vacuum" ? "VACUUM DROP TEST" : "AIR RESISTANCE DROP TEST"}
       </div>
       <div style={{
-        fontSize: "1rem", color: "var(--text-secondary)", marginBottom: "1.5rem", textAlign: "center",
+        fontSize: "1rem", color: "var(--text-secondary)", marginBottom: "0.8rem", textAlign: "center",
       }}>
-        Tap cards to reorder: #1 = hits ground first
+        Drag to reorder: #1 = hits ground first
       </div>
-      <div style={{
-        flex: 1, width: "100%", maxWidth: "400px",
-        display: "flex", flexDirection: "column", gap: "0.7rem",
-      }}>
-        {order.map((obj, idx) => (
-          <div
-            key={obj.id}
-            onClick={() => {
-              if (dragIdx === null) {
-                setDragIdx(idx);
-              } else {
-                moveItem(dragIdx, idx);
-                setDragIdx(null);
-              }
-            }}
-            style={{
-              display: "flex", alignItems: "center", gap: "1rem",
-              padding: "0.8rem 1rem",
-              background: dragIdx === idx ? `${obj.color}20` : "var(--bg-card)",
-              borderRadius: "12px",
-              border: dragIdx === idx ? `2px solid ${obj.color}` : "2px solid transparent",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-          >
-            <span style={{
-              width: "2rem", height: "2rem", borderRadius: "50%",
-              background: "var(--bg-secondary)", display: "flex",
-              justifyContent: "center", alignItems: "center",
-              fontSize: "1rem", fontWeight: 700, color: obj.color,
-              fontFamily: "var(--font-mono)",
-            }}>
-              {idx + 1}
-            </span>
-            <ObjectIcon id={obj.id} color={obj.color} />
-            <span style={{ color: obj.color, fontWeight: 600, fontSize: "1.1rem" }}>
-              {obj.name}
-            </span>
-          </div>
-        ))}
-      </div>
-      <button
-        onClick={handleDrop}
+      <div
+        ref={containerRef}
         style={{
-          marginTop: "1rem",
-          padding: "1rem 3rem",
-          fontSize: "1.3rem",
-          fontWeight: 700,
-          background: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
-          color: "#0a0a0f",
-          border: "none",
-          borderRadius: "12px",
-          cursor: "pointer",
-          boxShadow: `0 0 30px ${mode === "vacuum" ? "#00e5ff60" : "#ff2d7b60"}`,
+          flex: 1, width: "100%", maxWidth: "min(95vw, 600px)",
+          display: "flex", flexDirection: "column", gap: "0.6rem",
+          touchAction: "none",
         }}
       >
-        DROP!
-      </button>
+        {order.map((obj, idx) => {
+          const isDragging = dragState !== null && dragState.index === idx;
+          const deltaY = isDragging ? dragState.currentY - dragState.startY : 0;
+          const shift = !isDragging ? getShiftForIndex(idx) : 0;
+
+          return (
+            <div
+              key={obj.id}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                e.currentTarget.setPointerCapture(e.pointerId);
+                setDragState({ index: idx, startY: e.clientY, currentY: e.clientY });
+              }}
+              onPointerMove={(e) => {
+                if (dragState && dragState.index === idx) {
+                  setDragState({ ...dragState, currentY: e.clientY });
+                }
+              }}
+              onPointerUp={(e) => {
+                if (dragState && dragState.index === idx) {
+                  const finalDeltaY = e.clientY - dragState.startY;
+                  const targetIndex = getDragTargetIndex(dragState.index, finalDeltaY);
+                  if (targetIndex !== dragState.index) {
+                    moveItem(dragState.index, targetIndex);
+                  }
+                  setDragState(null);
+                }
+              }}
+              style={{
+                display: "flex", alignItems: "center", gap: "1rem",
+                padding: "1rem 1.2rem",
+                background: isDragging ? `${obj.color}20` : "var(--bg-card)",
+                borderRadius: "12px",
+                border: isDragging ? `2px solid ${obj.color}` : "2px solid transparent",
+                cursor: isDragging ? "grabbing" : "grab",
+                transform: isDragging
+                  ? `translateY(${deltaY}px) scale(1.05)`
+                  : `translateY(${shift}px)`,
+                transition: isDragging
+                  ? "box-shadow 0.2s ease"
+                  : "transform 0.2s ease, box-shadow 0.2s ease",
+                boxShadow: isDragging ? `0 8px 24px rgba(0,0,0,0.4)` : "none",
+                zIndex: isDragging ? 10 : 1,
+                position: "relative",
+                userSelect: "none",
+              }}
+            >
+              <span style={{
+                width: "2.4rem", height: "2.4rem", borderRadius: "50%",
+                background: "var(--bg-secondary)", display: "flex",
+                justifyContent: "center", alignItems: "center",
+                fontSize: "1.1rem", fontWeight: 700, color: obj.color,
+                fontFamily: "var(--font-mono)",
+              }}>
+                {idx + 1}
+              </span>
+              <ObjectIcon id={obj.id} color={obj.color} />
+              <span style={{ color: obj.color, fontWeight: 600, fontSize: "1.25rem" }}>
+                {obj.name}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{
+        marginTop: "0.8rem",
+        fontSize: "1rem",
+        color: "rgba(255,255,255,0.35)",
+        textAlign: "center",
+        animation: "pulse-glow 2s ease-in-out infinite",
+      }}>
+        Waiting for drop...
+      </div>
     </div>
   );
 }

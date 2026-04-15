@@ -284,7 +284,7 @@ function GravitySportsSlide({ active }: { active: boolean }) {
             animation: "fade-in-up 0.6s ease 1s both",
           }}
         >
-          <svg width="100" height="90" viewBox="0 0 100 90">
+          <svg width="160" height="140" viewBox="0 0 100 90">
             {/* Uprights */}
             <line
               x1="15"
@@ -313,8 +313,14 @@ function GravitySportsSlide({ active }: { active: boolean }) {
               style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
             />
             {/* Stick figure arcing over */}
-            <circle cx="55" cy="20" r="6" fill="none" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="55" y1="26" x2="60" y2="38" stroke="#00e5ff" strokeWidth="2" />
+            <circle cx="55" cy="14" r="10" fill="none" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="55" y1="24" x2="60" y2="40" stroke="#00e5ff" strokeWidth="4" />
+            {/* Arms */}
+            <line x1="57" y1="30" x2="45" y2="26" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="57" y1="30" x2="68" y2="34" stroke="#00e5ff" strokeWidth="4" />
+            {/* Legs */}
+            <line x1="60" y1="40" x2="52" y2="52" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="60" y1="40" x2="68" y2="50" stroke="#00e5ff" strokeWidth="4" />
           </svg>
           <span
             style={{
@@ -336,7 +342,7 @@ function GravitySportsSlide({ active }: { active: boolean }) {
             animation: "fade-in-up 0.6s ease 1.2s both",
           }}
         >
-          <svg width="100" height="90" viewBox="0 0 100 90">
+          <svg width="160" height="140" viewBox="0 0 100 90">
             {/* Wall */}
             <rect
               x="60"
@@ -349,14 +355,14 @@ function GravitySportsSlide({ active }: { active: boolean }) {
               opacity="0.4"
             />
             {/* Climber stick figure */}
-            <circle cx="50" cy="30" r="7" fill="none" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="50" y1="37" x2="50" y2="58" stroke="#00e5ff" strokeWidth="2" />
+            <circle cx="50" cy="25" r="14" fill="none" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="50" y1="39" x2="50" y2="58" stroke="#00e5ff" strokeWidth="4" />
             {/* Arms reaching to wall */}
-            <line x1="50" y1="42" x2="62" y2="33" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="50" y1="48" x2="62" y2="50" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="50" y1="44" x2="62" y2="33" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="50" y1="50" x2="62" y2="50" stroke="#00e5ff" strokeWidth="4" />
             {/* Legs */}
-            <line x1="50" y1="58" x2="42" y2="72" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="50" y1="58" x2="58" y2="72" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="50" y1="58" x2="42" y2="72" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="50" y1="58" x2="58" y2="72" stroke="#00e5ff" strokeWidth="4" />
           </svg>
           <span
             style={{
@@ -378,7 +384,7 @@ function GravitySportsSlide({ active }: { active: boolean }) {
             animation: "fade-in-up 0.6s ease 1.4s both",
           }}
         >
-          <svg width="100" height="90" viewBox="0 0 100 90">
+          <svg width="160" height="140" viewBox="0 0 100 90">
             {/* Ground line */}
             <line
               x1="5"
@@ -390,14 +396,14 @@ function GravitySportsSlide({ active }: { active: boolean }) {
               opacity="0.3"
             />
             {/* Sprinter stick figure */}
-            <circle cx="55" cy="28" r="7" fill="none" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="55" y1="35" x2="48" y2="55" stroke="#00e5ff" strokeWidth="2" />
+            <circle cx="55" cy="22" r="14" fill="none" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="55" y1="36" x2="48" y2="55" stroke="#00e5ff" strokeWidth="4" />
             {/* Arms pumping */}
-            <line x1="52" y1="40" x2="38" y2="35" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="52" y1="40" x2="65" y2="45" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="52" y1="42" x2="38" y2="35" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="52" y1="42" x2="65" y2="47" stroke="#00e5ff" strokeWidth="4" />
             {/* Legs running */}
-            <line x1="48" y1="55" x2="35" y2="78" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="48" y1="55" x2="62" y2="78" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="48" y1="55" x2="35" y2="78" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="48" y1="55" x2="62" y2="78" stroke="#00e5ff" strokeWidth="4" />
           </svg>
           <span
             style={{
@@ -866,18 +872,18 @@ function DropTestIntroSlide({ active }: { active: boolean }) {
             animation: "fade-in-up 0.6s ease 1.6s both",
           }}
         >
-          <svg width="60" height="80" viewBox="0 0 60 80">
+          <svg width="120" height="140" viewBox="0 0 60 80">
             {/* Head */}
-            <circle cx="30" cy="14" r="10" fill="none" stroke="#00e5ff" strokeWidth="2"
+            <circle cx="30" cy="16" r="14" fill="none" stroke="#00e5ff" strokeWidth="4"
               style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }} />
             {/* Body */}
-            <line x1="30" y1="24" x2="30" y2="52" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="30" y1="30" x2="30" y2="52" stroke="#00e5ff" strokeWidth="4" />
             {/* Arms */}
-            <line x1="30" y1="32" x2="14" y2="44" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="30" y1="32" x2="46" y2="44" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="30" y1="36" x2="14" y2="46" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="30" y1="36" x2="46" y2="46" stroke="#00e5ff" strokeWidth="4" />
             {/* Legs */}
-            <line x1="30" y1="52" x2="18" y2="72" stroke="#00e5ff" strokeWidth="2" />
-            <line x1="30" y1="52" x2="42" y2="72" stroke="#00e5ff" strokeWidth="2" />
+            <line x1="30" y1="52" x2="18" y2="72" stroke="#00e5ff" strokeWidth="4" />
+            <line x1="30" y1="52" x2="42" y2="72" stroke="#00e5ff" strokeWidth="4" />
           </svg>
           <span
             style={{
@@ -1254,7 +1260,7 @@ export const section1Slides: SlideDefinition[] = [
   { id: "parkour-definition", section: 1, accent: "cyan", component: ParkourDefinitionSlide },
   { id: "transition", section: 1, accent: "cyan", component: TransitionSlide },
   { id: "drop-test-intro", section: 1, accent: "cyan", component: DropTestIntroSlide, studentEvent: "dropTest_vacuum" },
-  { id: "vacuum-result", section: 1, accent: "cyan", component: VacuumResultSlide },
+  { id: "vacuum-result", section: 1, accent: "cyan", component: VacuumResultSlide, studentEvent: "dropShow_vacuum" },
   { id: "drop-test-air", section: 1, accent: "cyan", component: DropTestAirSlide, studentEvent: "dropTest_air" },
-  { id: "air-result", section: 1, accent: "cyan", component: AirResultSlide },
+  { id: "air-result", section: 1, accent: "cyan", component: AirResultSlide, studentEvent: "dropShow_air" },
 ];

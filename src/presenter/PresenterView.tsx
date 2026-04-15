@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useRef } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -9,13 +9,11 @@ export default function PresenterView() {
   const key = searchParams.get("key") ?? "";
   const [authorized, setAuthorized] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
-  const lastTriggeredSlide = useRef(-1);
 
   const session = useQuery(api.sessions.getCurrent);
   const createSession = useMutation(api.sessions.create);
   const advance = useMutation(api.sessions.advanceSlide);
   const goBack = useMutation(api.sessions.previousSlide);
-  const triggerEvent = useMutation(api.sessions.triggerEvent);
 
   useEffect(() => {
     if (key === "gravity2026") {
@@ -36,28 +34,26 @@ export default function PresenterView() {
 
       if (clientX > half) {
         if (session.slideIndex < slides.length - 1) {
-          advance({ sessionId: session._id, presenterKey: key });
+          const nextSlide = slides[session.slideIndex + 1];
+          advance({
+            sessionId: session._id,
+            presenterKey: key,
+            studentEvent: nextSlide?.studentEvent,
+          });
         }
       } else {
-        goBack({ sessionId: session._id, presenterKey: key });
+        if (session.slideIndex > 0) {
+          const prevSlide = slides[session.slideIndex - 1];
+          goBack({
+            sessionId: session._id,
+            presenterKey: key,
+            studentEvent: prevSlide?.studentEvent,
+          });
+        }
       }
     },
     [session, authorized, key, transitioning]
   );
-
-  // Auto-trigger student events
-  useEffect(() => {
-    if (!session || !authorized) return;
-    const slide = slides[session.slideIndex];
-    if (slide?.studentEvent && session.slideIndex !== lastTriggeredSlide.current) {
-      lastTriggeredSlide.current = session.slideIndex;
-      triggerEvent({
-        sessionId: session._id,
-        presenterKey: key,
-        eventType: slide.studentEvent as any,
-      });
-    }
-  }, [session?.slideIndex]);
 
   if (!authorized) {
     return (

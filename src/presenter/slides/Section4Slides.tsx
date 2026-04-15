@@ -140,21 +140,27 @@ function MoonParkourSlide({ active }: { active: boolean }) {
           />
 
           {/* Height markers */}
-          <line x1="300" y1="310" x2="300" y2="40" stroke="#8888a040" strokeWidth="1" strokeDasharray="3,6" />
-          <text x="310" y="50" fill="#8888a0" fontSize="12" fontFamily="var(--font-mono)">
+          <line x1="300" y1="310" x2="300" y2="20" stroke="#8888a040" strokeWidth="1" strokeDasharray="3,6" />
+          <text x="315" y="30" fill="#8888a0" fontSize="14" fontFamily="var(--font-mono)">
             6x higher!
           </text>
 
           {/* Stick figure floating at peak */}
-          <circle cx="300" cy="40" r="8" fill="#8888a0" opacity="0.7" />
-          <line x1="300" y1="48" x2="300" y2="65" stroke="#8888a0" strokeWidth="2" opacity="0.7" />
+          <circle cx="300" cy="25" r="16" fill="#8888a0" opacity="0.7" />
+          <line x1="300" y1="41" x2="300" y2="75" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
           {/* Arms out wide (floating) */}
-          <line x1="300" y1="55" x2="280" y2="50" stroke="#8888a0" strokeWidth="2" opacity="0.7" />
-          <line x1="300" y1="55" x2="320" y2="50" stroke="#8888a0" strokeWidth="2" opacity="0.7" />
+          <line x1="300" y1="55" x2="270" y2="45" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
+          <line x1="300" y1="55" x2="330" y2="45" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
+          {/* Legs (floating, spread) */}
+          <line x1="300" y1="75" x2="285" y2="95" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
+          <line x1="300" y1="75" x2="315" y2="95" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
 
           {/* Stick figure on ground */}
-          <circle cx="80" cy="295" r="7" fill="#00e676" />
-          <line x1="80" y1="302" x2="80" y2="310" stroke="#00e676" strokeWidth="2" />
+          <circle cx="80" cy="278" r="14" fill="#00e676" />
+          <line x1="80" y1="292" x2="80" y2="310" stroke="#00e676" strokeWidth="4" />
+          {/* Arms */}
+          <line x1="80" y1="298" x2="65" y2="305" stroke="#00e676" strokeWidth="4" />
+          <line x1="80" y1="298" x2="95" y2="305" stroke="#00e676" strokeWidth="4" />
         </svg>
       </div>
 
@@ -260,7 +266,7 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
             strokeWidth="3"
             filter="url(#jup-glow)"
           />
-          <text x="300" y="225" fill="#ffc107" fontSize="12" fontFamily="var(--font-mono)" textAnchor="middle">
+          <text x="300" y="215" fill="#ffc107" fontSize="14" fontFamily="var(--font-mono)" textAnchor="middle">
             Jupiter jump
           </text>
 
@@ -277,8 +283,11 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
           </text>
 
           {/* Crushed stick figure */}
-          <circle cx="300" cy="238" r="6" fill="#ffc107" />
-          <line x1="300" y1="244" x2="300" y2="250" stroke="#ffc107" strokeWidth="2" />
+          <circle cx="300" cy="230" r="12" fill="#ffc107" />
+          <line x1="300" y1="242" x2="300" y2="250" stroke="#ffc107" strokeWidth="4" />
+          {/* Arms (crushed, splayed out) */}
+          <line x1="300" y1="245" x2="282" y2="248" stroke="#ffc107" strokeWidth="4" />
+          <line x1="300" y1="245" x2="318" y2="248" stroke="#ffc107" strokeWidth="4" />
         </svg>
       </div>
 

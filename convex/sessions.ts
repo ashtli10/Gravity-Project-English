@@ -41,6 +41,7 @@ export const advanceSlide = mutation({
   args: {
     sessionId: v.id("sessions"),
     presenterKey: v.string(),
+    studentEvent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     if (args.presenterKey !== "gravity2026") {
@@ -50,7 +51,9 @@ export const advanceSlide = mutation({
     if (!session) throw new Error("Session not found");
     await ctx.db.patch("sessions", args.sessionId, {
       slideIndex: session.slideIndex + 1,
-      activeEvent: undefined,
+      activeEvent: args.studentEvent
+        ? { type: args.studentEvent as any, triggeredAt: Date.now() }
+        : undefined,
     });
   },
 });
@@ -59,6 +62,7 @@ export const previousSlide = mutation({
   args: {
     sessionId: v.id("sessions"),
     presenterKey: v.string(),
+    studentEvent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     if (args.presenterKey !== "gravity2026") {
@@ -69,7 +73,9 @@ export const previousSlide = mutation({
     if (session.slideIndex > 0) {
       await ctx.db.patch("sessions", args.sessionId, {
         slideIndex: session.slideIndex - 1,
-        activeEvent: undefined,
+        activeEvent: args.studentEvent
+          ? { type: args.studentEvent as any, triggeredAt: Date.now() }
+          : undefined,
       });
     }
   },
@@ -99,6 +105,8 @@ export const triggerEvent = mutation({
     eventType: v.union(
       v.literal("dropTest_vacuum"),
       v.literal("dropTest_air"),
+      v.literal("dropShow_vacuum"),
+      v.literal("dropShow_air"),
       v.literal("moveSpotter"),
       v.literal("rooftopRun"),
       v.literal("planetaryParkour"),

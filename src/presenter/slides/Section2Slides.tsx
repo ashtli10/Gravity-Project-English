@@ -193,89 +193,89 @@ function WallRunSlide({ active }: { active: boolean }) {
           {/* Stick figure running up the wall */}
           {/* Head */}
           <circle
-            cx="280"
-            cy="180"
-            r="14"
+            cx="250"
+            cy="130"
+            r="25"
             fill="none"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
-            style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.3))" }}
+            strokeWidth="4.5"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.3))" }}
           />
           {/* Body (angled toward wall) */}
           <line
-            x1="280"
-            y1="194"
-            x2="295"
-            y2="240"
+            x1="250"
+            y1="155"
+            x2="275"
+            y2="230"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
+            strokeWidth="4.5"
           />
           {/* Left arm reaching up */}
           <line
-            x1="286"
-            y1="208"
-            x2="310"
-            y2="185"
+            x1="260"
+            y1="180"
+            x2="300"
+            y2="145"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
+            strokeWidth="4.5"
           />
           {/* Right arm back */}
           <line
-            x1="286"
-            y1="208"
-            x2="262"
-            y2="220"
+            x1="260"
+            y1="180"
+            x2="220"
+            y2="198"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
+            strokeWidth="4.5"
           />
           {/* Left leg on wall */}
           <line
-            x1="295"
-            y1="240"
+            x1="275"
+            y1="230"
             x2="318"
-            y2="250"
+            y2="248"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
+            strokeWidth="4.5"
           />
           {/* Right leg pushing */}
           <line
-            x1="295"
-            y1="240"
-            x2="280"
-            y2="275"
+            x1="275"
+            y1="230"
+            x2="252"
+            y2="290"
             stroke="var(--text-primary)"
-            strokeWidth="2.5"
+            strokeWidth="4.5"
           />
           {/* Foot on wall */}
           <circle
             cx="318"
-            cy="250"
-            r="3"
+            cy="248"
+            r="5"
             fill="var(--text-primary)"
           />
 
           {/* Force arrow: forward momentum (cyan) */}
           <ForceArrow
-            x={240}
-            y={220}
+            x={200}
+            y={200}
             angle={-50}
-            length={80}
+            length={90}
             color="#00e5ff"
             label="Forward momentum"
             delay={0.8}
-            thickness={4}
+            thickness={5}
           />
 
           {/* Force arrow: gravity (pink, pointing down) */}
           <ForceArrow
-            x={300}
-            y={260}
+            x={280}
+            y={255}
             angle={90}
-            length={55}
+            length={60}
             color="#ff2d7b"
             label="Gravity's pull"
             delay={1.1}
-            thickness={4}
+            thickness={5}
           />
         </svg>
       </div>
@@ -338,32 +338,32 @@ function PrecisionJumpRollSlide({ active }: { active: boolean }) {
           >
             Precision Jump
           </div>
-          <svg width="280" height="180" viewBox="0 0 280 180">
+          <svg width="400" height="260" viewBox="0 0 400 260">
             {/* Left platform */}
             <rect
-              x="10"
-              y="130"
-              width="70"
-              height="40"
+              x="15"
+              y="190"
+              width="100"
+              height="55"
               fill="#1a1a2e"
               stroke="#ff2d7b"
               strokeWidth="2"
-              rx="2"
+              rx="3"
             />
             {/* Right platform */}
             <rect
-              x="200"
-              y="130"
-              width="70"
-              height="40"
+              x="285"
+              y="190"
+              width="100"
+              height="55"
               fill="#1a1a2e"
               stroke="#ff2d7b"
               strokeWidth="2"
-              rx="2"
+              rx="3"
             />
             {/* Parabolic arc */}
             <path
-              d="M55,125 Q140,10 235,125"
+              d="M80,185 Q200,15 335,185"
               stroke="#ff2d7b"
               strokeWidth="2.5"
               fill="none"
@@ -371,18 +371,18 @@ function PrecisionJumpRollSlide({ active }: { active: boolean }) {
               style={{ filter: "drop-shadow(0 0 6px #ff2d7b)" }}
             />
             {/* Stick figure at peak */}
-            <circle cx="140" cy="35" r="8" fill="none" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="43" x2="140" y2="65" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="50" x2="128" y2="58" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="50" x2="152" y2="58" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="65" x2="132" y2="80" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="65" x2="148" y2="80" stroke="var(--text-primary)" strokeWidth="2" />
+            <circle cx="200" cy="42" r="16" fill="none" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="200" y1="58" x2="200" y2="100" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="200" y1="72" x2="178" y2="86" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="200" y1="72" x2="222" y2="86" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="200" y1="100" x2="186" y2="126" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="200" y1="100" x2="214" y2="126" stroke="var(--text-primary)" strokeWidth="4" />
             {/* Label */}
             <text
-              x="140"
-              y="105"
+              x="200"
+              y="155"
               fill="#ff2d7b"
-              fontSize="12"
+              fontSize="13"
               fontFamily="var(--font-mono)"
               textAnchor="middle"
               opacity="0.7"
@@ -412,63 +412,63 @@ function PrecisionJumpRollSlide({ active }: { active: boolean }) {
           >
             Landing Roll
           </div>
-          <svg width="280" height="180" viewBox="0 0 280 180">
+          <svg width="400" height="260" viewBox="0 0 400 260">
             {/* Ground */}
             <line
               x1="20"
-              y1="150"
-              x2="260"
-              y2="150"
+              y1="220"
+              x2="380"
+              y2="220"
               stroke="#ff2d7b"
               strokeWidth="1"
               opacity="0.3"
             />
 
             {/* Stick figure in rolling position */}
-            <circle cx="140" cy="110" r="10" fill="none" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="120" x2="150" y2="140" stroke="var(--text-primary)" strokeWidth="2" />
+            <circle cx="190" cy="150" r="18" fill="none" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="190" y1="168" x2="206" y2="205" stroke="var(--text-primary)" strokeWidth="4" />
             {/* Curved back for roll */}
             <path
-              d="M140,120 Q155,130 148,148"
+              d="M190,168 Q215,185 205,218"
               stroke="var(--text-primary)"
-              strokeWidth="2"
+              strokeWidth="4"
               fill="none"
             />
             {/* Arms tucked */}
-            <line x1="140" y1="125" x2="130" y2="132" stroke="var(--text-primary)" strokeWidth="2" />
-            <line x1="140" y1="125" x2="148" y2="128" stroke="var(--text-primary)" strokeWidth="2" />
+            <line x1="190" y1="176" x2="172" y2="188" stroke="var(--text-primary)" strokeWidth="4" />
+            <line x1="190" y1="176" x2="205" y2="182" stroke="var(--text-primary)" strokeWidth="4" />
 
             {/* Downward force arrow */}
             <ForceArrow
-              x={120}
-              y={55}
+              x={160}
+              y={60}
               angle={90}
-              length={45}
+              length={55}
               color="#ff2d7b"
               label="Impact"
               delay={1.0}
-              thickness={3}
+              thickness={4}
             />
 
             {/* Redirected force arrow (forward) */}
             <ForceArrow
-              x={155}
-              y={135}
+              x={215}
+              y={195}
               angle={0}
-              length={65}
+              length={85}
               color="#00e5ff"
               label="Redirected"
               delay={1.3}
-              thickness={3}
+              thickness={4}
             />
 
             {/* Curved redirect arrow */}
             <path
-              d="M125,100 Q130,140 155,138"
+              d="M168,138 Q175,198 215,195"
               stroke="var(--text-secondary)"
-              strokeWidth="1.5"
+              strokeWidth="2"
               fill="none"
-              strokeDasharray="4,3"
+              strokeDasharray="5,4"
               opacity="0.4"
               style={{ animation: "fade-in 0.5s ease 1.5s both" }}
             />
@@ -492,17 +492,8 @@ function PrecisionJumpRollSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 16: Did You Spot the Moves? ────────────────────────────── */
+/* ─── Slide 16: Video Quiz ─────────────────────────────────────────── */
 function SpotTheMovesSlide({ active }: { active: boolean }) {
-  const moves = [
-    "Wall Run",
-    "Kong Vault",
-    "Precision Jump",
-    "Roll",
-    "Cat Leap",
-    "Dash Vault",
-  ];
-
   return (
     <SlideLayout accent="pink" active={active}>
       <AnimatedText
@@ -512,41 +503,16 @@ function SpotTheMovesSlide({ active }: { active: boolean }) {
         weight={800}
         delay={0.1}
       >
-        Did you spot the moves?
+        Video Quiz
       </AnimatedText>
 
-      {/* Move cards grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1.5rem",
-          marginTop: "2.5rem",
-          maxWidth: "700px",
-          width: "100%",
-        }}
+      <AnimatedText
+        size="var(--slide-body)"
+        color="var(--text-secondary)"
+        delay={0.5}
       >
-        {moves.map((move, i) => (
-          <div
-            key={move}
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid rgba(255,45,123,0.3)",
-              borderRadius: "12px",
-              padding: "1.2rem 1.5rem",
-              textAlign: "center",
-              fontSize: "var(--slide-body)",
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              boxShadow: "0 0 20px rgba(255,45,123,0.08)",
-              animation: `fade-in-up 0.5s ease ${0.4 + i * 0.15}s both`,
-              transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-            }}
-          >
-            {move}
-          </div>
-        ))}
-      </div>
+        Answer the questions on your phone!
+      </AnimatedText>
 
       {/* Decorative bottom glow */}
       <div
@@ -574,5 +540,5 @@ export const section2Slides: SlideDefinition[] = [
   { id: "break-it-down", section: 2, accent: "pink", component: BreakItDownSlide },
   { id: "wall-run", section: 2, accent: "pink", component: WallRunSlide },
   { id: "precision-jump-roll", section: 2, accent: "pink", component: PrecisionJumpRollSlide },
-  { id: "spot-the-moves", section: 2, accent: "pink", component: SpotTheMovesSlide, studentEvent: "moveSpotter" },
+  { id: "video-quiz", section: 2, accent: "pink", component: SpotTheMovesSlide, studentEvent: "moveSpotter" },
 ];

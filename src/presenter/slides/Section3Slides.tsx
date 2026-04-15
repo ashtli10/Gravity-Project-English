@@ -120,14 +120,33 @@ function JumpCalculationSlide({ active }: { active: boolean }) {
             gravity
           </text>
           {/* Stick figure at start */}
-          <circle cx="160" cy="200" r="8" fill="#ffc107" />
+          <circle cx="155" cy="155" r="16" fill="#ffc107" />
           <line
-            x1="160"
-            y1="208"
-            x2="160"
-            y2="235"
+            x1="155"
+            y1="171"
+            x2="158"
+            y2="205"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <line
+            x1="158"
+            y1="205"
+            x2="148"
+            y2="220"
+            stroke="#ffc107"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <line
+            x1="158"
+            y1="205"
+            x2="168"
+            y2="220"
+            stroke="#ffc107"
+            strokeWidth="4"
+            strokeLinecap="round"
           />
         </svg>
       </div>
@@ -165,7 +184,7 @@ function LandingRollSlide({ active }: { active: boolean }) {
       <div style={{ animation: "fade-in-up 0.6s ease 0.3s both" }}>
         <svg
           viewBox="0 0 500 300"
-          style={{ width: "75%", maxWidth: "500px" }}
+          style={{ width: "85%", maxWidth: "600px" }}
         >
           <defs>
             <filter id="glow-gold">
@@ -190,70 +209,70 @@ function LandingRollSlide({ active }: { active: boolean }) {
 
           {/* Stick figure landing (slightly crouched) */}
           {/* Head */}
-          <circle cx="180" cy="185" r="10" fill="#ffc107" />
+          <circle cx="180" cy="125" r="20" fill="#ffc107" />
           {/* Body (angled forward) */}
           <line
             x1="180"
-            y1="195"
-            x2="185"
-            y2="230"
+            y1="145"
+            x2="190"
+            y2="210"
             stroke="#ffc107"
-            strokeWidth="3"
+            strokeWidth="5"
             strokeLinecap="round"
           />
           {/* Arms out for balance */}
           <line
             x1="185"
-            y1="210"
-            x2="165"
-            y2="200"
+            y1="175"
+            x2="155"
+            y2="160"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
           <line
             x1="185"
-            y1="210"
-            x2="200"
-            y2="205"
+            y1="175"
+            x2="210"
+            y2="165"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
           {/* Bent legs */}
           <line
-            x1="185"
-            y1="230"
-            x2="175"
+            x1="190"
+            y1="210"
+            x2="170"
             y2="248"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
           <line
-            x1="185"
-            y1="230"
-            x2="195"
+            x1="190"
+            y1="210"
+            x2="200"
             y2="248"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
 
           {/* Downward force arrow (impact) */}
           <line
-            x1="185"
-            y1="140"
-            x2="185"
-            y2="175"
+            x1="190"
+            y1="60"
+            x2="190"
+            y2="95"
             stroke="#ff2d7b"
             strokeWidth="3"
             strokeDasharray="6,3"
           />
-          <polygon points="185,180 180,168 190,168" fill="#ff2d7b" />
+          <polygon points="190,105 185,93 195,93" fill="#ff2d7b" />
           <text
-            x="200"
-            y="158"
+            x="205"
+            y="78"
             fill="#ff2d7b"
             fontSize="12"
             fontFamily="var(--font-mono)"
@@ -346,18 +365,8 @@ function LeanForwardSlide({ active }: { active: boolean }) {
       <div style={{ animation: "fade-in-up 0.6s ease 0.3s both" }}>
         <svg
           viewBox="0 0 500 350"
-          style={{ width: "75%", maxWidth: "500px" }}
+          style={{ width: "90%", maxWidth: "700px" }}
         >
-          <defs>
-            <filter id="glow-arrows">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
           {/* Ground */}
           <rect
             x="0"
@@ -369,95 +378,97 @@ function LeanForwardSlide({ active }: { active: boolean }) {
             strokeWidth="1"
           />
 
-          {/* Stick figure leaning forward */}
+          {/* Stick figure leaning forward — LARGE */}
           {/* Head */}
-          <circle cx="210" cy="175" r="12" fill="#ffc107" />
+          <circle cx="235" cy="90" r="22" fill="#ffc107" />
           {/* Body (leaned forward) */}
           <line
+            x1="228"
+            y1="112"
+            x2="205"
+            y2="210"
+            stroke="#ffc107"
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+          {/* Right arm (forward) */}
+          <line
+            x1="220"
+            y1="150"
+            x2="260"
+            y2="135"
+            stroke="#ffc107"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          {/* Left arm (back) */}
+          <line
+            x1="220"
+            y1="150"
+            x2="185"
+            y2="168"
+            stroke="#ffc107"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          {/* Left leg */}
+          <line
             x1="205"
-            y1="187"
-            x2="190"
-            y2="250"
-            stroke="#ffc107"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
-          {/* Arms */}
-          <line
-            x1="200"
-            y1="210"
-            x2="225"
-            y2="200"
-            stroke="#ffc107"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          <line
-            x1="200"
             y1="210"
             x2="180"
-            y2="220"
+            y2="296"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
-          {/* Legs */}
+          {/* Right leg */}
           <line
-            x1="190"
-            y1="250"
-            x2="175"
-            y2="298"
+            x1="205"
+            y1="210"
+            x2="225"
+            y2="296"
             stroke="#ffc107"
-            strokeWidth="2"
+            strokeWidth="4"
             strokeLinecap="round"
           />
-          <line
-            x1="190"
-            y1="250"
-            x2="205"
-            y2="298"
-            stroke="#ffc107"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-
-          {/* Force arrows using ForceArrow component would be ideal,
-              but inline for SVG clarity */}
+          {/* Feet */}
+          <circle cx="180" cy="296" r="4" fill="#ffc107" />
+          <circle cx="225" cy="296" r="4" fill="#ffc107" />
 
           {/* Forward momentum arrow (gold) */}
           <ForceArrow
-            x={210}
-            y={210}
+            x={245}
+            y={155}
             angle={0}
-            length={100}
+            length={120}
             color="#ffc107"
             label="momentum"
             delay={0.5}
-            thickness={3}
+            thickness={4}
           />
 
           {/* Gravity arrow (pink, pointing down) */}
           <ForceArrow
-            x={190}
-            y={200}
+            x={210}
+            y={140}
             angle={90}
-            length={80}
+            length={100}
             color="#ff2d7b"
             label="gravity"
             delay={0.7}
-            thickness={3}
+            thickness={4}
           />
 
           {/* Resultant arrow (green, diagonal) */}
           <ForceArrow
-            x={200}
-            y={210}
+            x={230}
+            y={155}
             angle={38}
-            length={110}
+            length={135}
             color="#00e676"
             label="resultant"
             delay={0.9}
-            thickness={3}
+            thickness={4}
           />
         </svg>
       </div>
@@ -558,8 +569,10 @@ function RooftopRunSlide({ active }: { active: boolean }) {
           />
 
           {/* Stick figure on first building */}
-          <circle cx="50" cy="98" r="5" fill="#ffc107" />
-          <line x1="50" y1="103" x2="50" y2="110" stroke="#ffc107" strokeWidth="2" />
+          <circle cx="50" cy="82" r="10" fill="#ffc107" />
+          <line x1="50" y1="92" x2="50" y2="106" stroke="#ffc107" strokeWidth="4" strokeLinecap="round" />
+          <line x1="50" y1="106" x2="44" y2="110" stroke="#ffc107" strokeWidth="3" strokeLinecap="round" />
+          <line x1="50" y1="106" x2="56" y2="110" stroke="#ffc107" strokeWidth="3" strokeLinecap="round" />
         </svg>
       </div>
 

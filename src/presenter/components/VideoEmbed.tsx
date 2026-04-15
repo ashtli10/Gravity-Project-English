@@ -1,7 +1,7 @@
 // ==========================================
 // CHANGE THIS URL TO YOUR YOUTUBE VIDEO
 // ==========================================
-const YOUTUBE_VIDEO_ID = "dQw4w9WgXcQ"; // Replace with your parkour video ID
+const YOUTUBE_VIDEO_ID = "6ojPzimBnhw"; // Storror rooftop parkour POV
 // ==========================================
 
 export default function VideoEmbed() {
