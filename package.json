@@ -6,7 +6,7 @@
     "dev": "npx concurrently --names convex,vite --prefix-colors blue,green \"npx convex dev\" \"npx vite\"",
     "dev:frontend": "vite",
     "dev:backend": "convex dev",
-    "build": "vite build && convex deploy",
+    "build": "vite build",
     "preview": "vite preview",
     "logs": "convex logs",
     "lint": "tsc -p convex && eslint . --report-unused-disable-directives --max-warnings 0"

@@ -2,7 +2,10 @@ import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
 import ForceArrow from "../components/ForceArrow";
 import VideoEmbed from "../components/VideoEmbed";
+import GameLeaderboard from "../components/GameLeaderboard";
 import type { SlideDefinition } from "./index";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 /* ─── Slide 11: Section Title ──────────────────────────────────────── */
 function WatchThisTitleSlide({ active }: { active: boolean }) {
@@ -533,6 +536,28 @@ function SpotTheMovesSlide({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Slide: Video Quiz Leaderboard ─── */
+function VideoQuizLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="pink" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="videoQuiz"
+          title="VIDEO QUIZ LEADERBOARD"
+          accent="#ff2d7b"
+          scoreUnit="/4"
+        />
+      ) : (
+        <AnimatedText color="#ff2d7b" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
 /* ─── Export ───────────────────────────────────────────────────────── */
 export const section2Slides: SlideDefinition[] = [
   { id: "watch-this", section: 2, accent: "pink", component: WatchThisTitleSlide },
@@ -541,4 +566,5 @@ export const section2Slides: SlideDefinition[] = [
   { id: "wall-run", section: 2, accent: "pink", component: WallRunSlide },
   { id: "precision-jump-roll", section: 2, accent: "pink", component: PrecisionJumpRollSlide },
   { id: "video-quiz", section: 2, accent: "pink", component: SpotTheMovesSlide, studentEvent: "moveSpotter" },
+  { id: "video-quiz-leaderboard", section: 2, accent: "pink", component: VideoQuizLeaderboardSlide },
 ];

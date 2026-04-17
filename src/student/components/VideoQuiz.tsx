@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+interface VideoQuizProps {
+  onFinished?: (score: number) => void;
+}
 
 interface Question {
   question: string;
@@ -44,11 +48,12 @@ const questions: Question[] = [
   },
 ];
 
-export default function VideoQuiz() {
+export default function VideoQuiz({ onFinished }: VideoQuizProps = {}) {
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const submittedRef = useRef(false);
 
   const q = questions[currentQ];
 
@@ -56,6 +61,7 @@ export default function VideoQuiz() {
     if (selected !== null) return; // already answered
     setSelected(optionIdx);
 
+    const newScore = optionIdx === q.correct ? score + 1 : score;
     if (optionIdx === q.correct) {
       setScore((s) => s + 1);
     }
@@ -67,6 +73,10 @@ export default function VideoQuiz() {
         setSelected(null);
       } else {
         setFinished(true);
+        if (!submittedRef.current) {
+          submittedRef.current = true;
+          onFinished?.(newScore);
+        }
       }
     }, 1200);
   };

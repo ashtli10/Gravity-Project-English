@@ -1,6 +1,9 @@
 import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
+import GameLeaderboard from "../components/GameLeaderboard";
 import type { SlideDefinition } from "./index";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 /* ─── Slide 0: Title ───────────────────────────────────────────────── */
 function TitleSlide({ active }: { active: boolean }) {
@@ -1250,6 +1253,28 @@ function AirResultSlide({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Slide: Drop Test Air Leaderboard ─── */
+function DropTestLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="cyan" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="dropTestAir"
+          title="DROP TEST LEADERBOARD"
+          accent="#00e5ff"
+          scoreUnit="/10"
+        />
+      ) : (
+        <AnimatedText color="#00e5ff" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
 /* ─── Export ───────────────────────────────────────────────────────── */
 export const section1Slides: SlideDefinition[] = [
   { id: "title", section: 1, accent: "cyan", component: TitleSlide },
@@ -1263,4 +1288,5 @@ export const section1Slides: SlideDefinition[] = [
   { id: "vacuum-result", section: 1, accent: "cyan", component: VacuumResultSlide, studentEvent: "dropShow_vacuum" },
   { id: "drop-test-air", section: 1, accent: "cyan", component: DropTestAirSlide, studentEvent: "dropTest_air" },
   { id: "air-result", section: 1, accent: "cyan", component: AirResultSlide, studentEvent: "dropShow_air" },
+  { id: "drop-test-leaderboard", section: 1, accent: "cyan", component: DropTestLeaderboardSlide },
 ];

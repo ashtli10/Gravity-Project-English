@@ -221,8 +221,10 @@ const PATTERN_LIB: PatternDef[] = [
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
-export default function GravitySurge() {
+export default function GravitySurge({ onGameOver }: { onGameOver?: (score: number) => void } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onGameOverRef = useRef(onGameOver);
+  onGameOverRef.current = onGameOver;
 
   useEffect(() => {
     const canvasEl = canvasRef.current;
@@ -735,6 +737,7 @@ export default function GravitySurge() {
           localStorage.setItem(HIGH_SCORE_KEY, String(state.score));
         }
       } catch { /* ignore */ }
+      onGameOverRef.current?.(state.score);
     }
 
     // ── Render ────────────────────────────────────────────────────────────

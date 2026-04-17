@@ -17,7 +17,7 @@ export const create = mutation({
     }
     const existing = await ctx.db.query("sessions").take(10);
     for (const s of existing) {
-      // Clean up old poll votes for each session
+      // Clean up old poll votes
       const votes = await ctx.db
         .query("pollVotes")
         .withIndex("by_sessionId_and_slideContext", (q) =>
@@ -26,6 +26,26 @@ export const create = mutation({
         .take(500);
       for (const vote of votes) {
         await ctx.db.delete(vote._id);
+      }
+      // Clean up old players
+      const players = await ctx.db
+        .query("players")
+        .withIndex("by_sessionId_and_voterId", (q) =>
+          q.eq("sessionId", s._id)
+        )
+        .take(500);
+      for (const p of players) {
+        await ctx.db.delete(p._id);
+      }
+      // Clean up old scores
+      const scores = await ctx.db
+        .query("scores")
+        .withIndex("by_sessionId_and_game", (q) =>
+          q.eq("sessionId", s._id)
+        )
+        .take(500);
+      for (const sc of scores) {
+        await ctx.db.delete(sc._id);
       }
       await ctx.db.delete(s._id);
     }

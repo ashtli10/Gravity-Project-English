@@ -2,6 +2,8 @@ import type { SlideDefinition } from "./index";
 import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
 import PollResults from "../components/PollResults";
+import GameLeaderboard from "../components/GameLeaderboard";
+import ChampionSlideComponent from "../components/ChampionSlide";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
@@ -600,6 +602,44 @@ function ThankYouSlide({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Slide: Gravity Surge Leaderboard ─── */
+function GravitySurgeLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="mixed" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="gravitySurge"
+          title="GRAVITY SURGE LEADERBOARD"
+          accent="#ff2d7b"
+          scoreUnit="pts"
+        />
+      ) : (
+        <AnimatedText color="#ff2d7b" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide: Overall Champion ─── */
+function ChampionLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="mixed" active={active}>
+      {session ? (
+        <ChampionSlideComponent sessionId={session._id} />
+      ) : (
+        <AnimatedText color="#b388ff" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
 export const section5Slides: SlideDefinition[] = [
   {
     id: "your-call",
@@ -644,6 +684,18 @@ export const section5Slides: SlideDefinition[] = [
     accent: "mixed",
     component: GravitySurgeSlide,
     studentEvent: "gravitySurge",
+  },
+  {
+    id: "gravity-surge-leaderboard",
+    section: 5,
+    accent: "mixed",
+    component: GravitySurgeLeaderboardSlide,
+  },
+  {
+    id: "champion",
+    section: 5,
+    accent: "mixed",
+    component: ChampionLeaderboardSlide,
   },
   {
     id: "thank-you",

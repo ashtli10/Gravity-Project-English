@@ -2,6 +2,9 @@ import type { SlideDefinition } from "./index";
 import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
 import ForceArrow from "../components/ForceArrow";
+import GameLeaderboard from "../components/GameLeaderboard";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 /* ─── Slide 17: Section Title ─── */
 function GravityVsTraceurSlide({ active }: { active: boolean }) {
@@ -593,6 +596,28 @@ function RooftopRunSlide({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Slide: Rooftop Run Leaderboard ─── */
+function RooftopRunLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="gold" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="rooftopRun"
+          title="ROOFTOP RUN LEADERBOARD"
+          accent="#ffc107"
+          scoreUnit="m"
+        />
+      ) : (
+        <AnimatedText color="#ffc107" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
 export const section3Slides: SlideDefinition[] = [
   {
     id: "gravity-vs-traceur",
@@ -624,5 +649,11 @@ export const section3Slides: SlideDefinition[] = [
     accent: "gold",
     component: RooftopRunSlide,
     studentEvent: "rooftopRun",
+  },
+  {
+    id: "rooftop-run-leaderboard",
+    section: 3,
+    accent: "gold",
+    component: RooftopRunLeaderboardSlide,
   },
 ];

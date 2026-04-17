@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 interface DropTestProps {
   mode: "vacuum" | "air";
   showDrop?: boolean;
+  onScored?: (score: number) => void;
 }
 
 interface DropObject {
@@ -85,16 +86,39 @@ function ObjectIcon({ id, color }: { id: string; color: string }) {
   }
 }
 
-export default function DropTest({ mode, showDrop }: DropTestProps) {
+// Correct order for air mode: lowest air resistance falls fastest
+const AIR_CORRECT_ORDER = [...objects].sort((a, b) => a.airResistance - b.airResistance);
+
+function scoreArrangement(studentOrder: DropObject[]): number {
+  // Count correctly ordered pairs (out of 10 total pairs for 5 items)
+  let correct = 0;
+  for (let i = 0; i < studentOrder.length; i++) {
+    for (let j = i + 1; j < studentOrder.length; j++) {
+      // Student says i falls before j. Check if that's correct (lower air resistance = falls faster).
+      if (studentOrder[i].airResistance <= studentOrder[j].airResistance) {
+        correct++;
+      }
+    }
+  }
+  return correct; // 0-10
+}
+
+export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
   const [order, setOrder] = useState(() => [...objects].sort(() => Math.random() - 0.5));
   const [dropped, setDropped] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [dragState, setDragState] = useState<{ index: number; startY: number; currentY: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const scoredRef = useRef(false);
 
   // Auto-drop when presenter triggers the show event
   useEffect(() => {
     if (showDrop && !dropped) {
+      // Score the arrangement for air mode before dropping
+      if (mode === "air" && !scoredRef.current) {
+        scoredRef.current = true;
+        onScored?.(scoreArrangement(order));
+      }
       setDropped(true);
       setTimeout(() => setShowResult(true), mode === "vacuum" ? 2000 : 3000);
     }

@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as leaderboard from "../leaderboard.js";
 import type * as polls from "../polls.js";
 import type * as sessions from "../sessions.js";
 
@@ -18,6 +19,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  leaderboard: typeof leaderboard;
   polls: typeof polls;
   sessions: typeof sessions;
 }>;

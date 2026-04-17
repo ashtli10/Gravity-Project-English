@@ -2,6 +2,9 @@ import type { SlideDefinition } from "./index";
 import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
 import PlanetComparison from "../components/PlanetComparison";
+import GameLeaderboard from "../components/GameLeaderboard";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 /* ─── Slide 22: Section Title ─── */
 function WhatIfSlide({ active }: { active: boolean }) {
@@ -406,6 +409,28 @@ function PlanetaryParkourSlide({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Slide: Planetary Parkour Leaderboard ─── */
+function PlanetaryParkourLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="green" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="planetaryParkour"
+          title="PLANETARY PARKOUR LEADERBOARD"
+          accent="#00e676"
+          scoreUnit="pts"
+        />
+      ) : (
+        <AnimatedText color="#00e676" size="var(--slide-body)" delay={0}>
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
 export const section4Slides: SlideDefinition[] = [
   {
     id: "what-if-gravity-changed",
@@ -437,5 +462,11 @@ export const section4Slides: SlideDefinition[] = [
     accent: "green",
     component: PlanetaryParkourSlide,
     studentEvent: "planetaryParkour",
+  },
+  {
+    id: "planetary-parkour-leaderboard",
+    section: 4,
+    accent: "green",
+    component: PlanetaryParkourLeaderboardSlide,
   },
 ];

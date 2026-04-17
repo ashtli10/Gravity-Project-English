@@ -37,4 +37,32 @@ export default defineSchema({
       "slideContext",
       "voterId",
     ]),
+
+  players: defineTable({
+    sessionId: v.id("sessions"),
+    voterId: v.string(),
+    name: v.string(),
+  })
+    .index("by_sessionId_and_voterId", ["sessionId", "voterId"])
+    .index("by_sessionId_and_name", ["sessionId", "name"]),
+
+  scores: defineTable({
+    sessionId: v.id("sessions"),
+    voterId: v.string(),
+    playerName: v.string(),
+    game: v.union(
+      v.literal("rooftopRun"),
+      v.literal("planetaryParkour"),
+      v.literal("gravitySurge"),
+      v.literal("videoQuiz"),
+      v.literal("dropTestAir")
+    ),
+    rawScore: v.number(),
+  })
+    .index("by_sessionId_and_game", ["sessionId", "game"])
+    .index("by_sessionId_and_voterId_and_game", [
+      "sessionId",
+      "voterId",
+      "game",
+    ]),
 });

@@ -278,9 +278,19 @@ function getCosmeticZone(pipesPassed: number): {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function PlanetaryParkour() {
+const PLANET_SCORE_MULTIPLIER: Record<string, number> = {
+  Moon: 1.0,
+  Mars: 1.3,
+  Earth: 1.6,
+  Jupiter: 2.5,
+  Sun: 3.0,
+};
+
+export default function PlanetaryParkour({ onGameOver }: { onGameOver?: (score: number) => void } = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onGameOverRef = useRef(onGameOver);
+  onGameOverRef.current = onGameOver;
   const [selectedPlanet, setSelectedPlanet] = useState<number | null>(null);
 
   // Mutable game state
@@ -512,6 +522,10 @@ export default function PlanetaryParkour() {
         g2.highScore = g2.score;
         saveHighScore(planet.name, g2.score);
       }
+      // Submit weighted score for leaderboard
+      const multiplier = PLANET_SCORE_MULTIPLIER[planet.name] ?? 1;
+      const weighted = Math.round(g2.score * multiplier);
+      onGameOverRef.current?.(weighted);
     }
 
     // ── Collision ──

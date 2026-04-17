@@ -1633,7 +1633,7 @@ function renderGameOver(ctx: CanvasRenderingContext2D, gs: GameState, time: numb
 // MAIN GAME LOOP
 // ============================================================
 
-function runGame(canvas: HTMLCanvasElement): () => void {
+function runGame(canvas: HTMLCanvasElement, onGameOver?: (score: number) => void): () => void {
   const ctx = canvas.getContext("2d")!;
   let destroyed = false;
 
@@ -1653,6 +1653,7 @@ function runGame(canvas: HTMLCanvasElement): () => void {
   const { w, h } = resizeCanvas();
   let gs = createInitialState(w, h);
   const input = createInputManager(canvas);
+  let scoreSubmitted = false;
 
   function restart() {
     const { w, h } = resizeCanvas();
@@ -1661,6 +1662,7 @@ function runGame(canvas: HTMLCanvasElement): () => void {
     gs = createInitialState(w, h);
     gs.bestDistance = bestDist;
     gs.bestCoins = bestCoins;
+    scoreSubmitted = false;
   }
 
   const onResize = () => {
@@ -1695,6 +1697,10 @@ function runGame(canvas: HTMLCanvasElement): () => void {
         input.state.jumpReleasedThisFrame = false;
         break;
       case "gameover":
+        if (!scoreSubmitted) {
+          scoreSubmitted = true;
+          onGameOver?.(Math.floor(gs.distance));
+        }
         if (input.state.jumpPressed) {
           input.state.jumpPressed = false;
           restart();
@@ -1745,14 +1751,16 @@ function runGame(canvas: HTMLCanvasElement): () => void {
 // REACT COMPONENT
 // ============================================================
 
-export default function RooftopRun() {
+export default function RooftopRun({ onGameOver }: { onGameOver?: (score: number) => void } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onGameOverRef = useRef(onGameOver);
+  onGameOverRef.current = onGameOver;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const cleanup = runGame(canvas);
+    const cleanup = runGame(canvas, (score) => onGameOverRef.current?.(score));
     return cleanup;
   }, []);
 
