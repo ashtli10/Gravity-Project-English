@@ -76,16 +76,17 @@ const JUMP_VX = 380;
 const WALL_SLIDE_SPEED = 40;
 const WALL_SLIDE_DURATION = 0.6;
 const PLATFORM_HEIGHT = 8;
-const PLATFORM_WIDTH_DEFAULT = 75;
 const COUNTDOWN_DURATION = 3;
 const DEATH_FREEZE_TIME = 0.6;
 const LS_KEY = "wallclimber_highscore";
 
 // Physics validation:
-// Max jump height = v^2 / (2*g) = 520^2 / (2*620) = 218px at base gravity
-// At max gravity (900): 520^2 / (2*900) = 150px
-// With 20% safety margin: 174px (base), 120px (max)
-// All segments must keep vertical gaps under these limits.
+// Max jump height = v^2 / (2*g) = 520^2 / (2*620) = 218px at base gravity.
+// Jump velocity scales with sqrt(gravity/BASE_GRAVITY), so effective max
+// height stays ~218px regardless of gravity. Higher gravity still makes
+// falls faster and requires quicker reactions.
+// With 20% safety margin: keep platform gaps under ~174px.
+// All segments are designed within this limit.
 
 // Background zone thresholds (in "meters climbed")
 const ZONE_BUILDING = 0;
@@ -171,14 +172,14 @@ const SEGMENTS: SegmentDef[] = [
       { side: "left",  xOffset: 10, yOffset: 60,  width: 70 },
     ],
   },
-  // Segment 6: Same-side double then switch
+  // Segment 6: Alternating offset climb
   {
     height: 380,
     difficulty: 1,
     platforms: [
       { side: "left",  xOffset: 5,  yOffset: 330, width: 75 },
-      { side: "left",  xOffset: 30, yOffset: 240, width: 60 },
-      { side: "right", xOffset: 10, yOffset: 140, width: 70 },
+      { side: "right", xOffset: 30, yOffset: 240, width: 60 },
+      { side: "left",  xOffset: 10, yOffset: 140, width: 70 },
       { side: "right", xOffset: 25, yOffset: 50,  width: 65 },
     ],
   },
@@ -361,8 +362,12 @@ export default function WallClimber() {
     const ctx = canvas.getContext("2d")!;
 
     // Sizing: always measure from the container div, never window
-    const W = () => canvas.width;
-    const H = () => canvas.height;
+    // Canvas buffer is scaled by DPR for crisp rendering, but game logic
+    // uses CSS-pixel dimensions.
+    let csW = 0;
+    let csH = 0;
+    const W = () => csW;
+    const H = () => csH;
     let initialized = false;
 
     // ------ Game State ------
@@ -383,6 +388,8 @@ export default function WallClimber() {
     // Segment generation tracking
     let highestGeneratedY = 0;
     let segmentsPlaced = 0;
+    let lastPlacedSide: "left" | "right" = "left"; // side of the topmost platform placed so far
+    let lastTopYOffset = 0; // yOffset of the topmost platform in the last segment
     // Pre-shuffled segment queues by difficulty
     let easyQueue: SegmentDef[] = [];
     let mediumQueue: SegmentDef[] = [];
@@ -502,6 +509,8 @@ export default function WallClimber() {
       highestGeneratedY = startY;
       highestDecorY = startY + 200;
       segmentsPlaced = 0;
+      lastPlacedSide = "left"; // starting platform is on the left
+      lastTopYOffset = 0; // starting platform is at baseWorldY + 0
       refillQueues();
 
       // Starting platform (wide, safe, centered-left)
@@ -539,14 +548,17 @@ export default function WallClimber() {
       return Math.max(0, Math.floor((h * 0.7 - worldY) / 8));
     }
 
-    function placeSegment(segment: SegmentDef, baseWorldY: number) {
+    function placeSegment(segment: SegmentDef, baseWorldY: number, mirror: boolean) {
       const w = W();
       const playableWidth = w - WALL_WIDTH * 2;
 
       for (const pdef of segment.platforms) {
+        const side = mirror
+          ? (pdef.side === "left" ? "right" : "left")
+          : pdef.side;
         const platWidth = Math.min(pdef.width, playableWidth - 10);
         let x: number;
-        if (pdef.side === "left") {
+        if (side === "left") {
           x = WALL_WIDTH + 4 + pdef.xOffset;
         } else {
           x = w - WALL_WIDTH - platWidth - 4 - pdef.xOffset;
@@ -558,17 +570,43 @@ export default function WallClimber() {
           x,
           y: baseWorldY + pdef.yOffset,
           width: platWidth,
-          side: pdef.side,
+          side,
         });
       }
     }
 
     function generateSegmentsUpTo(targetY: number) {
       while (highestGeneratedY > targetY) {
-        const segment = pickSegment();
-        highestGeneratedY -= segment.height;
-        placeSegment(segment, highestGeneratedY);
+        // Pick a segment, then try up to 4 more if the cross-boundary gap
+        // is unreasonable. The real gap between the previous top platform
+        // and the new bottom platform = lastTopYOffset + seg.height - bottomYOffset.
+        let seg: SegmentDef = pickSegment();
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const bottomYOffset = Math.max(...seg.platforms.map(p => p.yOffset));
+          const gap = lastTopYOffset + seg.height - bottomYOffset;
+          if (gap >= 50 && gap <= 160) break;
+          seg = pickSegment();
+        }
+
+        // Mirror the segment if its bottom platform is on the same side as
+        // the previous segment's top platform — ensures zigzag continuity.
+        const bottomPlatform = seg.platforms.reduce((a, b) =>
+          b.yOffset > a.yOffset ? b : a
+        );
+        const needsMirror = bottomPlatform.side === lastPlacedSide;
+
+        highestGeneratedY -= seg.height;
+        placeSegment(seg, highestGeneratedY, needsMirror);
         segmentsPlaced++;
+
+        // Track the topmost platform for the next boundary check
+        const topPlatform = seg.platforms.reduce((a, b) =>
+          b.yOffset < a.yOffset ? b : a
+        );
+        lastPlacedSide = needsMirror
+          ? (topPlatform.side === "left" ? "right" : "left")
+          : topPlatform.side;
+        lastTopYOffset = topPlatform.yOffset;
       }
     }
 
@@ -905,6 +943,10 @@ export default function WallClimber() {
       const h = H();
       const meters = metersFromY(player.y);
       const zone = getZone(meters);
+
+      // Reset DPR transform at the start of each frame
+      const dpr = window.devicePixelRatio || 1;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // --- Background ---
       renderBackground(w, h, zone, meters);
@@ -1401,9 +1443,13 @@ export default function WallClimber() {
         const newH = Math.round(rect.height);
         if (newW <= 0 || newH <= 0) continue;
 
-        if (canvas.width !== newW || canvas.height !== newH) {
-          canvas.width = newW;
-          canvas.height = newH;
+        if (csW !== newW || csH !== newH) {
+          csW = newW;
+          csH = newH;
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = newW * dpr;
+          canvas.height = newH * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
           initGame();
           initialized = true;
         } else if (!initialized) {
@@ -1428,7 +1474,7 @@ export default function WallClimber() {
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", height: "100%", position: "relative", background: BG_COLOR, overflow: "hidden" }}
+      style={{ width: "100%", height: "100%", maxWidth: "450px", margin: "0 auto", position: "relative", background: BG_COLOR, overflow: "hidden" }}
     >
       <canvas
         ref={canvasRef}
