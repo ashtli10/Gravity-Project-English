@@ -132,53 +132,36 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
   };
 
   if (dropped) {
+    const accent = mode === "vacuum" ? "#00e5ff" : "#ff2d7b";
     // Animation phase
     return (
       <div style={{
         width: "100vw", height: "100vh", background: "#0a0a0f",
         display: "flex", flexDirection: "column", alignItems: "center",
         justifyContent: "flex-start", padding: "1rem",
+        position: "relative", overflow: "hidden",
       }}>
+        {/* Title */}
         <div style={{
-          fontSize: "clamp(1.4rem, 4vw, 2rem)", color: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
-          fontWeight: 700, marginBottom: "2rem",
-          textShadow: `0 0 15px ${mode === "vacuum" ? "#00e5ff" : "#ff2d7b"}`,
+          fontSize: "clamp(1.4rem, 4vw, 2rem)", color: accent,
+          fontWeight: 700, marginBottom: "1rem",
+          textShadow: `0 0 15px ${accent}`,
+          zIndex: 2,
         }}>
           {mode === "vacuum" ? "VACUUM DROP" : "AIR RESISTANCE DROP"}
         </div>
-        <div style={{
-          flex: 1, width: "100%", maxWidth: "min(95vw, 600px)",
-          display: "flex", justifyContent: "space-around", alignItems: "flex-start",
-          position: "relative",
-        }}>
-          {objects.map((obj) => {
-            const delay = mode === "vacuum" ? 0 : obj.airResistance * 1.5;
-            const duration = mode === "vacuum" ? 1.5 : 1.5 + obj.airResistance * 2;
-            return (
-              <div
-                key={obj.id}
-                style={{
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem",
-                  animation: `drop-fall ${duration}s ease-in ${delay}s both`,
-                  position: "relative",
-                }}
-              >
-                <ObjectIcon id={obj.id} color={obj.color} />
-                <span style={{ fontSize: "0.85rem", color: obj.color }}>{obj.name}</span>
-              </div>
-            );
-          })}
-        </div>
+
+        {/* Result text — centered, above falling objects */}
         {showResult && (
           <div style={{
-            position: "absolute", bottom: "15%", left: "50%", transform: "translateX(-50%)",
-            textAlign: "center", animation: "fade-in-up 0.5s ease both",
+            zIndex: 3, textAlign: "center", padding: "0 1rem",
+            animation: "scale-in 0.5s ease both",
           }}>
             <div style={{
-              fontSize: "clamp(1.5rem, 4vw, 2rem)",
-              fontWeight: 700,
-              color: mode === "vacuum" ? "#00e5ff" : "#ff2d7b",
-              textShadow: `0 0 20px ${mode === "vacuum" ? "#00e5ff" : "#ff2d7b"}`,
+              fontSize: "clamp(1.6rem, 5vw, 2.2rem)",
+              fontWeight: 900,
+              color: accent,
+              textShadow: `0 0 25px ${accent}, 0 0 50px ${accent}60`,
             }}>
               {mode === "vacuum"
                 ? "They ALL hit at the same time!"
@@ -193,10 +176,40 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
             </div>
           </div>
         )}
+
+        {/* Falling objects */}
+        <div style={{
+          flex: 1, width: "100%", maxWidth: "min(95vw, 600px)",
+          display: "flex", justifyContent: "space-around", alignItems: "flex-start",
+          position: "relative", marginTop: "1rem",
+          zIndex: 1,
+        }}>
+          {objects.map((obj) => {
+            const delay = mode === "vacuum" ? 0 : obj.airResistance * 1.5;
+            const duration = mode === "vacuum" ? 1.5 : 1.5 + obj.airResistance * 2;
+            return (
+              <div
+                key={obj.id}
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem",
+                  animation: `drop-fall ${duration}s ease-in ${delay}s both`,
+                  position: "relative",
+                }}
+              >
+                <ObjectIcon id={obj.id} color={obj.color} />
+                <span style={{ fontSize: "0.75rem", color: obj.color, opacity: 0.8 }}>{obj.name}</span>
+              </div>
+            );
+          })}
+        </div>
         <style>{`
           @keyframes drop-fall {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(60vh); }
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(60vh); opacity: 0.4; }
+          }
+          @keyframes scale-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
           }
         `}</style>
       </div>

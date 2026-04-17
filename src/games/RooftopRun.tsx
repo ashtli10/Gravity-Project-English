@@ -1654,6 +1654,8 @@ function runGame(canvas: HTMLCanvasElement, onGameOver?: (score: number) => void
   let gs = createInitialState(w, h);
   const input = createInputManager(canvas);
   let scoreSubmitted = false;
+  let lastLiveScore = 0;
+  let lastLiveTime = 0;
 
   function restart() {
     const { w, h } = resizeCanvas();
@@ -1663,6 +1665,8 @@ function runGame(canvas: HTMLCanvasElement, onGameOver?: (score: number) => void
     gs.bestDistance = bestDist;
     gs.bestCoins = bestCoins;
     scoreSubmitted = false;
+    lastLiveScore = 0;
+    lastLiveTime = 0;
   }
 
   const onResize = () => {
@@ -1686,11 +1690,19 @@ function runGame(canvas: HTMLCanvasElement, onGameOver?: (score: number) => void
       case "countdown":
         updateCountdown(gs, dt);
         break;
-      case "playing":
+      case "playing": {
         updatePlaying(gs, input.state, dt);
         input.state.jumpPressed = false;
         input.state.jumpReleasedThisFrame = false;
+        // Live score: submit every 3s if improved
+        const curScore = Math.floor(gs.distance);
+        if (now - lastLiveTime > 3000 && curScore > lastLiveScore) {
+          lastLiveScore = curScore;
+          lastLiveTime = now;
+          onGameOver?.(curScore);
+        }
         break;
+      }
       case "dead":
         updateDead(gs, dt);
         input.state.jumpPressed = false;

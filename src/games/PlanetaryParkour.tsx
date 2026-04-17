@@ -343,6 +343,9 @@ export default function PlanetaryParkour({ onGameOver }: { onGameOver?: (score: 
     }
   }, []);
 
+  let liveLastScore = 0;
+  let liveLastTime = 0;
+
   function startCountdown() {
     const g = gs.current;
     g.playerY = g.canvasH * 0.45;
@@ -368,6 +371,8 @@ export default function PlanetaryParkour({ onGameOver }: { onGameOver?: (score: 
     g.state = "COUNTDOWN";
     g.countdownStep = 3;
     g.countdownTimer = 0;
+    liveLastScore = 0;
+    liveLastTime = 0;
 
     // Generate terrain
     g.terrain = [];
@@ -1183,6 +1188,18 @@ export default function PlanetaryParkour({ onGameOver }: { onGameOver?: (score: 
               g.cosmeticLabelTimer = 2.0;
             }
             g.lastCosmeticZone = czi;
+          }
+        }
+
+        // Live score: submit every 3s if improved
+        const nowMs = performance.now();
+        if (nowMs - liveLastTime > 3000 && g.score > 0) {
+          const multiplier = PLANET_SCORE_MULTIPLIER[planet.name] ?? 1;
+          const weighted = Math.round(g.score * multiplier);
+          if (weighted > liveLastScore) {
+            liveLastScore = weighted;
+            liveLastTime = nowMs;
+            onGameOverRef.current?.(weighted);
           }
         }
 

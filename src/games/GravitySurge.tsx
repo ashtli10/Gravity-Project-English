@@ -599,6 +599,9 @@ export default function GravitySurge({ onGameOver }: { onGameOver?: (score: numb
     window.addEventListener("keydown", handleKeyDown);
 
     // ── Reset ─────────────────────────────────────────────────────────────
+    let lastLiveScore = 0;
+    let lastLiveTime = 0;
+
     function resetGame() {
       player = createPlayer();
       obstacles = [];
@@ -612,6 +615,8 @@ export default function GravitySurge({ onGameOver }: { onGameOver?: (score: numb
       nextPatternX = player.x + W * 0.7;
       buildPlaylist();
       initStars();
+      lastLiveScore = 0;
+      lastLiveTime = 0;
     }
 
     // ── Update ────────────────────────────────────────────────────────────
@@ -707,6 +712,14 @@ export default function GravitySurge({ onGameOver }: { onGameOver?: (score: numb
 
       // ── Score ───────────────────────────────────────────────────────────
       state.score = Math.floor(state.distanceTraveled / 10);
+
+      // Live score: submit every 3s if improved
+      const nowMs = performance.now();
+      if (nowMs - lastLiveTime > 3000 && state.score > lastLiveScore) {
+        lastLiveScore = state.score;
+        lastLiveTime = nowMs;
+        onGameOverRef.current?.(state.score);
+      }
 
       // ── Collision ───────────────────────────────────────────────────────
       if (checkCollision()) { die(); return; }

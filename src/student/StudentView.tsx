@@ -77,34 +77,35 @@ export default function StudentView() {
 
   const event = session.activeEvent;
   if (!event) {
-    // First slide (title) = play while waiting. Other slides = look at the screen.
     if (session.slideIndex === 0) return <WaitingScreen />;
     return <LookUp />;
   }
+
+  // Games keep running across game→leaderboard slides (same event type persists).
+  // Non-game events use triggeredAt as key so they reset when re-triggered.
+  const eventKey = String(event.triggeredAt);
 
   switch (event.type) {
     case "lookUp":
       return <LookUp />;
     case "dropTest_vacuum":
-      return <DropTest mode="vacuum" />;
+      return <DropTest key="vacuum" mode="vacuum" />;
     case "dropShow_vacuum":
-      return <DropTest mode="vacuum" showDrop />;
+      return <DropTest key="vacuum" mode="vacuum" showDrop />;
     case "dropTest_air":
-      return <DropTest mode="air" onScored={handleScore("dropTestAir")} />;
+      return <DropTest key="air" mode="air" onScored={handleScore("dropTestAir")} />;
     case "dropShow_air":
-      return <DropTest mode="air" showDrop onScored={handleScore("dropTestAir")} />;
+      return <DropTest key="air" mode="air" showDrop onScored={handleScore("dropTestAir")} />;
     case "moveSpotter":
-      return <VideoQuiz onFinished={handleScore("videoQuiz")} />;
+      return <VideoQuiz key={eventKey} onFinished={handleScore("videoQuiz")} />;
     case "rooftopRun":
       return <RooftopRun onGameOver={handleScore("rooftopRun")} />;
     case "planetaryParkour":
-      return (
-        <PlanetaryParkour onGameOver={handleScore("planetaryParkour")} />
-      );
+      return <PlanetaryParkour onGameOver={handleScore("planetaryParkour")} />;
     case "gravitySurge":
       return <GravitySurge onGameOver={handleScore("gravitySurge")} />;
     case "poll":
-      return <PollView sessionId={session._id} voterId={voterId} />;
+      return <PollView key={eventKey} sessionId={session._id} voterId={voterId} />;
     default:
       return <LookUp />;
   }

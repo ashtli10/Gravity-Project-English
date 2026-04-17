@@ -207,7 +207,7 @@ export const getTotalLeaderboard = query({
       p.gameNormalized[s.game] = max > 0 ? (s.rawScore / max) * 1000 : 0;
     }
 
-    // Build sorted result
+    // Build sorted result — use normalized scores so all games feel equally weighted
     const results = Array.from(playerMap.entries()).map(([, p]) => ({
       playerName: p.playerName,
       totalScore: Math.round(
@@ -217,7 +217,13 @@ export const getTotalLeaderboard = query({
           p.gameNormalized.videoQuiz +
           p.gameNormalized.dropTestAir
       ),
-      gameScores: p.gameScores,
+      gameScores: {
+        rooftopRun: Math.round(p.gameNormalized.rooftopRun),
+        planetaryParkour: Math.round(p.gameNormalized.planetaryParkour),
+        gravitySurge: Math.round(p.gameNormalized.gravitySurge),
+        videoQuiz: Math.round(p.gameNormalized.videoQuiz),
+        dropTestAir: Math.round(p.gameNormalized.dropTestAir),
+      },
     }));
 
     results.sort((a, b) => b.totalScore - a.totalScore);
