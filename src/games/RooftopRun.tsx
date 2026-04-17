@@ -418,6 +418,16 @@ function generatePlatform(
 
   let gap = randomRange(LEVEL.gapMinWidth, LEVEL.gapMaxWidth) * gapMult;
   let width = Math.max(80, randomRange(LEVEL.platformMinWidth, LEVEL.platformMaxWidth) * lerp(1, 0.8, diff));
+  const type = pickPlatformType(distance);
+
+  // Crumbling platforms must be narrow enough to cross before they disappear.
+  // At speed S, the player crosses W pixels in W/S seconds. The crumble timer
+  // is 0.7s, so cap width to 75% of what the player can cross in time.
+  if (type === "crumbling") {
+    const speed = getCurrentSpeed(distance);
+    width = Math.min(width, Math.max(80, speed * 0.7 * 0.75));
+  }
+
   const baseY = canvasHeight * LEVEL.baseY;
   let yVar = randomRange(-LEVEL.yVariation, LEVEL.yVariation) * lerp(1, 1.2, diff);
 
@@ -450,11 +460,12 @@ function generatePlatform(
   // Early game: make first 3000px trivially easy
   if (distance < 3000) {
     gap = Math.min(gap, safeGap * 0.6);
-    width = Math.max(width, 200);
+    if (type !== "crumbling") {
+      width = Math.max(width, 200);
+    }
   }
 
   const x = lastX + lastWidth + gap;
-  const type = pickPlatformType(distance);
 
   return {
     x, y, width,
