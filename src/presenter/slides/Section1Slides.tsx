@@ -1288,5 +1288,5 @@ export const section1Slides: SlideDefinition[] = [
   { id: "vacuum-result", section: 1, accent: "cyan", component: VacuumResultSlide, studentEvent: "dropShow_vacuum" },
   { id: "drop-test-air", section: 1, accent: "cyan", component: DropTestAirSlide, studentEvent: "dropTest_air" },
   { id: "air-result", section: 1, accent: "cyan", component: AirResultSlide, studentEvent: "dropShow_air" },
-  { id: "drop-test-leaderboard", section: 1, accent: "cyan", component: DropTestLeaderboardSlide },
+  { id: "drop-test-leaderboard", section: 1, accent: "cyan", component: DropTestLeaderboardSlide, studentEvent: "dropShow_air" },
 ];

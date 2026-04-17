@@ -468,5 +468,6 @@ export const section4Slides: SlideDefinition[] = [
     section: 4,
     accent: "green",
     component: PlanetaryParkourLeaderboardSlide,
+    studentEvent: "planetaryParkour",
   },
 ];

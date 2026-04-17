@@ -10,7 +10,6 @@ import NameEntry from "./components/NameEntry";
 import RooftopRun from "../games/RooftopRun";
 import PlanetaryParkour from "../games/PlanetaryParkour";
 import GravitySurge from "../games/GravitySurge";
-import WallClimber from "../games/WallClimber";
 
 function getVoterId(): string {
   const stored = localStorage.getItem("gravity-voter-id");
@@ -104,8 +103,6 @@ export default function StudentView() {
       );
     case "gravitySurge":
       return <GravitySurge onGameOver={handleScore("gravitySurge")} />;
-    case "wallClimber":
-      return <WallClimber />;
     case "poll":
       return <PollView sessionId={session._id} voterId={voterId} />;
     default:

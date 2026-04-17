@@ -690,12 +690,14 @@ export const section5Slides: SlideDefinition[] = [
     section: 5,
     accent: "mixed",
     component: GravitySurgeLeaderboardSlide,
+    studentEvent: "gravitySurge",
   },
   {
     id: "champion",
     section: 5,
     accent: "mixed",
     component: ChampionLeaderboardSlide,
+    studentEvent: "gravitySurge",
   },
   {
     id: "thank-you",

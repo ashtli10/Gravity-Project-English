@@ -566,5 +566,5 @@ export const section2Slides: SlideDefinition[] = [
   { id: "wall-run", section: 2, accent: "pink", component: WallRunSlide },
   { id: "precision-jump-roll", section: 2, accent: "pink", component: PrecisionJumpRollSlide },
   { id: "video-quiz", section: 2, accent: "pink", component: SpotTheMovesSlide, studentEvent: "moveSpotter" },
-  { id: "video-quiz-leaderboard", section: 2, accent: "pink", component: VideoQuizLeaderboardSlide },
+  { id: "video-quiz-leaderboard", section: 2, accent: "pink", component: VideoQuizLeaderboardSlide, studentEvent: "moveSpotter" },
 ];

@@ -655,5 +655,6 @@ export const section3Slides: SlideDefinition[] = [
     section: 3,
     accent: "gold",
     component: RooftopRunLeaderboardSlide,
+    studentEvent: "rooftopRun",
   },
 ];

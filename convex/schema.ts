@@ -15,7 +15,6 @@ export default defineSchema({
           v.literal("rooftopRun"),
           v.literal("planetaryParkour"),
           v.literal("gravitySurge"),
-          v.literal("wallClimber"),
           v.literal("poll"),
           v.literal("lookUp")
         ),
