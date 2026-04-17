@@ -53,6 +53,7 @@ interface TerrainPoint {
 
 interface PlanetDef {
   name: string;
+  emoji: string;
   gravity: number;
   flapVelocity: number;
   baseGap: number;      // starting gap as fraction of canvas height
@@ -74,6 +75,7 @@ interface PlanetDef {
 const PLANETS: PlanetDef[] = [
   {
     name: "Moon",
+    emoji: "\uD83C\uDF19",
     gravity: 400,
     flapVelocity: -280,
     baseGap: 0.44,
@@ -91,6 +93,7 @@ const PLANETS: PlanetDef[] = [
   },
   {
     name: "Earth",
+    emoji: "\uD83C\uDF0D",
     gravity: 980,
     flapVelocity: -380,
     baseGap: 0.35,
@@ -108,6 +111,7 @@ const PLANETS: PlanetDef[] = [
   },
   {
     name: "Mars",
+    emoji: "\uD83D\uDD34",
     gravity: 620,
     flapVelocity: -320,
     baseGap: 0.39,
@@ -125,6 +129,7 @@ const PLANETS: PlanetDef[] = [
   },
   {
     name: "Jupiter",
+    emoji: "\uD83E\uDE90",
     gravity: 1800,
     flapVelocity: -520,
     baseGap: 0.30,
@@ -142,6 +147,7 @@ const PLANETS: PlanetDef[] = [
   },
   {
     name: "Sun",
+    emoji: "\u2600\uFE0F",
     gravity: 2600,
     flapVelocity: -640,
     baseGap: 0.27,
@@ -194,6 +200,7 @@ const DEATH_FLASH_MS = 150;
 const MOVING_PIPE_CHANCE = 0.22;  // ~1 in 5 pipes oscillates
 const SHOOTING_STAR_INTERVAL = 2.5; // seconds between shooting stars
 const COMBO_MILESTONE = 5;
+const PLANET_BAR_HEIGHT = 56;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -308,6 +315,7 @@ export default function PlanetaryParkour() {
     animId: 0,
     highScore: 0,
     pipeCounter: 0, // for deciding which pipes oscillate
+    lastPipeGapY: -1, // previous pipe's gap center for reachability clamping
   });
 
   const flap = useCallback(() => {
@@ -346,6 +354,7 @@ export default function PlanetaryParkour() {
     g.lastCosmeticZone = 0;
     g.shootingStarTimer = 0;
     g.pipeCounter = 0;
+    g.lastPipeGapY = -1;
     g.state = "COUNTDOWN";
     g.countdownStep = 3;
     g.countdownTimer = 0;
@@ -424,10 +433,43 @@ export default function PlanetaryParkour() {
         g2.planet.baseGap - g2.totalPipesPassed * 0.004
       );
       const gapH = h * gapFrac;
-      const gapY = margin + gapH / 2 + Math.random() * (h - 2 * margin - gapH);
 
+      // Compute oscillation params first (needed for reachability budget)
       g2.pipeCounter++;
       const shouldOscillate = Math.random() < MOVING_PIPE_CHANCE && g2.pipeCounter > 5;
+      // Scale oscillation down at high difficulty
+      const oscDifficultyScale = Math.max(0.4, 1.0 - g2.totalPipesPassed * 0.012);
+      const oscillateAmp = shouldOscillate ? (25 + Math.random() * 35) * oscDifficultyScale : 0;
+      const oscillateSpeed = shouldOscillate ? 1.5 + Math.random() * 1.5 : 0;
+
+      // Generate unconstrained random gapY
+      let gapY = margin + gapH / 2 + Math.random() * (h - 2 * margin - gapH);
+
+      // Clamp to reachable range from previous pipe
+      if (g2.lastPipeGapY >= 0) {
+        const scrollSpeed = Math.min(
+          MAX_SCROLL_SPEED,
+          BASE_SCROLL_SPEED + g2.totalPipesPassed * SCROLL_SPEED_RAMP
+        );
+        const T = PIPE_SPACING / scrollSpeed;
+
+        // Max FALL (going down = increasing Y): gravity helps
+        const maxFall = 0.5 * g2.planet.gravity * T * T;
+        // Max RISE (going up = decreasing Y): must flap repeatedly against gravity
+        const maxRise = Math.abs(g2.planet.flapVelocity) * T * 0.55;
+
+        // Safety margin + subtract oscillation budget (pipe may be at worst position)
+        const safeMaxFall = maxFall * 0.85 - oscillateAmp;
+        const safeMaxRise = maxRise * 0.85 - oscillateAmp;
+
+        const minGapY = g2.lastPipeGapY - Math.max(0, safeMaxRise);
+        const maxGapY = g2.lastPipeGapY + Math.max(0, safeMaxFall);
+        gapY = clamp(gapY, minGapY, maxGapY);
+      }
+
+      // Respect screen margins
+      gapY = clamp(gapY, margin + gapH / 2, h - margin - gapH / 2);
+      g2.lastPipeGapY = gapY;
 
       g2.pipes.push({
         x: g2.nextPipeX,
@@ -435,8 +477,8 @@ export default function PlanetaryParkour() {
         baseGapY: gapY,
         gapH,
         scored: false,
-        oscillateAmp: shouldOscillate ? 25 + Math.random() * 35 : 0,
-        oscillateSpeed: shouldOscillate ? 1.5 + Math.random() * 1.5 : 0,
+        oscillateAmp,
+        oscillateSpeed,
         style: Math.floor(Math.random() * 3),
       });
       g2.nextPipeX += PIPE_SPACING;
@@ -837,7 +879,7 @@ export default function PlanetaryParkour() {
       c.shadowColor = planet.accentColor;
       c.shadowBlur = 20;
       c.fillStyle = "#ffffff";
-      c.fillText(String(g2.score), w / 2, 32);
+      c.fillText(String(g2.score), w / 2, 32 + PLANET_BAR_HEIGHT);
       c.shadowBlur = 0;
       c.restore();
 
@@ -850,7 +892,7 @@ export default function PlanetaryParkour() {
         c.fillStyle = planet.accentColor;
         c.shadowColor = planet.accentColor;
         c.shadowBlur = 12;
-        c.fillText(`x${g2.combo} STREAK`, w / 2, 90);
+        c.fillText(`x${g2.combo} STREAK`, w / 2, 90 + PLANET_BAR_HEIGHT);
         c.shadowBlur = 0;
         c.restore();
       }
@@ -870,15 +912,6 @@ export default function PlanetaryParkour() {
         c.restore();
       }
 
-      // Planet & gravity info (top-left)
-      c.font = "bold 13px -apple-system, BlinkMacSystemFont, sans-serif";
-      c.textAlign = "left";
-      c.fillStyle = planet.accentColor + "90";
-      c.fillText(planet.name, 12, 28);
-      c.font = "11px -apple-system, BlinkMacSystemFont, sans-serif";
-      c.fillStyle = "#ffffff50";
-      c.fillText(`g = ${planet.realGravity}`, 12, 44);
-
       // Cosmetic zone label
       if (g2.cosmeticLabelTimer > 0 && g2.cosmeticLabelText) {
         const alpha = g2.cosmeticLabelTimer > 1.5 ? (2 - g2.cosmeticLabelTimer) * 2 : g2.cosmeticLabelTimer / 1.5;
@@ -887,7 +920,7 @@ export default function PlanetaryParkour() {
         c.font = "bold 18px -apple-system, BlinkMacSystemFont, sans-serif";
         c.textAlign = "center";
         c.fillStyle = planet.accentColor + "cc";
-        c.fillText(g2.cosmeticLabelText, w / 2, g.canvasH * 0.14);
+        c.fillText(g2.cosmeticLabelText, w / 2, Math.max(g.canvasH * 0.14, PLANET_BAR_HEIGHT + 20));
         c.globalAlpha = 1;
         c.restore();
       }
@@ -906,13 +939,13 @@ export default function PlanetaryParkour() {
       c.fillStyle = planet.accentColor;
       c.shadowColor = planet.accentColor;
       c.shadowBlur = 24;
-      c.fillText(planet.name.toUpperCase(), w / 2, h * 0.2);
+      c.fillText(planet.name.toUpperCase(), w / 2, h * 0.25);
       c.shadowBlur = 0;
 
       c.font = "16px -apple-system, BlinkMacSystemFont, sans-serif";
       c.fillStyle = "#8888a0";
-      c.fillText(`Gravity: ${planet.realGravity}`, w / 2, h * 0.27);
-      c.fillText(planet.description, w / 2, h * 0.32);
+      c.fillText(`Gravity: ${planet.realGravity}`, w / 2, h * 0.30);
+      c.fillText(planet.description, w / 2, h * 0.35);
 
       // Bouncing rocket
       const ry = h * 0.48 + Math.sin(time * 2.5) * 10;
@@ -994,13 +1027,13 @@ export default function PlanetaryParkour() {
       c.fillStyle = "#ff4444";
       c.shadowColor = "#ff4444";
       c.shadowBlur = 20;
-      c.fillText("GAME OVER", w / 2, h * 0.26);
+      c.fillText("GAME OVER", w / 2, h * 0.30);
       c.shadowBlur = 0;
 
       // Score
       c.font = "bold 56px -apple-system, BlinkMacSystemFont, sans-serif";
       c.fillStyle = "#ffffff";
-      c.fillText(String(g2.score), w / 2, h * 0.37);
+      c.fillText(String(g2.score), w / 2, h * 0.40);
 
       // Planet info
       c.font = "18px -apple-system, BlinkMacSystemFont, sans-serif";
@@ -1026,10 +1059,6 @@ export default function PlanetaryParkour() {
       c.fillText("TAP TO RETRY", w / 2, h * 0.73);
       c.globalAlpha = 1;
 
-      // Back to planets hint
-      c.font = "13px -apple-system, BlinkMacSystemFont, sans-serif";
-      c.fillStyle = "#555570";
-      c.fillText("Press back to choose another planet", w / 2, h * 0.80);
       c.restore();
     }
 
@@ -1093,7 +1122,7 @@ export default function PlanetaryParkour() {
             pipe.gapY = pipe.baseGapY + Math.sin(time * pipe.oscillateSpeed) * pipe.oscillateAmp;
             // Clamp so gap doesn't go offscreen
             const halfGap = pipe.gapH / 2;
-            const margin = g.canvasH * 0.08;
+            const margin = g.canvasH * 0.1;
             pipe.gapY = clamp(pipe.gapY, margin + halfGap, g.canvasH - margin - halfGap);
           }
         }
@@ -1411,34 +1440,82 @@ export default function PlanetaryParkour() {
           touchAction: "none",
         }}
       />
-      {/* Back button */}
-      <button
-        onClick={() => {
-          const g = gs.current;
-          cancelAnimationFrame(g.animId);
-          g.state = "IDLE";
-          setSelectedPlanet(null);
-        }}
+      {/* Planet selector bar */}
+      <div
         style={{
           position: "absolute",
-          top: "8px",
-          left: "8px",
-          background: "rgba(10,10,15,0.75)",
-          color: "#8888a0",
-          border: "1px solid rgba(136,136,160,0.25)",
-          borderRadius: "10px",
-          padding: "6px 14px",
-          fontSize: "14px",
-          fontWeight: 600,
-          cursor: "pointer",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: `${PLANET_BAR_HEIGHT}px`,
+          display: "flex",
+          alignItems: "stretch",
+          justifyContent: "center",
+          background: "rgba(10, 10, 15, 0.85)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
           zIndex: 10,
-          fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
           touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
         }}
       >
-        &larr; Planets
-      </button>
+        {PLANETS.map((p, i) => (
+          <button
+            key={p.name}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (i === selectedPlanet) return;
+              const g = gs.current;
+              cancelAnimationFrame(g.animId);
+              g.state = "IDLE";
+              g.pipes = [];
+              g.score = 0;
+              g.totalPipesPassed = 0;
+              g.combo = 0;
+              g.scrollX = 0;
+              g.nextPipeX = 0;
+              g.particles = [];
+              g.shootingStars = [];
+              g.flashTimer = 0;
+              g.pipeCounter = 0;
+              g.lastPipeGapY = -1;
+              setSelectedPlanet(i);
+            }}
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "4px 2px",
+              background: i === selectedPlanet
+                ? `${p.accentColor}18`
+                : "transparent",
+              border: "none",
+              borderBottom: i === selectedPlanet
+                ? `3px solid ${p.accentColor}`
+                : "3px solid transparent",
+              cursor: "pointer",
+              fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+              touchAction: "manipulation",
+              WebkitTapHighlightColor: "transparent",
+            }}
+          >
+            <span style={{ fontSize: "22px", lineHeight: 1 }}>
+              {p.emoji}
+            </span>
+            <span
+              style={{
+                fontSize: "12px",
+                fontWeight: 700,
+                color: i === selectedPlanet ? p.accentColor : "#8888a0",
+                marginTop: "3px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {p.name}
+            </span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
