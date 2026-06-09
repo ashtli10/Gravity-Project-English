@@ -5,7 +5,6 @@ const gameValidator = v.union(
   v.literal("rooftopRun"),
   v.literal("planetaryParkour"),
   v.literal("gravitySurge"),
-  v.literal("videoQuiz"),
   v.literal("dropTestAir")
 );
 
@@ -130,8 +129,8 @@ export const getLeaderboard = query({
   },
 });
 
-type GameName = "rooftopRun" | "planetaryParkour" | "gravitySurge" | "videoQuiz" | "dropTestAir";
-const GAMES: GameName[] = ["rooftopRun", "planetaryParkour", "gravitySurge", "videoQuiz", "dropTestAir"];
+type GameName = "rooftopRun" | "planetaryParkour" | "gravitySurge" | "dropTestAir";
+const GAMES: GameName[] = ["rooftopRun", "planetaryParkour", "gravitySurge", "dropTestAir"];
 
 export const getTotalLeaderboard = query({
   args: {
@@ -168,7 +167,6 @@ export const getTotalLeaderboard = query({
       rooftopRun: 0,
       planetaryParkour: 0,
       gravitySurge: 0,
-      videoQuiz: 0,
       dropTestAir: 0,
     };
     for (const s of allScores) {
@@ -191,12 +189,11 @@ export const getTotalLeaderboard = query({
       if (!playerMap.has(s.voterId)) {
         playerMap.set(s.voterId, {
           playerName: s.playerName,
-          gameScores: { rooftopRun: 0, planetaryParkour: 0, gravitySurge: 0, videoQuiz: 0, dropTestAir: 0 },
+          gameScores: { rooftopRun: 0, planetaryParkour: 0, gravitySurge: 0, dropTestAir: 0 },
           gameNormalized: {
             rooftopRun: 0,
             planetaryParkour: 0,
             gravitySurge: 0,
-            videoQuiz: 0,
             dropTestAir: 0,
           },
         });
@@ -214,14 +211,12 @@ export const getTotalLeaderboard = query({
         p.gameNormalized.rooftopRun +
           p.gameNormalized.planetaryParkour +
           p.gameNormalized.gravitySurge +
-          p.gameNormalized.videoQuiz +
           p.gameNormalized.dropTestAir
       ),
       gameScores: {
         rooftopRun: Math.round(p.gameNormalized.rooftopRun),
         planetaryParkour: Math.round(p.gameNormalized.planetaryParkour),
         gravitySurge: Math.round(p.gameNormalized.gravitySurge),
-        videoQuiz: Math.round(p.gameNormalized.videoQuiz),
         dropTestAir: Math.round(p.gameNormalized.dropTestAir),
       },
     }));

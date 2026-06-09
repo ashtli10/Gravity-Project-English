@@ -12,7 +12,7 @@ export const getCurrent = query({
 export const create = mutation({
   args: { presenterKey: v.string() },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Invalid presenter key");
     }
     const existing = await ctx.db.query("sessions").take(10);
@@ -25,7 +25,7 @@ export const create = mutation({
         )
         .take(500);
       for (const vote of votes) {
-        await ctx.db.delete(vote._id);
+        await ctx.db.delete("pollVotes", vote._id);
       }
       // Clean up old players
       const players = await ctx.db
@@ -35,7 +35,7 @@ export const create = mutation({
         )
         .take(500);
       for (const p of players) {
-        await ctx.db.delete(p._id);
+        await ctx.db.delete("players", p._id);
       }
       // Clean up old scores
       const scores = await ctx.db
@@ -45,9 +45,9 @@ export const create = mutation({
         )
         .take(500);
       for (const sc of scores) {
-        await ctx.db.delete(sc._id);
+        await ctx.db.delete("scores", sc._id);
       }
-      await ctx.db.delete(s._id);
+      await ctx.db.delete("sessions", s._id);
     }
     const id = await ctx.db.insert("sessions", {
       slideIndex: 0,
@@ -64,7 +64,7 @@ export const advanceSlide = mutation({
     studentEvent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Unauthorized");
     }
     const session = await ctx.db.get("sessions", args.sessionId);
@@ -85,7 +85,7 @@ export const previousSlide = mutation({
     studentEvent: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Unauthorized");
     }
     const session = await ctx.db.get("sessions", args.sessionId);
@@ -108,7 +108,7 @@ export const goToSlide = mutation({
     slideIndex: v.number(),
   },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Unauthorized");
     }
     await ctx.db.patch("sessions", args.sessionId, {
@@ -127,7 +127,6 @@ export const triggerEvent = mutation({
       v.literal("dropTest_air"),
       v.literal("dropShow_vacuum"),
       v.literal("dropShow_air"),
-      v.literal("moveSpotter"),
       v.literal("rooftopRun"),
       v.literal("planetaryParkour"),
       v.literal("gravitySurge"),
@@ -136,7 +135,7 @@ export const triggerEvent = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Unauthorized");
     }
     await ctx.db.patch("sessions", args.sessionId, {
@@ -154,7 +153,7 @@ export const clearEvent = mutation({
     presenterKey: v.string(),
   },
   handler: async (ctx, args) => {
-    if (args.presenterKey !== "gravity2026") {
+    if (args.presenterKey !== "frontier2200") {
       throw new Error("Unauthorized");
     }
     await ctx.db.patch("sessions", args.sessionId, {

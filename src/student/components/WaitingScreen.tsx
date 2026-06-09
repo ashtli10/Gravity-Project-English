@@ -21,7 +21,7 @@ export default function WaitingScreen() {
           letterSpacing: "0.05em",
         }}
       >
-        DEFYING GRAVITY
+        FRONTIER 2200
       </div>
       <div
         style={{
@@ -39,7 +39,7 @@ export default function WaitingScreen() {
           textAlign: "center",
         }}
       >
-        Waiting for the presentation to start...
+        Awaiting mission launch...
       </div>
     </div>
   );

@@ -1,72 +1,92 @@
-import { Particle, Vec2 } from "./types";
+// Simple particle system shared across games (bursts, trails, sparks).
 
-export function emitImpact(
-  particles: Particle[],
-  pos: Vec2,
-  color: string,
-  count: number
-): void {
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      pos: { x: pos.x, y: pos.y },
-      vel: {
-        x: (Math.random() - 0.5) * 300,
-        y: -Math.random() * 200 - 50,
-      },
-      life: 0.3 + Math.random() * 0.4,
-      maxLife: 0.7,
-      color,
-      size: 2 + Math.random() * 4,
-    });
-  }
+export interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  color: string;
+  gravity: number;
 }
 
-export function emitTrail(
-  particles: Particle[],
-  pos: Vec2,
-  color: string
-): void {
-  particles.push({
-    pos: { x: pos.x, y: pos.y },
-    vel: { x: -30 + Math.random() * 10, y: (Math.random() - 0.5) * 20 },
-    life: 0.15 + Math.random() * 0.15,
-    maxLife: 0.3,
-    color,
-    size: 1.5 + Math.random() * 2,
-  });
-}
+export class Particles {
+  private list: Particle[] = [];
 
-export function emitDeath(
-  particles: Particle[],
-  pos: Vec2,
-  color: string
-): void {
-  for (let i = 0; i < 25; i++) {
-    const angle = (Math.PI * 2 * i) / 25;
-    const speed = 100 + Math.random() * 200;
-    particles.push({
-      pos: { x: pos.x, y: pos.y },
-      vel: {
-        x: Math.cos(angle) * speed,
-        y: Math.sin(angle) * speed,
-      },
-      life: 0.4 + Math.random() * 0.6,
-      maxLife: 1,
-      color,
-      size: 3 + Math.random() * 5,
-    });
-  }
-}
-
-export function updateParticles(particles: Particle[], dt: number): void {
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-    p.pos.x += p.vel.x * dt;
-    p.pos.y += p.vel.y * dt;
-    p.vel.y += 200 * dt; // particle gravity
-    p.life -= dt;
-    if (p.life <= 0) {
-      particles.splice(i, 1);
+  /** Radial burst — used for explosions / deaths. */
+  burst(
+    x: number,
+    y: number,
+    count: number,
+    color: string,
+    opts: { speed?: number; size?: number; gravity?: number; life?: number } = {}
+  ) {
+    const speed = opts.speed ?? 320;
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const s = speed * (0.3 + Math.random() * 0.7);
+      const life = opts.life ?? 0.6 + Math.random() * 0.5;
+      this.list.push({
+        x,
+        y,
+        vx: Math.cos(a) * s,
+        vy: Math.sin(a) * s,
+        life,
+        maxLife: life,
+        size: (opts.size ?? 4) * (0.5 + Math.random()),
+        color,
+        gravity: opts.gravity ?? 0,
+      });
     }
+  }
+
+  /** Single trailing particle — call each frame behind a moving body. */
+  trail(x: number, y: number, color: string, size = 3, life = 0.4) {
+    this.list.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 30,
+      vy: (Math.random() - 0.5) * 30,
+      life,
+      maxLife: life,
+      size,
+      color,
+      gravity: 0,
+    });
+  }
+
+  update(dt: number) {
+    for (let i = this.list.length - 1; i >= 0; i--) {
+      const p = this.list[i];
+      p.life -= dt;
+      if (p.life <= 0) {
+        this.list.splice(i, 1);
+        continue;
+      }
+      p.vy += p.gravity * dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+    }
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+    for (const p of this.list) {
+      const a = p.life / p.maxLife;
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * a, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  clear() {
+    this.list = [];
   }
 }

@@ -79,7 +79,7 @@ export default function NameEntry({
           letterSpacing: "0.05em",
         }}
       >
-        DEFYING GRAVITY
+        FRONTIER 2200
       </div>
 
       <div
@@ -100,7 +100,7 @@ export default function NameEntry({
           textAlign: "center",
         }}
       >
-        Enter your name to join
+        Enter your call sign to join the mission
       </div>
 
       <div
@@ -123,7 +123,7 @@ export default function NameEntry({
             if (e.key === "Enter" && !submitting) handleSubmit();
           }}
           maxLength={16}
-          placeholder="Your name..."
+          placeholder="Call sign..."
           autoFocus
           style={{
             padding: "1rem 1.2rem",
@@ -228,7 +228,7 @@ export default function NameEntry({
             marginTop: "1rem",
           }}
         >
-          Waiting for presenter to start...
+          Awaiting mission launch...
         </div>
       )}
     </div>

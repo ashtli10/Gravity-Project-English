@@ -1,90 +1,89 @@
-export class InputManager {
-  private canvas: HTMLCanvasElement;
-  private _jumpPressed = false;
-  private _holdingJump = false;
-  private _swipeDown = false;
-  private touchStartY = 0;
-  private touchStartTime = 0;
-  private touching = false;
+// Unified pointer + keyboard input for the canvas games.
+// A "tap" is any pointerdown, mousedown, touchstart, or jump-key press.
+// Games poll consumeTap() once per frame and read isHolding() for variable jumps.
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.bindEvents();
-  }
+export class Input {
+  private tapQueued = false;
+  private holding = false;
+  private el: HTMLElement | Window;
+  private bound: Array<[string, EventListener]> = [];
 
-  private bindEvents(): void {
-    const opts = { passive: false } as AddEventListenerOptions;
+  constructor(target?: HTMLElement) {
+    this.el = target ?? window;
 
-    this.canvas.addEventListener("touchstart", this.onTouchStart, opts);
-    this.canvas.addEventListener("touchmove", this.onTouchMove, opts);
-    this.canvas.addEventListener("touchend", this.onTouchEnd, opts);
-
-    // Mouse fallback for desktop testing
-    this.canvas.addEventListener("mousedown", this.onMouseDown);
-    this.canvas.addEventListener("mouseup", this.onMouseUp);
-  }
-
-  private onTouchStart = (e: TouchEvent): void => {
-    e.preventDefault();
-    this.touching = true;
-    this.touchStartY = e.touches[0].clientY;
-    this.touchStartTime = performance.now();
-    this._jumpPressed = true;
-    this._holdingJump = true;
-    this._swipeDown = false;
-  };
-
-  private onTouchMove = (e: TouchEvent): void => {
-    e.preventDefault();
-    if (this.touching) {
-      const dy = e.touches[0].clientY - this.touchStartY;
-      if (dy > 40) {
-        this._swipeDown = true;
-        this._holdingJump = false;
+    const press = (e: Event) => {
+      // Ignore multi-touch extras; any press counts as a tap.
+      this.tapQueued = true;
+      this.holding = true;
+      if (e.cancelable) e.preventDefault();
+    };
+    const release = () => {
+      this.holding = false;
+    };
+    const keyDown = (e: KeyboardEvent) => {
+      if (
+        e.code === "Space" ||
+        e.code === "ArrowUp" ||
+        e.code === "ArrowDown" ||
+        e.code === "KeyW"
+      ) {
+        if (!e.repeat) {
+          this.tapQueued = true;
+          this.holding = true;
+        }
+        e.preventDefault();
       }
-    }
-  };
+    };
+    const keyUp = (e: KeyboardEvent) => {
+      if (
+        e.code === "Space" ||
+        e.code === "ArrowUp" ||
+        e.code === "ArrowDown" ||
+        e.code === "KeyW"
+      ) {
+        this.holding = false;
+      }
+    };
 
-  private onTouchEnd = (e: TouchEvent): void => {
-    e.preventDefault();
-    this.touching = false;
-    this._holdingJump = false;
-  };
+    this.add("pointerdown", press as EventListener);
+    this.add("pointerup", release as EventListener);
+    this.add("pointercancel", release as EventListener);
+    this.add("touchstart", press as EventListener);
+    this.add("touchend", release as EventListener);
+    this.add("mousedown", press as EventListener);
+    this.add("mouseup", release as EventListener);
+    window.addEventListener("keydown", keyDown);
+    window.addEventListener("keyup", keyUp);
+    this.bound.push(["keydown", keyDown as EventListener]);
+    this.bound.push(["keyup", keyUp as EventListener]);
+  }
 
-  private onMouseDown = (): void => {
-    this._jumpPressed = true;
-    this._holdingJump = true;
-  };
+  private add(type: string, fn: EventListener) {
+    this.el.addEventListener(type, fn, { passive: false } as AddEventListenerOptions);
+    this.bound.push([type, fn]);
+  }
 
-  private onMouseUp = (): void => {
-    this._holdingJump = false;
-  };
-
-  consumeJump(): boolean {
-    if (this._jumpPressed) {
-      this._jumpPressed = false;
+  /** Returns true once per queued tap, then clears it. */
+  consumeTap(): boolean {
+    if (this.tapQueued) {
+      this.tapQueued = false;
       return true;
     }
     return false;
   }
 
   isHolding(): boolean {
-    return this._holdingJump;
+    return this.holding;
   }
 
-  consumeSwipeDown(): boolean {
-    if (this._swipeDown) {
-      this._swipeDown = false;
-      return true;
+  destroy() {
+    for (const [type, fn] of this.bound) {
+      if (type === "keydown" || type === "keyup") {
+        window.removeEventListener(type, fn);
+      } else {
+        this.el.removeEventListener(type, fn);
+      }
     }
-    return false;
-  }
-
-  destroy(): void {
-    this.canvas.removeEventListener("touchstart", this.onTouchStart);
-    this.canvas.removeEventListener("touchmove", this.onTouchMove);
-    this.canvas.removeEventListener("touchend", this.onTouchEnd);
-    this.canvas.removeEventListener("mousedown", this.onMouseDown);
-    this.canvas.removeEventListener("mouseup", this.onMouseUp);
+    this.bound = [];
   }
 }

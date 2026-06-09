@@ -37,7 +37,7 @@ export default function PresenterView() {
   const navLock = useRef(false);
 
   useEffect(() => {
-    if (key === "gravity2026") {
+    if (key === "frontier2200") {
       setAuthorized(true);
       createSession({ presenterKey: key });
     }
@@ -89,7 +89,7 @@ export default function PresenterView() {
         background: "#0a0a0f", color: "#ff2d7b",
         fontSize: "1.5rem", fontFamily: "var(--font-display)",
       }}>
-        Access denied. Add ?key=gravity2026 to the URL.
+        Access denied. Add ?key=frontier2200 to the URL.
       </div>
     );
   }

@@ -6,8 +6,8 @@ import GameLeaderboard from "../components/GameLeaderboard";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
-/* ─── Slide 22: Section Title ─── */
-function WhatIfSlide({ active }: { active: boolean }) {
+/* ─── Slide 1: Section Title ─── */
+function NewWorldsTitleSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="green" active={active}>
       <AnimatedText
@@ -18,14 +18,14 @@ function WhatIfSlide({ active }: { active: boolean }) {
         delay={0}
         style={{ letterSpacing: "0.06em" }}
       >
-        WHAT IF GRAVITY CHANGED?
+        NEW WORLDS, NEW GRAVITY
       </AnimatedText>
       <AnimatedText
         color="var(--text-secondary)"
         size="var(--slide-subtitle)"
         delay={0.5}
       >
-        From floating to crushing — gravity rules everything
+        Every world pulls differently
       </AnimatedText>
       {/* Decorative pulsing circle */}
       <div
@@ -43,40 +43,34 @@ function WhatIfSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 23: Planet Comparison ─── */
+/* ─── Slide 2: Planet Comparison ─── */
 function PlanetComparisonSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="green" active={active}>
-      <AnimatedText
-        color="#00e676"
-        size="var(--slide-title)"
-        glow
-        weight={800}
-        delay={0}
-      >
-        GRAVITY ACROSS THE SOLAR SYSTEM
+      <AnimatedText color="#00e676" size="var(--slide-title)" glow weight={800}>
+        GRAVITY ACROSS THE WORLDS
       </AnimatedText>
       <PlanetComparison />
     </SlideLayout>
   );
 }
 
-/* ─── Slide 24: Moon Parkour ─── */
-function MoonParkourSlide({ active }: { active: boolean }) {
+/* ─── Slide 3: A Colony on the Moon ─── */
+function MoonColonySlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="green" active={active}>
       <AnimatedText
-        color="#8888a0"
+        color="#c0c0d0"
         size="var(--slide-title)"
         glow
         weight={800}
         delay={0}
       >
-        PARKOUR ON THE MOON
+        A COLONY ON THE MOON
       </AnimatedText>
 
       <AnimatedText
-        color="#8888a0"
+        color="#c0c0d0"
         size="var(--slide-body)"
         delay={0.2}
         mono
@@ -84,7 +78,7 @@ function MoonParkourSlide({ active }: { active: boolean }) {
         g = 1.6 m/s²
       </AnimatedText>
 
-      {/* SVG: huge floaty jump arc */}
+      {/* SVG: huge floaty jump arc vs small Earth jump */}
       <div style={{ animation: "fade-in-up 0.6s ease 0.4s both" }}>
         <svg
           viewBox="0 0 600 350"
@@ -98,7 +92,6 @@ function MoonParkourSlide({ active }: { active: boolean }) {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-            {/* Moon surface texture */}
             <linearGradient id="moon-surface" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#2a2a3e" />
               <stop offset="100%" stopColor="#1a1a2e" />
@@ -112,15 +105,15 @@ function MoonParkourSlide({ active }: { active: boolean }) {
             width="600"
             height="40"
             fill="url(#moon-surface)"
-            stroke="#8888a060"
+            stroke="#c0c0d060"
             strokeWidth="1"
           />
           {/* Craters */}
-          <ellipse cx="100" cy="320" rx="20" ry="5" fill="#1a1a2e" stroke="#8888a030" strokeWidth="1" />
-          <ellipse cx="400" cy="325" rx="15" ry="4" fill="#1a1a2e" stroke="#8888a030" strokeWidth="1" />
-          <ellipse cx="520" cy="318" rx="12" ry="3" fill="#1a1a2e" stroke="#8888a030" strokeWidth="1" />
+          <ellipse cx="100" cy="320" rx="20" ry="5" fill="#1a1a2e" stroke="#c0c0d030" strokeWidth="1" />
+          <ellipse cx="400" cy="325" rx="15" ry="4" fill="#1a1a2e" stroke="#c0c0d030" strokeWidth="1" />
+          <ellipse cx="520" cy="318" rx="12" ry="3" fill="#1a1a2e" stroke="#c0c0d030" strokeWidth="1" />
 
-          {/* Earth-height jump (small, reference) */}
+          {/* Earth-height jump (small, dashed reference) */}
           <path
             d="M 80 310 Q 130 260 180 310"
             fill="none"
@@ -136,32 +129,29 @@ function MoonParkourSlide({ active }: { active: boolean }) {
           <path
             d="M 80 310 Q 300 20 520 310"
             fill="none"
-            stroke="#8888a0"
+            stroke="#c0c0d0"
             strokeWidth="3"
             strokeDasharray="8,4"
             filter="url(#moon-glow)"
           />
 
           {/* Height markers */}
-          <line x1="300" y1="310" x2="300" y2="20" stroke="#8888a040" strokeWidth="1" strokeDasharray="3,6" />
-          <text x="315" y="30" fill="#8888a0" fontSize="14" fontFamily="var(--font-mono)">
+          <line x1="300" y1="310" x2="300" y2="20" stroke="#c0c0d040" strokeWidth="1" strokeDasharray="3,6" />
+          <text x="315" y="30" fill="#c0c0d0" fontSize="14" fontFamily="var(--font-mono)">
             6x higher!
           </text>
 
-          {/* Stick figure floating at peak */}
-          <circle cx="300" cy="25" r="16" fill="#8888a0" opacity="0.7" />
-          <line x1="300" y1="41" x2="300" y2="75" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
-          {/* Arms out wide (floating) */}
-          <line x1="300" y1="55" x2="270" y2="45" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
-          <line x1="300" y1="55" x2="330" y2="45" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
-          {/* Legs (floating, spread) */}
-          <line x1="300" y1="75" x2="285" y2="95" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
-          <line x1="300" y1="75" x2="315" y2="95" stroke="#8888a0" strokeWidth="4" opacity="0.7" />
+          {/* Floating figure at the peak */}
+          <circle cx="300" cy="25" r="16" fill="#c0c0d0" opacity="0.8" />
+          <line x1="300" y1="41" x2="300" y2="75" stroke="#c0c0d0" strokeWidth="4" opacity="0.8" />
+          <line x1="300" y1="55" x2="270" y2="45" stroke="#c0c0d0" strokeWidth="4" opacity="0.8" />
+          <line x1="300" y1="55" x2="330" y2="45" stroke="#c0c0d0" strokeWidth="4" opacity="0.8" />
+          <line x1="300" y1="75" x2="285" y2="95" stroke="#c0c0d0" strokeWidth="4" opacity="0.8" />
+          <line x1="300" y1="75" x2="315" y2="95" stroke="#c0c0d0" strokeWidth="4" opacity="0.8" />
 
-          {/* Stick figure on ground */}
+          {/* Figure on the ground (launch point) */}
           <circle cx="80" cy="278" r="14" fill="#00e676" />
           <line x1="80" y1="292" x2="80" y2="310" stroke="#00e676" strokeWidth="4" />
-          {/* Arms */}
           <line x1="80" y1="298" x2="65" y2="305" stroke="#00e676" strokeWidth="4" />
           <line x1="80" y1="298" x2="95" y2="305" stroke="#00e676" strokeWidth="4" />
         </svg>
@@ -173,27 +163,16 @@ function MoonParkourSlide({ active }: { active: boolean }) {
         delay={0.7}
         style={{ maxWidth: "85%" }}
       >
-        On the Moon, you{" "}
-        <span className="grammar-modal">would</span> jump six times
-        higher.
-      </AnimatedText>
-
-      <AnimatedText
-        color="var(--text-secondary)"
-        size="var(--slide-body)"
-        delay={1.0}
-        style={{ maxWidth: "85%", marginTop: "0.3rem" }}
-      >
-        You <span className="grammar-modal">can</span> float for seconds{" "}
-        <span className="grammar-purpose">in order to</span> cover huge
-        distances.
+        On the Moon, you <span className="grammar-future">would</span> jump six
+        times higher, and you <span className="grammar-possibility">could</span>{" "}
+        float for seconds.
       </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 25: Jupiter Parkour ─── */
-function JupiterParkourSlide({ active }: { active: boolean }) {
+/* ─── Slide 4: A World Like Jupiter ─── */
+function HeavyWorldSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="green" active={active}>
       <AnimatedText
@@ -203,7 +182,7 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
         weight={800}
         delay={0}
       >
-        PARKOUR ON JUPITER
+        A WORLD LIKE JUPITER
       </AnimatedText>
 
       <AnimatedText
@@ -215,7 +194,7 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
         g = 24.8 m/s²
       </AnimatedText>
 
-      {/* SVG: tiny crushed jump */}
+      {/* SVG: tiny crushed jump under heavy gravity */}
       <div style={{ animation: "fade-in-up 0.6s ease 0.4s both" }}>
         <svg
           viewBox="0 0 600 300"
@@ -229,7 +208,6 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-            {/* Jupiter surface banding */}
             <linearGradient id="jup-surface" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="#3a2a10" />
               <stop offset="30%" stopColor="#4a3520" />
@@ -249,7 +227,7 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
             strokeWidth="1"
           />
 
-          {/* Earth-height jump (reference, now looks huge by comparison) */}
+          {/* Earth-height jump (reference, looks huge by comparison) */}
           <path
             d="M 200 250 Q 300 130 400 250"
             fill="none"
@@ -269,28 +247,35 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
             strokeWidth="3"
             filter="url(#jup-glow)"
           />
-          <text x="300" y="215" fill="#ffc107" fontSize="14" fontFamily="var(--font-mono)" textAnchor="middle">
+          <text x="300" y="218" fill="#ffc107" fontSize="14" fontFamily="var(--font-mono)" textAnchor="middle">
             Jupiter jump
           </text>
 
-          {/* Massive gravity arrows pushing down */}
+          {/* Heavy gravity arrows pushing down */}
           <line x1="300" y1="60" x2="300" y2="200" stroke="#ff2d7b" strokeWidth="4" opacity="0.6" />
           <polygon points="300,215 293,195 307,195" fill="#ff2d7b" opacity="0.7" />
           <line x1="200" y1="80" x2="200" y2="180" stroke="#ff2d7b" strokeWidth="3" opacity="0.3" />
           <polygon points="200,190 195,175 205,175" fill="#ff2d7b" opacity="0.3" />
           <line x1="400" y1="80" x2="400" y2="180" stroke="#ff2d7b" strokeWidth="3" opacity="0.3" />
           <polygon points="400,190 395,175 405,175" fill="#ff2d7b" opacity="0.3" />
+          <line x1="120" y1="100" x2="120" y2="170" stroke="#ff2d7b" strokeWidth="2" opacity="0.2" />
+          <polygon points="120,180 116,168 124,168" fill="#ff2d7b" opacity="0.2" />
+          <line x1="480" y1="100" x2="480" y2="170" stroke="#ff2d7b" strokeWidth="2" opacity="0.2" />
+          <polygon points="480,180 476,168 484,168" fill="#ff2d7b" opacity="0.2" />
 
           <text x="420" y="130" fill="#ff2d7b" fontSize="14" fontFamily="var(--font-mono)" opacity="0.8">
             24.8 m/s²
           </text>
 
-          {/* Crushed stick figure */}
-          <circle cx="300" cy="230" r="12" fill="#ffc107" />
-          <line x1="300" y1="242" x2="300" y2="250" stroke="#ffc107" strokeWidth="4" />
-          {/* Arms (crushed, splayed out) */}
-          <line x1="300" y1="245" x2="282" y2="248" stroke="#ffc107" strokeWidth="4" />
-          <line x1="300" y1="245" x2="318" y2="248" stroke="#ffc107" strokeWidth="4" />
+          {/* Crushed / splayed figure pinned to the ground */}
+          <circle cx="300" cy="232" r="12" fill="#ffc107" />
+          <line x1="300" y1="244" x2="300" y2="250" stroke="#ffc107" strokeWidth="4" />
+          {/* Arms splayed flat */}
+          <line x1="300" y1="246" x2="278" y2="249" stroke="#ffc107" strokeWidth="4" />
+          <line x1="300" y1="246" x2="322" y2="249" stroke="#ffc107" strokeWidth="4" />
+          {/* Legs splayed flat */}
+          <line x1="300" y1="250" x2="284" y2="250" stroke="#ffc107" strokeWidth="4" />
+          <line x1="300" y1="250" x2="316" y2="250" stroke="#ffc107" strokeWidth="4" />
         </svg>
       </div>
 
@@ -300,31 +285,22 @@ function JupiterParkourSlide({ active }: { active: boolean }) {
         delay={0.7}
         style={{ maxWidth: "85%" }}
       >
-        On Jupiter, you{" "}
-        <span className="grammar-modal">wouldn&apos;t</span> be able to
-        jump at all.
-      </AnimatedText>
-
-      <AnimatedText
-        color="var(--text-secondary)"
-        size="var(--slide-body)"
-        delay={1.0}
-        style={{ maxWidth: "85%", marginTop: "0.3rem" }}
-      >
-        Your body <span className="grammar-modal">can&apos;t</span> fight
-        24.8 m/s² of gravity.
+        On Jupiter, you <span className="grammar-possibility">could</span>{" "}
+        barely move — your body <span className="grammar-future">will</span>{" "}
+        feel impossibly heavy.
       </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 26: Find Out (Planetary Parkour) ─── */
-function PlanetaryParkourSlide({ active }: { active: boolean }) {
+/* ─── Slide 5: Find Out Yourself (Starship Drifter) ─── */
+function DrifterIntroSlide({ active }: { active: boolean }) {
   const planets = [
-    { name: "Moon", color: "#8888a0", size: 30 },
-    { name: "Mars", color: "#ff6b35", size: 36 },
-    { name: "Earth", color: "#00e676", size: 42 },
-    { name: "Jupiter", color: "#ffc107", size: 60 },
+    { name: "Moon", color: "#c0c0d0", size: 34 },
+    { name: "Mars", color: "#ff6b35", size: 40 },
+    { name: "Earth", color: "#00e676", size: 46 },
+    { name: "Jupiter", color: "#ffc107", size: 64 },
+    { name: "Sun", color: "#ffaa00", size: 84 },
   ];
 
   return (
@@ -345,17 +321,16 @@ function PlanetaryParkourSlide({ active }: { active: boolean }) {
         size="var(--slide-subtitle)"
         delay={0.4}
       >
-        Planetary Parkour — Choose your planet!
+        Starship Drifter — choose your world!
       </AnimatedText>
 
-      {/* Planet circles */}
+      {/* Glowing planet circles */}
       <div
         style={{
           display: "flex",
-          gap: "3rem",
+          gap: "2.5rem",
           marginTop: "2.5rem",
           alignItems: "center",
-          animation: "fade-in-up 0.6s ease 0.7s both",
         }}
       >
         {planets.map((planet, i) => (
@@ -374,8 +349,8 @@ function PlanetaryParkourSlide({ active }: { active: boolean }) {
                 width: `${planet.size}px`,
                 height: `${planet.size}px`,
                 borderRadius: "50%",
-                background: `radial-gradient(circle at 35% 35%, ${planet.color}90, ${planet.color}40)`,
-                boxShadow: `0 0 20px ${planet.color}40, 0 0 40px ${planet.color}20`,
+                background: `radial-gradient(circle at 35% 35%, ${planet.color}f0, ${planet.color}40)`,
+                boxShadow: `0 0 24px ${planet.color}50, 0 0 48px ${planet.color}25`,
               }}
             />
             <span
@@ -392,25 +367,21 @@ function PlanetaryParkourSlide({ active }: { active: boolean }) {
         ))}
       </div>
 
-      {/* Pulsing indicator */}
-      <div
-        style={{
-          marginTop: "2rem",
-          fontSize: "var(--slide-body)",
-          color: "#00e676",
-          fontFamily: "var(--font-mono)",
-          animation: "fade-in-up 0.6s ease 1.3s both",
-          opacity: 0.8,
-        }}
+      <AnimatedText
+        color="#00e676"
+        size="var(--slide-body)"
+        delay={1.5}
+        mono
+        style={{ marginTop: "2rem", opacity: 0.85 }}
       >
         Check your devices now!
-      </div>
+      </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide: Planetary Parkour Leaderboard ─── */
-function PlanetaryParkourLeaderboardSlide({ active }: { active: boolean }) {
+/* ─── Slide 6: Starship Drifter Leaderboard ─── */
+function DrifterLeaderboardSlide({ active }: { active: boolean }) {
   const session = useQuery(api.sessions.getCurrent);
   return (
     <SlideLayout accent="green" active={active}>
@@ -418,12 +389,12 @@ function PlanetaryParkourLeaderboardSlide({ active }: { active: boolean }) {
         <GameLeaderboard
           sessionId={session._id}
           game="planetaryParkour"
-          title="PLANETARY PARKOUR LEADERBOARD"
+          title="STARSHIP DRIFTER LEADERBOARD"
           accent="#00e676"
           scoreUnit="pts"
         />
       ) : (
-        <AnimatedText color="#00e676" size="var(--slide-body)" delay={0}>
+        <AnimatedText color="#00e676" size="var(--slide-body)">
           Waiting for session...
         </AnimatedText>
       )}
@@ -433,10 +404,10 @@ function PlanetaryParkourLeaderboardSlide({ active }: { active: boolean }) {
 
 export const section4Slides: SlideDefinition[] = [
   {
-    id: "what-if-gravity-changed",
+    id: "newworlds-title",
     section: 4,
     accent: "green",
-    component: WhatIfSlide,
+    component: NewWorldsTitleSlide,
   },
   {
     id: "planet-comparison",
@@ -445,29 +416,29 @@ export const section4Slides: SlideDefinition[] = [
     component: PlanetComparisonSlide,
   },
   {
-    id: "moon-parkour",
+    id: "moon-colony",
     section: 4,
     accent: "green",
-    component: MoonParkourSlide,
+    component: MoonColonySlide,
   },
   {
-    id: "jupiter-parkour",
+    id: "heavy-world",
     section: 4,
     accent: "green",
-    component: JupiterParkourSlide,
+    component: HeavyWorldSlide,
   },
   {
-    id: "planetary-parkour",
+    id: "drifter-intro",
     section: 4,
     accent: "green",
-    component: PlanetaryParkourSlide,
+    component: DrifterIntroSlide,
     studentEvent: "planetaryParkour",
   },
   {
-    id: "planetary-parkour-leaderboard",
+    id: "drifter-leaderboard",
     section: 4,
     accent: "green",
-    component: PlanetaryParkourLeaderboardSlide,
+    component: DrifterLeaderboardSlide,
     studentEvent: "planetaryParkour",
   },
 ];

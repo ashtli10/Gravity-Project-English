@@ -7,8 +7,8 @@ import ChampionSlideComponent from "../components/ChampionSlide";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
-/* ─── Slide 27: Section Title ─── */
-function YourCallSlide({ active }: { active: boolean }) {
+/* ─── Slide 1: Section Title ─── */
+function YourFutureSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
       <AnimatedText
@@ -19,7 +19,7 @@ function YourCallSlide({ active }: { active: boolean }) {
         delay={0}
         style={{ letterSpacing: "0.08em" }}
       >
-        YOUR CALL
+        YOUR FUTURE
       </AnimatedText>
       <AnimatedText
         color="var(--text-secondary)"
@@ -43,8 +43,8 @@ function YourCallSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 28: Would You Try Parkour? ─── */
-function WouldYouTrySlide({ active }: { active: boolean }) {
+/* ─── Slide 2: Would You Live On Mars? ─── */
+function WouldYouGoSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
       <AnimatedText
@@ -53,8 +53,9 @@ function WouldYouTrySlide({ active }: { active: boolean }) {
         glow
         weight={900}
         delay={0}
+        style={{ letterSpacing: "0.04em" }}
       >
-        WOULD YOU TRY PARKOUR?
+        WOULD YOU LIVE ON MARS?
       </AnimatedText>
       <AnimatedText
         color="var(--text-secondary)"
@@ -64,19 +65,21 @@ function WouldYouTrySlide({ active }: { active: boolean }) {
         Tell us what you think.
       </AnimatedText>
 
-      {/* Three option cards preview */}
+      {/* Three preview option cards */}
       <div
         style={{
           display: "flex",
           gap: "2rem",
           marginTop: "2.5rem",
+          flexWrap: "wrap",
+          justifyContent: "center",
           animation: "fade-in-up 0.6s ease 0.8s both",
         }}
       >
         {[
-          { label: "Yes!", color: "#00e676" },
-          { label: "Maybe", color: "#ffc107" },
-          { label: "No way!", color: "#ff2d7b" },
+          { label: "Yes — sign me up!", color: "#00e676" },
+          { label: "Maybe, with training", color: "#ffc107" },
+          { label: "No, Earth is home", color: "#ff2d7b" },
         ].map((opt) => (
           <div
             key={opt.label}
@@ -113,16 +116,9 @@ function WouldYouTrySlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 29: Poll Results ─── */
-const pollOptions = [
-  { label: "Yes, definitely!", value: "yes", color: "#00e676" },
-  { label: "Maybe with training", value: "maybe", color: "#ffc107" },
-  { label: "No way!", value: "no", color: "#ff2d7b" },
-];
-
+/* ─── Slide 3: Poll Results ─── */
 function PollResultsSlide({ active }: { active: boolean }) {
   const session = useQuery(api.sessions.getCurrent);
-
   return (
     <SlideLayout accent="mixed" active={active}>
       <AnimatedText
@@ -130,25 +126,22 @@ function PollResultsSlide({ active }: { active: boolean }) {
         size="var(--slide-title)"
         glow
         weight={800}
-        delay={0}
+        style={{ marginBottom: "1.5rem" }}
       >
         POLL RESULTS
       </AnimatedText>
-
       {session ? (
-        <div style={{ animation: "fade-in-up 0.6s ease 0.3s both", width: "100%", display: "flex", justifyContent: "center" }}>
-          <PollResults
-            sessionId={session._id}
-            slideContext="would-you-try-parkour"
-            options={pollOptions}
-          />
-        </div>
+        <PollResults
+          sessionId={session._id}
+          slideContext="would-you-live-on-mars"
+          options={[
+            { label: "Yes — sign me up!", value: "yes", color: "#00e676" },
+            { label: "Maybe, with training", value: "maybe", color: "#ffc107" },
+            { label: "No, Earth is home", value: "no", color: "#ff2d7b" },
+          ]}
+        />
       ) : (
-        <AnimatedText
-          color="var(--text-secondary)"
-          size="var(--slide-body)"
-          delay={0.3}
-        >
+        <AnimatedText color="#b388ff" size="var(--slide-body)">
           Waiting for session...
         </AnimatedText>
       )}
@@ -156,7 +149,7 @@ function PollResultsSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 30: My Opinion Backdrop ─── */
+/* ─── Slide 4: My Opinion Backdrop ─── */
 function MyOpinionSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
@@ -170,7 +163,7 @@ function MyOpinionSlide({ active }: { active: boolean }) {
         MY OPINION
       </AnimatedText>
 
-      {/* Subtle decorative backdrop — gradient bar with shifting colors */}
+      {/* Multi-color gradient bar */}
       <div
         style={{
           width: "60%",
@@ -185,17 +178,16 @@ function MyOpinionSlide({ active }: { active: boolean }) {
         }}
       />
 
-      {/* Minimal geometric shapes for visual interest */}
+      {/* Floating geometric shapes */}
       <div
         style={{
           position: "relative",
-          width: "300px",
+          width: "320px",
           height: "200px",
           marginTop: "2rem",
           animation: "fade-in-up 0.6s ease 0.6s both",
         }}
       >
-        {/* Floating geometric elements */}
         <div
           style={{
             position: "absolute",
@@ -224,7 +216,7 @@ function MyOpinionSlide({ active }: { active: boolean }) {
           style={{
             position: "absolute",
             bottom: "10px",
-            left: "120px",
+            left: "130px",
             width: "50px",
             height: "50px",
             borderRadius: "50%",
@@ -232,13 +224,26 @@ function MyOpinionSlide({ active }: { active: boolean }) {
             boxShadow: "0 0 15px #ffc10715",
           }}
         />
+        <div
+          style={{
+            position: "absolute",
+            top: "0px",
+            right: "120px",
+            width: "0",
+            height: "0",
+            borderLeft: "22px solid transparent",
+            borderRight: "22px solid transparent",
+            borderBottom: "38px solid #00e5ff20",
+            filter: "drop-shadow(0 0 12px #00e5ff15)",
+          }}
+        />
       </div>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 31: Is Parkour Safe? ─── */
-function ParkourSafetySlide({ active }: { active: boolean }) {
+/* ─── Slide 5: Future Ethics ─── */
+function FutureEthicsSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
       <AnimatedText
@@ -248,30 +253,74 @@ function ParkourSafetySlide({ active }: { active: boolean }) {
         weight={800}
         delay={0}
       >
-        IS PARKOUR SAFE?
+        SHOULD WE COLONIZE SPACE?
       </AnimatedText>
 
-      <AnimatedText
-        color="var(--text-primary)"
-        size="var(--slide-body)"
-        delay={0.3}
-        style={{ maxWidth: "85%" }}
+      {/* Planet cradled in protective hands / shield */}
+      <div
+        style={{
+          marginTop: "1.5rem",
+          animation: "fade-in-up 0.6s ease 0.3s both",
+        }}
       >
-        Parkour <span className="grammar-modal">may</span> look
-        dangerous, but with training you{" "}
-        <span className="grammar-modal">can</span> do it safely.
-      </AnimatedText>
+        <svg viewBox="0 0 200 170" style={{ width: "200px", height: "170px" }}>
+          <defs>
+            <radialGradient id="ethicsPlanet" cx="40%" cy="35%" r="70%">
+              <stop offset="0%" stopColor="#7fd4ff" />
+              <stop offset="55%" stopColor="#00e5ff" />
+              <stop offset="100%" stopColor="#1466a8" />
+            </radialGradient>
+          </defs>
+          {/* Protective shield arc */}
+          <path
+            d="M 30 70 A 80 80 0 0 1 170 70"
+            fill="none"
+            stroke="#b388ff"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.7"
+            filter="drop-shadow(0 0 8px #b388ff60)"
+          />
+          {/* Planet */}
+          <circle
+            cx="100"
+            cy="78"
+            r="34"
+            fill="url(#ethicsPlanet)"
+            filter="drop-shadow(0 0 14px #00e5ff50)"
+          />
+          {/* Planet ring */}
+          <ellipse
+            cx="100"
+            cy="78"
+            rx="50"
+            ry="14"
+            fill="none"
+            stroke="#ffc107"
+            strokeWidth="2.5"
+            opacity="0.65"
+            transform="rotate(-18 100 78)"
+          />
+          {/* Cradling hands */}
+          <path
+            d="M 40 120 Q 60 100 100 118 Q 140 100 160 120 Q 150 150 100 150 Q 50 150 40 120 Z"
+            fill="none"
+            stroke="#00e676"
+            strokeWidth="3"
+            strokeLinejoin="round"
+            filter="drop-shadow(0 0 8px #00e67650)"
+          />
+        </svg>
+      </div>
 
       <AnimatedText
         color="var(--text-primary)"
         size="var(--slide-body)"
         delay={0.6}
-        style={{ maxWidth: "85%", marginTop: "0.8rem" }}
+        style={{ maxWidth: "85%", marginTop: "1.2rem" }}
       >
-        You <span className="grammar-modal">mustn&apos;t</span> try
-        advanced moves without preparation{" "}
-        <span className="grammar-purpose">in order not to</span> get
-        hurt.
+        <span className="grammar-conditional">If we treat new worlds with care</span>,
+        the future <span className="grammar-future">will</span> be brighter for everyone.
       </AnimatedText>
 
       <AnimatedText
@@ -280,62 +329,27 @@ function ParkourSafetySlide({ active }: { active: boolean }) {
         delay={0.9}
         style={{ maxWidth: "85%", marginTop: "0.8rem" }}
       >
-        Proper training exists{" "}
-        <span className="grammar-purpose">in order to</span> keep
-        athletes safe.
+        We <span className="grammar-possibility">may</span> need new laws for life beyond Earth.
       </AnimatedText>
-
-      {/* Visual: shield icon made with CSS */}
-      <div
-        style={{
-          marginTop: "1.5rem",
-          animation: "fade-in-up 0.6s ease 1.2s both",
-        }}
-      >
-        <svg
-          viewBox="0 0 100 120"
-          style={{ width: "80px", height: "96px" }}
-        >
-          <path
-            d="M 50 10 L 90 30 L 85 80 L 50 110 L 15 80 L 10 30 Z"
-            fill="none"
-            stroke="#00e676"
-            strokeWidth="3"
-            filter="drop-shadow(0 0 8px #00e67640)"
-          />
-          <text
-            x="50"
-            y="68"
-            fill="#00e676"
-            fontSize="32"
-            fontFamily="var(--font-display)"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontWeight="900"
-          >
-            ✓
-          </text>
-        </svg>
-      </div>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 32: Closing Statement ─── */
+/* ─── Slide 6: Closing Statement ─── */
 function ClosingStatementSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
-      {/* Subtle multi-color gradient glow behind text */}
+      {/* Radial multi-color glow backdrop */}
       <div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "80%",
-          height: "40%",
+          width: "85%",
+          height: "45%",
           background:
-            "radial-gradient(ellipse at center, #00e5ff08 0%, #ff2d7b06 30%, #ffc10704 60%, transparent 80%)",
+            "radial-gradient(ellipse at center, #b388ff10 0%, #00e5ff08 25%, #ff2d7b06 50%, #ffc10704 70%, transparent 85%)",
           pointerEvents: "none",
         }}
       />
@@ -351,10 +365,9 @@ function ClosingStatementSlide({ active }: { active: boolean }) {
             "0 0 20px rgba(179,136,255,0.4), 0 0 40px rgba(0,229,255,0.2), 0 0 60px rgba(255,45,123,0.1)",
         }}
       >
-        Gravity is the one opponent every athlete shares.
+        The future belongs to those who reach for it.
       </AnimatedText>
 
-      {/* Multi-color gradient bar */}
       <div
         style={{
           width: "50%",
@@ -372,19 +385,19 @@ function ClosingStatementSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 33: Gravity Surge ─── */
-function GravitySurgeSlide({ active }: { active: boolean }) {
+/* ─── Slide 7: Gravity Drive Intro ─── */
+function GravityDriveIntroSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="mixed" active={active}>
       <AnimatedText
-        color="#ff2d7b"
+        color="#b388ff"
         size="var(--slide-huge)"
         glow
         weight={900}
         delay={0}
         style={{ letterSpacing: "0.06em" }}
       >
-        GRAVITY SURGE
+        GRAVITY DRIVE
       </AnimatedText>
 
       <AnimatedText
@@ -392,10 +405,10 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
         size="var(--slide-subtitle)"
         delay={0.4}
       >
-        How long can you survive?
+        How long will you survive the reactor core?
       </AnimatedText>
 
-      {/* Gravity meter — vertical bar that fills up */}
+      {/* Gravity meter */}
       <div
         style={{
           display: "flex",
@@ -410,14 +423,14 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
           style={{
             width: "60px",
             height: "250px",
-            border: "2px solid #ff2d7b40",
+            border: "2px solid #b388ff40",
             borderRadius: "8px",
             position: "relative",
             overflow: "hidden",
-            background: "rgba(255,45,123,0.03)",
+            background: "rgba(179,136,255,0.03)",
           }}
         >
-          {/* Fill bar with gradient */}
+          {/* Fill bar ~75% */}
           <div
             style={{
               position: "absolute",
@@ -429,7 +442,7 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
                 "linear-gradient(to top, #00e676, #ffc107, #ff2d7b)",
               borderRadius: "0 0 6px 6px",
               boxShadow:
-                "0 0 20px rgba(255,45,123,0.4), inset 0 0 15px rgba(255,255,255,0.05)",
+                "0 0 20px rgba(179,136,255,0.4), inset 0 0 15px rgba(255,255,255,0.05)",
               animation: "fade-in 0.5s ease 0.8s both",
             }}
           />
@@ -466,7 +479,7 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
               fontWeight: 700,
             }}
           >
-            MAX G
+            MAX-G
           </span>
           <span
             style={{
@@ -484,7 +497,7 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
               fontFamily: "var(--font-mono)",
             }}
           >
-            SAFE
+            STABLE
           </span>
         </div>
       </div>
@@ -493,7 +506,7 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
         style={{
           marginTop: "1.5rem",
           fontSize: "var(--slide-body)",
-          color: "#ff2d7b",
+          color: "#b388ff",
           fontFamily: "var(--font-mono)",
           animation: "fade-in-up 0.6s ease 1s both",
           opacity: 0.8,
@@ -505,7 +518,45 @@ function GravitySurgeSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 34: Thank You ─── */
+/* ─── Slide 8: Gravity Drive Leaderboard ─── */
+function GravityDriveLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="mixed" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="gravitySurge"
+          title="GRAVITY DRIVE LEADERBOARD"
+          accent="#b388ff"
+          scoreUnit="pts"
+        />
+      ) : (
+        <AnimatedText color="#b388ff" size="var(--slide-body)">
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 9: Champion ─── */
+function ChampionSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="mixed" active={active}>
+      {session ? (
+        <ChampionSlideComponent sessionId={session._id} />
+      ) : (
+        <AnimatedText color="#b388ff" size="var(--slide-body)">
+          Waiting for session...
+        </AnimatedText>
+      )}
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 10: Thank You ─── */
 function ThankYouSlide({ active }: { active: boolean }) {
   const colors = [
     "#00e5ff", // T - cyan
@@ -537,7 +588,8 @@ function ThankYouSlide({ active }: { active: boolean }) {
               fontSize: "var(--slide-huge)",
               fontWeight: 900,
               fontFamily: "var(--font-display)",
-              color: letter === " " ? "transparent" : colors[i % colors.length],
+              color:
+                letter === " " ? "transparent" : colors[i % colors.length],
               textShadow:
                 letter === " "
                   ? "none"
@@ -558,10 +610,10 @@ function ThankYouSlide({ active }: { active: boolean }) {
         size="var(--slide-subtitle)"
         delay={0.9}
       >
-        Defying Gravity — An English Presentation
+        Frontier 2200 — An English Presentation
       </AnimatedText>
 
-      {/* Multi-color line */}
+      {/* Multi-color gradient line */}
       <div
         style={{
           width: "50%",
@@ -583,75 +635,35 @@ function ThankYouSlide({ active }: { active: boolean }) {
           animation: "fade-in-up 0.6s ease 1.4s both",
         }}
       >
-        {["#00e5ff", "#ff2d7b", "#ffc107", "#00e676", "#b388ff"].map(
-          (c) => (
-            <div
-              key={c}
-              style={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                background: c,
-                boxShadow: `0 0 8px ${c}80`,
-              }}
-            />
-          )
-        )}
+        {["#00e5ff", "#ff2d7b", "#ffc107", "#00e676", "#b388ff"].map((c) => (
+          <div
+            key={c}
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              background: c,
+              boxShadow: `0 0 8px ${c}80`,
+            }}
+          />
+        ))}
       </div>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide: Gravity Surge Leaderboard ─── */
-function GravitySurgeLeaderboardSlide({ active }: { active: boolean }) {
-  const session = useQuery(api.sessions.getCurrent);
-  return (
-    <SlideLayout accent="mixed" active={active}>
-      {session ? (
-        <GameLeaderboard
-          sessionId={session._id}
-          game="gravitySurge"
-          title="GRAVITY SURGE LEADERBOARD"
-          accent="#ff2d7b"
-          scoreUnit="pts"
-        />
-      ) : (
-        <AnimatedText color="#ff2d7b" size="var(--slide-body)" delay={0}>
-          Waiting for session...
-        </AnimatedText>
-      )}
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide: Overall Champion ─── */
-function ChampionLeaderboardSlide({ active }: { active: boolean }) {
-  const session = useQuery(api.sessions.getCurrent);
-  return (
-    <SlideLayout accent="mixed" active={active}>
-      {session ? (
-        <ChampionSlideComponent sessionId={session._id} />
-      ) : (
-        <AnimatedText color="#b388ff" size="var(--slide-body)" delay={0}>
-          Waiting for session...
-        </AnimatedText>
-      )}
     </SlideLayout>
   );
 }
 
 export const section5Slides: SlideDefinition[] = [
   {
-    id: "your-call",
+    id: "yourfuture-title",
     section: 5,
     accent: "mixed",
-    component: YourCallSlide,
+    component: YourFutureSlide,
   },
   {
-    id: "would-you-try",
+    id: "would-you-go",
     section: 5,
     accent: "mixed",
-    component: WouldYouTrySlide,
+    component: WouldYouGoSlide,
     studentEvent: "poll",
   },
   {
@@ -667,10 +679,10 @@ export const section5Slides: SlideDefinition[] = [
     component: MyOpinionSlide,
   },
   {
-    id: "parkour-safety",
+    id: "future-ethics",
     section: 5,
     accent: "mixed",
-    component: ParkourSafetySlide,
+    component: FutureEthicsSlide,
   },
   {
     id: "closing-statement",
@@ -679,24 +691,24 @@ export const section5Slides: SlideDefinition[] = [
     component: ClosingStatementSlide,
   },
   {
-    id: "gravity-surge",
+    id: "gravity-drive-intro",
     section: 5,
     accent: "mixed",
-    component: GravitySurgeSlide,
+    component: GravityDriveIntroSlide,
     studentEvent: "gravitySurge",
   },
   {
-    id: "gravity-surge-leaderboard",
+    id: "gravity-drive-leaderboard",
     section: 5,
     accent: "mixed",
-    component: GravitySurgeLeaderboardSlide,
+    component: GravityDriveLeaderboardSlide,
     studentEvent: "gravitySurge",
   },
   {
     id: "champion",
     section: 5,
     accent: "mixed",
-    component: ChampionLeaderboardSlide,
+    component: ChampionSlide,
     studentEvent: "gravitySurge",
   },
   {

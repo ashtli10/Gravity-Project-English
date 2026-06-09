@@ -7,11 +7,10 @@ interface ChampionSlideProps {
 }
 
 const GAME_LABELS: Record<string, { label: string; color: string }> = {
-  dropTestAir: { label: "Drop", color: "#00e5ff" },
-  videoQuiz: { label: "Quiz", color: "#ff2d7b" },
-  rooftopRun: { label: "Rooftop", color: "#ffc107" },
-  planetaryParkour: { label: "Planets", color: "#00e676" },
-  gravitySurge: { label: "Surge", color: "#b388ff" },
+  dropTestAir: { label: "Airlock", color: "#00e5ff" },
+  rooftopRun: { label: "Mag-Rail", color: "#ffc107" },
+  planetaryParkour: { label: "Drifter", color: "#00e676" },
+  gravitySurge: { label: "Grav-Drive", color: "#b388ff" },
 };
 
 const PODIUM_COLORS = ["#ffd700", "#c0c0c0", "#cd7f32"];
@@ -74,7 +73,7 @@ export default function ChampionSlide({ sessionId }: ChampionSlideProps) {
             "drop-shadow(0 0 20px rgba(179,136,255,0.4)) drop-shadow(0 0 40px rgba(0,229,255,0.2))",
         }}
       >
-        GRAVITY CHAMPION
+        FRONTIER CHAMPION
       </div>
 
       {/* Champion card */}

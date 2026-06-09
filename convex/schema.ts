@@ -11,7 +11,6 @@ export default defineSchema({
           v.literal("dropTest_air"),
           v.literal("dropShow_vacuum"),
           v.literal("dropShow_air"),
-          v.literal("moveSpotter"),
           v.literal("rooftopRun"),
           v.literal("planetaryParkour"),
           v.literal("gravitySurge"),
@@ -53,7 +52,6 @@ export default defineSchema({
       v.literal("rooftopRun"),
       v.literal("planetaryParkour"),
       v.literal("gravitySurge"),
-      v.literal("videoQuiz"),
       v.literal("dropTestAir")
     ),
     rawScore: v.number(),

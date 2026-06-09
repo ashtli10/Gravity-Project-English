@@ -58,12 +58,19 @@ export default function LookUp() {
         style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}
       />
       <div style={{
-        fontSize: "4rem",
         animation: "float 3s ease-in-out infinite",
         marginBottom: "1rem",
         zIndex: 1,
+        filter: "drop-shadow(0 0 16px #00e5ff)",
       }}>
-        {"\uD83D\uDC46"}
+        <svg width="84" height="84" viewBox="0 0 80 80">
+          {/* Viewscreen / radar frame */}
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#00e5ff" strokeWidth="3" opacity="0.5" />
+          <circle cx="40" cy="40" r="20" fill="none" stroke="#00e5ff" strokeWidth="2" opacity="0.3" />
+          {/* Upward chevrons */}
+          <polyline points="26,46 40,30 54,46" fill="none" stroke="#00e5ff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+          <polyline points="26,58 40,42 54,58" fill="none" stroke="#00e5ff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+        </svg>
       </div>
       <div style={{
         fontSize: "clamp(2rem, 5vw, 3rem)",
@@ -73,8 +80,9 @@ export default function LookUp() {
         fontFamily: "var(--font-display)",
         animation: "pulse-glow 2s ease-in-out infinite",
         zIndex: 1,
+        letterSpacing: "0.08em",
       }}>
-        LOOK UP
+        EYES ON SCREEN
       </div>
     </div>
   );

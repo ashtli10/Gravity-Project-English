@@ -4,7 +4,7 @@ import { Id } from "../../../convex/_generated/dataModel";
 
 interface GameLeaderboardProps {
   sessionId: Id<"sessions">;
-  game: "rooftopRun" | "planetaryParkour" | "gravitySurge" | "videoQuiz" | "dropTestAir";
+  game: "rooftopRun" | "planetaryParkour" | "gravitySurge" | "dropTestAir";
   title: string;
   accent: string;
   scoreUnit: string;

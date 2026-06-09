@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-interface DropTestProps {
+interface AirlockDropProps {
   mode: "vacuum" | "air";
   showDrop?: boolean;
   onScored?: (score: number) => void;
@@ -9,92 +9,99 @@ interface DropTestProps {
 interface DropObject {
   id: string;
   name: string;
-  airResistance: number; // 0 = no resistance, higher = more (only matters in air mode)
+  airResistance: number; // 0 = no resistance, higher = more (only matters in atmosphere)
   color: string;
 }
 
+// Ordered conceptually heaviest/densest (low resistance) -> lightest (high resistance).
 const objects: DropObject[] = [
-  { id: "feather", name: "Feather", airResistance: 0.95, color: "#00e5ff" },
-  { id: "bowling", name: "Bowling Ball", airResistance: 0.05, color: "#666680" },
-  { id: "cat", name: "Cat", airResistance: 0.4, color: "#ffc107" },
-  { id: "brick", name: "Brick", airResistance: 0.15, color: "#d4845a" },
-  { id: "human", name: "Human", airResistance: 0.3, color: "#e0e0e8" },
+  { id: "shard", name: "Ice Shard", airResistance: 0.05, color: "#88ccff" },
+  { id: "wrench", name: "Wrench", airResistance: 0.15, color: "#c0c0d0" },
+  { id: "helmet", name: "Helmet", airResistance: 0.3, color: "#e0e0e8" },
+  { id: "drone", name: "Sensor Drone", airResistance: 0.4, color: "#ffc107" },
+  { id: "sail", name: "Solar Sail", airResistance: 0.95, color: "#00e5ff" },
 ];
 
-// Draw each object as CSS
+// Draw each object as CSS/SVG — no emoji.
 function ObjectIcon({ id, color }: { id: string; color: string }) {
   switch (id) {
-    case "feather":
+    case "shard":
       return (
-        <div style={{
-          width: 50, height: 15, borderRadius: "50%",
-          background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
-          boxShadow: `0 0 10px ${color}`,
-          transform: "rotate(-15deg)",
-        }} />
-      );
-    case "bowling":
-      return (
-        <div style={{
-          width: 44, height: 44, borderRadius: "50%",
-          background: `radial-gradient(circle at 40% 40%, #888, ${color})`,
-          position: "relative",
-        }}>
-          <div style={{ position: "absolute", top: 12, left: 15, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
-          <div style={{ position: "absolute", top: 12, left: 24, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
-          <div style={{ position: "absolute", top: 20, left: 20, width: 5, height: 5, borderRadius: "50%", background: "#333" }} />
-        </div>
-      );
-    case "cat":
-      return (
-        <div style={{ position: "relative", width: 44, height: 44 }}>
-          {/* Ears */}
-          <div style={{ position: "absolute", left: 4, top: 0, width: 0, height: 0,
-            borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
-            borderBottom: `12px solid ${color}` }} />
-          <div style={{ position: "absolute", right: 4, top: 0, width: 0, height: 0,
-            borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
-            borderBottom: `12px solid ${color}` }} />
-          {/* Head */}
-          <div style={{ position: "absolute", top: 7, left: 4, width: 36, height: 32, borderRadius: "50%", background: color }} />
-          {/* Eyes */}
-          <div style={{ position: "absolute", top: 19, left: 13, width: 6, height: 6, borderRadius: "50%", background: "#0a0a0f" }} />
-          <div style={{ position: "absolute", top: 19, left: 25, width: 6, height: 6, borderRadius: "50%", background: "#0a0a0f" }} />
-        </div>
-      );
-    case "brick":
-      return (
-        <div style={{
-          width: 54, height: 30, background: color, borderRadius: 3,
-          border: "1px solid rgba(0,0,0,0.3)",
-          boxShadow: `inset 0 -2px 0 rgba(0,0,0,0.2)`,
-        }} />
-      );
-    case "human":
-      return (
-        <svg width="38" height="50" viewBox="0 0 30 40">
-          <circle cx="15" cy="6" r="5" fill={color} />
-          <line x1="15" y1="11" x2="15" y2="28" stroke={color} strokeWidth="2" />
-          <line x1="15" y1="16" x2="5" y2="22" stroke={color} strokeWidth="2" />
-          <line x1="15" y1="16" x2="25" y2="22" stroke={color} strokeWidth="2" />
-          <line x1="15" y1="28" x2="8" y2="38" stroke={color} strokeWidth="2" />
-          <line x1="15" y1="28" x2="22" y2="38" stroke={color} strokeWidth="2" />
+        <svg width="38" height="48" viewBox="0 0 30 40">
+          <polygon
+            points="15,2 26,16 18,38 12,38 4,16"
+            fill={color}
+            opacity="0.85"
+            style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+          />
+          <polygon points="15,2 26,16 15,20" fill="#ffffff" opacity="0.5" />
         </svg>
+      );
+    case "wrench":
+      return (
+        <svg width="46" height="46" viewBox="0 0 40 40" style={{ filter: `drop-shadow(0 0 5px ${color})` }}>
+          <path
+            d="M28 6a8 8 0 0 0-9.5 10.3L6 28.8l5.2 5.2 12.5-12.5A8 8 0 1 0 28 6zm0 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"
+            fill={color}
+          />
+        </svg>
+      );
+    case "helmet":
+      return (
+        <div style={{ position: "relative", width: 46, height: 46 }}>
+          <div style={{
+            position: "absolute", inset: 2, borderRadius: "50%",
+            background: `radial-gradient(circle at 38% 34%, #ffffff, ${color})`,
+            boxShadow: `0 0 10px ${color}`,
+          }} />
+          {/* Visor */}
+          <div style={{
+            position: "absolute", top: 14, left: 9, width: 28, height: 16,
+            borderRadius: "10px", background: "#0a0a0f", opacity: 0.85,
+            border: "1px solid #00e5ff55",
+          }} />
+        </div>
+      );
+    case "drone":
+      return (
+        <div style={{ position: "relative", width: 50, height: 40 }}>
+          {/* Body */}
+          <div style={{
+            position: "absolute", top: 12, left: 17, width: 16, height: 16,
+            borderRadius: 4, background: color, boxShadow: `0 0 8px ${color}`,
+          }} />
+          {/* Rotors */}
+          {[[4, 6], [38, 6], [4, 28], [38, 28]].map(([x, y], i) => (
+            <div key={i} style={{
+              position: "absolute", left: x, top: y, width: 9, height: 9,
+              borderRadius: "50%", border: `2px solid ${color}`,
+            }} />
+          ))}
+          {/* Sensor eye */}
+          <div style={{ position: "absolute", top: 18, left: 22, width: 6, height: 6, borderRadius: "50%", background: "#00e5ff" }} />
+        </div>
+      );
+    case "sail":
+      return (
+        <div style={{
+          width: 54, height: 16, borderRadius: "3px",
+          background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+          boxShadow: `0 0 12px ${color}`,
+          transform: "rotate(-12deg)",
+          border: `1px solid ${color}55`,
+        }} />
       );
     default:
       return null;
   }
 }
 
-// Correct order for air mode: lowest air resistance falls fastest
-const AIR_CORRECT_ORDER = [...objects].sort((a, b) => a.airResistance - b.airResistance);
-
+// Correct order for atmosphere mode: lowest air resistance falls fastest.
 function scoreArrangement(studentOrder: DropObject[]): number {
-  // Count correctly ordered pairs (out of 10 total pairs for 5 items)
   let correct = 0;
   for (let i = 0; i < studentOrder.length; i++) {
     for (let j = i + 1; j < studentOrder.length; j++) {
-      // Student says i falls before j. Check if that's correct (lower air resistance = falls faster).
+      // Student says i lands before j; correct if i has <= air resistance.
       if (studentOrder[i].airResistance <= studentOrder[j].airResistance) {
         correct++;
       }
@@ -103,7 +110,7 @@ function scoreArrangement(studentOrder: DropObject[]): number {
   return correct; // 0-10
 }
 
-export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
+export default function AirlockDrop({ mode, showDrop, onScored }: AirlockDropProps) {
   const [order, setOrder] = useState(() => [...objects].sort(() => Math.random() - 0.5));
   const [dropped, setDropped] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -111,10 +118,8 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scoredRef = useRef(false);
 
-  // Auto-drop when presenter triggers the show event
   useEffect(() => {
     if (showDrop && !dropped) {
-      // Score the arrangement for air mode before dropping
       if (mode === "air" && !scoredRef.current) {
         scoredRef.current = true;
         onScored?.(scoreArrangement(order));
@@ -133,7 +138,6 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
 
   if (dropped) {
     const accent = mode === "vacuum" ? "#00e5ff" : "#ff2d7b";
-    // Animation phase
     return (
       <div style={{
         width: "100vw", height: "100vh", background: "#0a0a0f",
@@ -141,17 +145,15 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
         justifyContent: "flex-start", padding: "1rem",
         position: "relative", overflow: "hidden",
       }}>
-        {/* Title */}
         <div style={{
           fontSize: "clamp(1.4rem, 4vw, 2rem)", color: accent,
           fontWeight: 700, marginBottom: "1rem",
           textShadow: `0 0 15px ${accent}`,
           zIndex: 2,
         }}>
-          {mode === "vacuum" ? "VACUUM DROP" : "AIR RESISTANCE DROP"}
+          {mode === "vacuum" ? "AIRLESS SURFACE" : "DOME ATMOSPHERE"}
         </div>
 
-        {/* Result text — centered, above falling objects */}
         {showResult && (
           <div style={{
             zIndex: 3, textAlign: "center", padding: "0 1rem",
@@ -165,19 +167,18 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
             }}>
               {mode === "vacuum"
                 ? "They ALL hit at the same time!"
-                : "The bowling ball wins! The feather floats down last."}
+                : "The ice shard wins! The solar sail drifts down last."}
             </div>
             <div style={{
               fontSize: "1rem", color: "var(--text-secondary)", marginTop: "0.5rem",
             }}>
               {mode === "vacuum"
-                ? "Without air, gravity pulls everything equally at 9.8 m/s\u00B2"
-                : "Air resistance depends on shape and surface area"}
+                ? "With no air, gravity pulls every mass at the same rate."
+                : "In atmosphere, air resistance depends on shape and surface area."}
             </div>
           </div>
         )}
 
-        {/* Falling objects */}
         <div style={{
           flex: 1, width: "100%", maxWidth: "min(95vw, 600px)",
           display: "flex", justifyContent: "space-around", alignItems: "flex-start",
@@ -216,8 +217,8 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
     );
   }
 
-  // Prediction phase -- drag to reorder
-  const ROW_HEIGHT = 78; // larger cards + slightly smaller gap
+  // Prediction phase — drag to reorder
+  const ROW_HEIGHT = 78;
 
   const getDragTargetIndex = (fromIndex: number, deltaY: number) => {
     const rawTarget = fromIndex + Math.round(deltaY / ROW_HEIGHT);
@@ -250,7 +251,7 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
         fontWeight: 700, textAlign: "center", marginBottom: "0.3rem",
         textShadow: `0 0 15px ${mode === "vacuum" ? "#00e5ff" : "#ff2d7b"}`,
       }}>
-        {mode === "vacuum" ? "VACUUM DROP TEST" : "AIR RESISTANCE DROP TEST"}
+        {mode === "vacuum" ? "AIRLOCK · VACUUM TEST" : "DOME · ATMOSPHERE TEST"}
       </div>
       <div style={{
         fontSize: "1rem", color: "var(--text-secondary)", marginBottom: "0.8rem", textAlign: "center",
@@ -336,7 +337,7 @@ export default function DropTest({ mode, showDrop, onScored }: DropTestProps) {
         textAlign: "center",
         animation: "pulse-glow 2s ease-in-out infinite",
       }}>
-        Waiting for drop...
+        Waiting for the airlock to open...
       </div>
     </div>
   );

@@ -51,8 +51,9 @@ html, body, #root {
 .glow-green { text-shadow: 0 0 20px var(--green), 0 0 40px var(--green); color: var(--green); }
 .glow-purple { text-shadow: 0 0 20px var(--purple), 0 0 40px var(--purple); color: var(--purple); }
 
-/* Grammar highlight styles */
-.grammar-modal {
+/* Grammar highlight styles — FUTURE FORMS focus */
+/* Future simple: will / going to */
+.grammar-future {
   font-weight: 700;
   color: var(--cyan);
   text-decoration: underline;
@@ -61,7 +62,8 @@ html, body, #root {
   text-underline-offset: 5px;
 }
 
-.grammar-purpose {
+/* Modals of possibility: might / could / may */
+.grammar-possibility {
   font-weight: 700;
   color: var(--pink);
   text-decoration: underline;
@@ -69,6 +71,20 @@ html, body, #root {
   text-decoration-thickness: 3px;
   text-underline-offset: 5px;
 }
+
+/* First conditional: if-clause + will */
+.grammar-conditional {
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+/* Back-compat aliases so any un-migrated span still renders highlighted */
+.grammar-modal { font-weight: 700; color: var(--cyan); text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+.grammar-purpose { font-weight: 700; color: var(--pink); text-decoration: underline; text-decoration-color: var(--pink); text-decoration-thickness: 3px; text-underline-offset: 5px; }
 
 /* Keyframe animations */
 @keyframes pulse-glow {

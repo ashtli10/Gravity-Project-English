@@ -9,12 +9,12 @@ interface PollViewProps {
 }
 
 const options = [
-  { label: "Yes, definitely!", value: "yes", color: "#00e676" },
-  { label: "Maybe with training", value: "maybe", color: "#ffc107" },
-  { label: "No way!", value: "no", color: "#ff2d7b" },
+  { label: "Yes — sign me up!", value: "yes", color: "#00e676" },
+  { label: "Maybe, with training", value: "maybe", color: "#ffc107" },
+  { label: "No, Earth is home", value: "no", color: "#ff2d7b" },
 ];
 
-const SLIDE_CONTEXT = "would-you-try-parkour";
+const SLIDE_CONTEXT = "would-you-live-on-mars";
 
 export default function PollView({ sessionId, voterId }: PollViewProps) {
   const [voted, setVoted] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export default function PollView({ sessionId, voterId }: PollViewProps) {
         textShadow: "0 0 15px #b388ff",
         textAlign: "center",
       }}>
-        Would you try parkour?
+        Would you live on Mars?
       </div>
 
       <div style={{

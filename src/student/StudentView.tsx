@@ -3,13 +3,12 @@ import { api } from "../../convex/_generated/api";
 import { useState, useCallback, useEffect } from "react";
 import LookUp from "./components/LookUp";
 import WaitingScreen from "./components/WaitingScreen";
-import DropTest from "./components/DropTest";
-import VideoQuiz from "./components/VideoQuiz";
+import AirlockDrop from "./components/AirlockDrop";
 import PollView from "./components/PollView";
 import NameEntry from "./components/NameEntry";
-import RooftopRun from "../games/RooftopRun";
-import PlanetaryParkour from "../games/PlanetaryParkour";
-import GravitySurge from "../games/GravitySurge";
+import MagRailRunner from "../games/MagRailRunner";
+import StarshipDrifter from "../games/StarshipDrifter";
+import GravityDrive from "../games/GravityDrive";
 
 function getVoterId(): string {
   const stored = localStorage.getItem("gravity-voter-id");
@@ -46,7 +45,7 @@ export default function StudentView() {
   }, [session?._id]);
 
   const handleScore = useCallback(
-    (game: "rooftopRun" | "planetaryParkour" | "gravitySurge" | "videoQuiz" | "dropTestAir") =>
+    (game: "rooftopRun" | "planetaryParkour" | "gravitySurge" | "dropTestAir") =>
       (score: number) => {
         if (!session || !playerName) return;
         submitScore({
@@ -89,21 +88,19 @@ export default function StudentView() {
     case "lookUp":
       return <LookUp />;
     case "dropTest_vacuum":
-      return <DropTest key="vacuum" mode="vacuum" />;
+      return <AirlockDrop key="vacuum" mode="vacuum" />;
     case "dropShow_vacuum":
-      return <DropTest key="vacuum" mode="vacuum" showDrop />;
+      return <AirlockDrop key="vacuum" mode="vacuum" showDrop />;
     case "dropTest_air":
-      return <DropTest key="air" mode="air" onScored={handleScore("dropTestAir")} />;
+      return <AirlockDrop key="air" mode="air" onScored={handleScore("dropTestAir")} />;
     case "dropShow_air":
-      return <DropTest key="air" mode="air" showDrop onScored={handleScore("dropTestAir")} />;
-    case "moveSpotter":
-      return <VideoQuiz key={eventKey} onFinished={handleScore("videoQuiz")} />;
+      return <AirlockDrop key="air" mode="air" showDrop onScored={handleScore("dropTestAir")} />;
     case "rooftopRun":
-      return <RooftopRun onGameOver={handleScore("rooftopRun")} />;
+      return <MagRailRunner onGameOver={handleScore("rooftopRun")} />;
     case "planetaryParkour":
-      return <PlanetaryParkour onGameOver={handleScore("planetaryParkour")} />;
+      return <StarshipDrifter onGameOver={handleScore("planetaryParkour")} />;
     case "gravitySurge":
-      return <GravitySurge onGameOver={handleScore("gravitySurge")} />;
+      return <GravityDrive onGameOver={handleScore("gravitySurge")} />;
     case "poll":
       return <PollView key={eventKey} sessionId={session._id} voterId={voterId} />;
     default:
