@@ -3,23 +3,23 @@ import { api } from "../../convex/_generated/api";
 import { useState, useCallback, useEffect } from "react";
 import LookUp from "./components/LookUp";
 import WaitingScreen from "./components/WaitingScreen";
-import AirlockDrop from "./components/AirlockDrop";
 import PollView from "./components/PollView";
 import NameEntry from "./components/NameEntry";
-import MagRailRunner from "../games/MagRailRunner";
-import StarshipDrifter from "../games/StarshipDrifter";
-import GravityDrive from "../games/GravityDrive";
+import TechMerge from "../games/TechMerge";
+import SkyClimb from "../games/SkyClimb";
+import DroneDefense from "../games/DroneDefense";
+import ShieldCommand from "../games/ShieldCommand";
 
 function getVoterId(): string {
-  const stored = localStorage.getItem("gravity-voter-id");
+  const stored = localStorage.getItem("frontier-voter-id");
   if (stored) return stored;
   const id = crypto.randomUUID();
-  localStorage.setItem("gravity-voter-id", id);
+  localStorage.setItem("frontier-voter-id", id);
   return id;
 }
 
 function getStoredName(): string | null {
-  return localStorage.getItem("gravity-player-name") || null;
+  return localStorage.getItem("frontier-player-name") || null;
 }
 
 export default function StudentView() {
@@ -38,14 +38,14 @@ export default function StudentView() {
         name: playerName,
       }).catch(() => {
         // Name might be taken in the new session — clear so user re-enters
-        localStorage.removeItem("gravity-player-name");
+        localStorage.removeItem("frontier-player-name");
         setPlayerName(null);
       });
     }
   }, [session?._id]);
 
   const handleScore = useCallback(
-    (game: "rooftopRun" | "planetaryParkour" | "gravitySurge" | "dropTestAir") =>
+    (game: "techMerge" | "skyClimb" | "droneDefense" | "shieldCommand") =>
       (score: number) => {
         if (!session || !playerName) return;
         submitScore({
@@ -87,20 +87,14 @@ export default function StudentView() {
   switch (event.type) {
     case "lookUp":
       return <LookUp />;
-    case "dropTest_vacuum":
-      return <AirlockDrop key="vacuum" mode="vacuum" />;
-    case "dropShow_vacuum":
-      return <AirlockDrop key="vacuum" mode="vacuum" showDrop />;
-    case "dropTest_air":
-      return <AirlockDrop key="air" mode="air" onScored={handleScore("dropTestAir")} />;
-    case "dropShow_air":
-      return <AirlockDrop key="air" mode="air" showDrop onScored={handleScore("dropTestAir")} />;
-    case "rooftopRun":
-      return <MagRailRunner onGameOver={handleScore("rooftopRun")} />;
-    case "planetaryParkour":
-      return <StarshipDrifter onGameOver={handleScore("planetaryParkour")} />;
-    case "gravitySurge":
-      return <GravityDrive onGameOver={handleScore("gravitySurge")} />;
+    case "techMerge":
+      return <TechMerge onGameOver={handleScore("techMerge")} />;
+    case "skyClimb":
+      return <SkyClimb onGameOver={handleScore("skyClimb")} />;
+    case "droneDefense":
+      return <DroneDefense onGameOver={handleScore("droneDefense")} />;
+    case "shieldCommand":
+      return <ShieldCommand onGameOver={handleScore("shieldCommand")} />;
     case "poll":
       return <PollView key={eventKey} sessionId={session._id} voterId={voterId} />;
     default:

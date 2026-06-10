@@ -2,10 +2,10 @@ import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 
 const gameValidator = v.union(
-  v.literal("rooftopRun"),
-  v.literal("planetaryParkour"),
-  v.literal("gravitySurge"),
-  v.literal("dropTestAir")
+  v.literal("techMerge"),
+  v.literal("skyClimb"),
+  v.literal("droneDefense"),
+  v.literal("shieldCommand")
 );
 
 export const registerName = mutation({
@@ -129,8 +129,8 @@ export const getLeaderboard = query({
   },
 });
 
-type GameName = "rooftopRun" | "planetaryParkour" | "gravitySurge" | "dropTestAir";
-const GAMES: GameName[] = ["rooftopRun", "planetaryParkour", "gravitySurge", "dropTestAir"];
+type GameName = "techMerge" | "skyClimb" | "droneDefense" | "shieldCommand";
+const GAMES: GameName[] = ["techMerge", "skyClimb", "droneDefense", "shieldCommand"];
 
 export const getTotalLeaderboard = query({
   args: {
@@ -164,10 +164,10 @@ export const getTotalLeaderboard = query({
 
     // Find max score per game for normalization
     const maxPerGame: Record<GameName, number> = {
-      rooftopRun: 0,
-      planetaryParkour: 0,
-      gravitySurge: 0,
-      dropTestAir: 0,
+      techMerge: 0,
+      skyClimb: 0,
+      droneDefense: 0,
+      shieldCommand: 0,
     };
     for (const s of allScores) {
       if (s.rawScore > maxPerGame[s.game]) {
@@ -189,12 +189,12 @@ export const getTotalLeaderboard = query({
       if (!playerMap.has(s.voterId)) {
         playerMap.set(s.voterId, {
           playerName: s.playerName,
-          gameScores: { rooftopRun: 0, planetaryParkour: 0, gravitySurge: 0, dropTestAir: 0 },
+          gameScores: { techMerge: 0, skyClimb: 0, droneDefense: 0, shieldCommand: 0 },
           gameNormalized: {
-            rooftopRun: 0,
-            planetaryParkour: 0,
-            gravitySurge: 0,
-            dropTestAir: 0,
+            techMerge: 0,
+            skyClimb: 0,
+            droneDefense: 0,
+            shieldCommand: 0,
           },
         });
       }
@@ -208,16 +208,16 @@ export const getTotalLeaderboard = query({
     const results = Array.from(playerMap.entries()).map(([, p]) => ({
       playerName: p.playerName,
       totalScore: Math.round(
-        p.gameNormalized.rooftopRun +
-          p.gameNormalized.planetaryParkour +
-          p.gameNormalized.gravitySurge +
-          p.gameNormalized.dropTestAir
+        p.gameNormalized.techMerge +
+          p.gameNormalized.skyClimb +
+          p.gameNormalized.droneDefense +
+          p.gameNormalized.shieldCommand
       ),
       gameScores: {
-        rooftopRun: Math.round(p.gameNormalized.rooftopRun),
-        planetaryParkour: Math.round(p.gameNormalized.planetaryParkour),
-        gravitySurge: Math.round(p.gameNormalized.gravitySurge),
-        dropTestAir: Math.round(p.gameNormalized.dropTestAir),
+        techMerge: Math.round(p.gameNormalized.techMerge),
+        skyClimb: Math.round(p.gameNormalized.skyClimb),
+        droneDefense: Math.round(p.gameNormalized.droneDefense),
+        shieldCommand: Math.round(p.gameNormalized.shieldCommand),
       },
     }));
 

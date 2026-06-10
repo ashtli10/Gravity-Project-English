@@ -7,13 +7,10 @@ export default defineSchema({
     activeEvent: v.optional(
       v.object({
         type: v.union(
-          v.literal("dropTest_vacuum"),
-          v.literal("dropTest_air"),
-          v.literal("dropShow_vacuum"),
-          v.literal("dropShow_air"),
-          v.literal("rooftopRun"),
-          v.literal("planetaryParkour"),
-          v.literal("gravitySurge"),
+          v.literal("techMerge"),
+          v.literal("skyClimb"),
+          v.literal("droneDefense"),
+          v.literal("shieldCommand"),
           v.literal("poll"),
           v.literal("lookUp")
         ),
@@ -49,10 +46,10 @@ export default defineSchema({
     voterId: v.string(),
     playerName: v.string(),
     game: v.union(
-      v.literal("rooftopRun"),
-      v.literal("planetaryParkour"),
-      v.literal("gravitySurge"),
-      v.literal("dropTestAir")
+      v.literal("techMerge"),
+      v.literal("skyClimb"),
+      v.literal("droneDefense"),
+      v.literal("shieldCommand")
     ),
     rawScore: v.number(),
   })

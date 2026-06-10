@@ -32,7 +32,7 @@ export default function NameEntry({
 
     if (!sessionId) {
       // No session yet — save locally, will register when session appears
-      localStorage.setItem("gravity-player-name", trimmed);
+      localStorage.setItem("frontier-player-name", trimmed);
       onRegistered(trimmed);
       return;
     }
@@ -41,7 +41,7 @@ export default function NameEntry({
     setError("");
     try {
       await registerName({ sessionId, voterId, name: trimmed });
-      localStorage.setItem("gravity-player-name", trimmed);
+      localStorage.setItem("frontier-player-name", trimmed);
       onRegistered(trimmed);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Something went wrong";

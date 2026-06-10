@@ -7,10 +7,10 @@ interface ChampionSlideProps {
 }
 
 const GAME_LABELS: Record<string, { label: string; color: string }> = {
-  dropTestAir: { label: "Airlock", color: "#00e5ff" },
-  rooftopRun: { label: "Mag-Rail", color: "#ffc107" },
-  planetaryParkour: { label: "Drifter", color: "#00e676" },
-  gravitySurge: { label: "Grav-Drive", color: "#b388ff" },
+  techMerge: { label: "Merge", color: "#00e5ff" },
+  skyClimb: { label: "Climb", color: "#ff2d7b" },
+  droneDefense: { label: "Defense", color: "#ffc107" },
+  shieldCommand: { label: "Shield", color: "#00e676" },
 };
 
 const PODIUM_COLORS = ["#ffd700", "#c0c0c0", "#cd7f32"];

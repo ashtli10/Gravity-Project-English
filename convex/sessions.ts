@@ -123,13 +123,10 @@ export const triggerEvent = mutation({
     sessionId: v.id("sessions"),
     presenterKey: v.string(),
     eventType: v.union(
-      v.literal("dropTest_vacuum"),
-      v.literal("dropTest_air"),
-      v.literal("dropShow_vacuum"),
-      v.literal("dropShow_air"),
-      v.literal("rooftopRun"),
-      v.literal("planetaryParkour"),
-      v.literal("gravitySurge"),
+      v.literal("techMerge"),
+      v.literal("skyClimb"),
+      v.literal("droneDefense"),
+      v.literal("shieldCommand"),
       v.literal("poll"),
       v.literal("lookUp")
     ),
