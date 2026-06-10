@@ -1,10 +1,14 @@
 import type { SlideDefinition } from "./index";
 import SlideLayout from "../components/SlideLayout";
 import AnimatedText from "../components/AnimatedText";
-import ForceArrow from "../components/ForceArrow";
+import GameLeaderboard from "../components/GameLeaderboard";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+
+const PINK = "#ff2d7b";
 
 /* ─── Slide 1: Section Title ───────────────────────────────────────── */
-function JourneyTitleSlide({ active }: { active: boolean }) {
+function CitiesTitleSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="pink" active={active}>
       <div
@@ -19,10 +23,11 @@ function JourneyTitleSlide({ active }: { active: boolean }) {
           textTransform: "uppercase",
           animation: "scale-in 0.7s ease 0.2s both",
           textAlign: "center",
+          lineHeight: 1.05,
           zIndex: 1,
         }}
       >
-        The Journey
+        Cities of Tomorrow
       </div>
 
       <AnimatedText
@@ -31,7 +36,7 @@ function JourneyTitleSlide({ active }: { active: boolean }) {
         delay={0.6}
         style={{ marginTop: "1.25rem", zIndex: 1 }}
       >
-        How we&apos;ll cross the void
+        Where 10 billion people will live
       </AnimatedText>
 
       {/* Decorative pink glow ring */}
@@ -69,8 +74,40 @@ function JourneyTitleSlide({ active }: { active: boolean }) {
   );
 }
 
-/* ─── Slide 2: Escaping Earth ──────────────────────────────────────── */
-function EscapeVelocitySlide({ active }: { active: boolean }) {
+/* ─── Slide 2: Cities Will Grow Upward ─────────────────────────────── */
+function VerticalCitiesSlide({ active }: { active: boolean }) {
+  // Towers get progressively taller left → right
+  const towers = [
+    { x: 36, w: 62, h: 96 },
+    { x: 128, w: 66, h: 150 },
+    { x: 224, w: 70, h: 206 },
+    { x: 324, w: 74, h: 258 },
+    { x: 428, w: 80, h: 306 },
+  ];
+
+  // Sky-bridges spanning the gaps between adjacent towers
+  const bridges = [
+    { x1: 98, x2: 128, y: 262 },
+    { x1: 194, x2: 224, y: 200 },
+    { x1: 294, x2: 324, y: 142 },
+    { x1: 398, x2: 428, y: 86 },
+    { x1: 294, x2: 324, y: 250 },
+  ];
+
+  // Small glowing pads climbing the tower sides
+  const pads = [
+    { x: 24, y: 258 },
+    { x: 98, y: 268 },
+    { x: 116, y: 226 },
+    { x: 194, y: 214 },
+    { x: 212, y: 168 },
+    { x: 294, y: 156 },
+    { x: 312, y: 112 },
+    { x: 398, y: 100 },
+    { x: 416, y: 56 },
+    { x: 508, y: 44 },
+  ];
+
   return (
     <SlideLayout accent="pink" active={active}>
       <AnimatedText
@@ -80,59 +117,20 @@ function EscapeVelocitySlide({ active }: { active: boolean }) {
         weight={800}
         delay={0.1}
       >
-        Escaping Earth
+        CITIES WILL GROW UPWARD
       </AnimatedText>
 
-      <AnimatedText
-        size="var(--slide-huge)"
-        color="var(--text-primary)"
-        mono
-        delay={0.4}
-        glow
-        style={{ marginTop: "0.5rem" }}
-      >
-        11.2 km/s
-      </AnimatedText>
-
-      <div
-        style={{
-          marginTop: "1.5rem",
-          animation: "fade-in-up 0.6s ease 0.6s both",
-        }}
-      >
+      <div style={{ marginTop: "1.25rem" }}>
         <svg
-          width="460"
-          height="300"
-          viewBox="0 0 460 300"
+          width="620"
+          height="350"
+          viewBox="0 0 640 350"
           style={{ overflow: "visible" }}
         >
-          {/* Curved planet horizon */}
-          <defs>
-            <linearGradient id="s2-horizon" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2a1430" />
-              <stop offset="100%" stopColor="#120618" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M-60,300 Q230,180 520,300 Z"
-            fill="url(#s2-horizon)"
-            stroke="#ff2d7b"
-            strokeWidth="2.5"
-            style={{ filter: "drop-shadow(0 -4px 14px rgba(255,45,123,0.5))" }}
-          />
-          {/* Atmosphere glow band */}
-          <path
-            d="M-60,300 Q230,180 520,300"
-            fill="none"
-            stroke="rgba(255,45,123,0.25)"
-            strokeWidth="14"
-            style={{ filter: "blur(4px)" }}
-          />
-
           {/* Stars */}
           {[
-            [40, 50], [120, 30], [200, 60], [300, 40], [400, 70],
-            [70, 110], [360, 110], [430, 30],
+            [60, 30], [150, 60], [250, 26], [380, 40], [560, 70],
+            [600, 24], [110, 110], [270, 90],
           ].map(([cx, cy], i) => (
             <circle
               key={i}
@@ -140,135 +138,117 @@ function EscapeVelocitySlide({ active }: { active: boolean }) {
               cy={cy}
               r={1.6}
               fill="#ffffff"
-              opacity={0.7}
+              opacity={0.65}
               style={{
-                animation: `pulse-glow 2.5s ease-in-out ${i * 0.25}s infinite`,
+                animation: `pulse-glow 2.6s ease-in-out ${i * 0.3}s infinite`,
               }}
             />
           ))}
 
-          {/* Rocket climbing away (tilted, ascending right) */}
-          <g
-            transform="translate(250 150) rotate(35)"
-            style={{ filter: "drop-shadow(0 0 8px rgba(0,229,255,0.5))" }}
-          >
-            {/* Body */}
-            <path
-              d="M0,-46 C13,-30 13,12 8,30 L-8,30 C-13,12 -13,-30 0,-46 Z"
-              fill="#1a1a2e"
-              stroke="#00e5ff"
-              strokeWidth="2.5"
-            />
-            {/* Nose tip */}
-            <circle cx="0" cy="-40" r="3" fill="#00e5ff" />
-            {/* Window */}
-            <circle cx="0" cy="-8" r="5.5" fill="none" stroke="#00e5ff" strokeWidth="2" />
-            {/* Fins */}
-            <path d="M-8,18 L-20,38 L-8,30 Z" fill="#ff2d7b" />
-            <path d="M8,18 L20,38 L8,30 Z" fill="#ff2d7b" />
-            {/* Exhaust flame */}
-            <path
-              d="M-6,32 Q0,62 6,32 Q0,46 -6,32 Z"
-              fill="#ffb800"
-              style={{ filter: "drop-shadow(0 0 6px #ffb800)" }}
-            />
-          </g>
+          {/* Towers, progressively taller, each with window strips */}
+          {towers.map((t, ti) => {
+            const top = 330 - t.h;
+            const rows = Math.floor((t.h - 26) / 26);
+            return (
+              <g
+                key={ti}
+                style={{
+                  animation: `fade-in-up 0.6s ease ${0.3 + ti * 0.15}s both`,
+                }}
+              >
+                <rect
+                  x={t.x}
+                  y={top}
+                  width={t.w}
+                  height={t.h}
+                  rx={4}
+                  fill="#16101f"
+                  stroke={PINK}
+                  strokeWidth={2}
+                  style={{
+                    filter: "drop-shadow(0 0 8px rgba(255,45,123,0.35))",
+                  }}
+                />
+                {Array.from({ length: rows }, (_, r) => (
+                  <rect
+                    key={r}
+                    x={t.x + 9}
+                    y={top + 16 + r * 26}
+                    width={t.w - 18}
+                    height={3.5}
+                    rx={1.5}
+                    fill="#00e5ff"
+                    opacity={0.28}
+                  />
+                ))}
+              </g>
+            );
+          })}
 
-          {/* Ascent trail */}
-          <path
-            d="M150,300 Q200,220 230,170"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            strokeDasharray="5,6"
-            opacity="0.45"
-            style={{ animation: "fade-in 0.6s ease 1s both" }}
+          {/* Beacon antenna on the tallest tower */}
+          <line
+            x1={468}
+            y1={24}
+            x2={468}
+            y2={8}
+            stroke={PINK}
+            strokeWidth={2.5}
+            style={{ animation: "fade-in 0.5s ease 1.2s both" }}
           />
-        </svg>
-      </div>
-
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1}
-        style={{ marginTop: "1rem", maxWidth: "82%" }}
-      >
-        <span className="grammar-conditional">If a ship reaches 11.2 km/s</span>, it{" "}
-        <span className="grammar-future">will</span> break free of Earth&apos;s gravity.
-      </AnimatedText>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 3: How Rockets Fight Gravity ───────────────────────────── */
-function HowRocketsWorkSlide({ active }: { active: boolean }) {
-  return (
-    <SlideLayout accent="pink" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--pink)"
-        glow
-        weight={800}
-        delay={0.1}
-      >
-        How Rockets Fight Gravity
-      </AnimatedText>
-
-      <div
-        style={{
-          marginTop: "1.5rem",
-          animation: "fade-in-up 0.6s ease 0.4s both",
-        }}
-      >
-        <svg
-          width="420"
-          height="420"
-          viewBox="0 0 420 420"
-          style={{ overflow: "visible" }}
-        >
-          {/* Rocket centered, pointing up */}
-          <g
-            transform="translate(210 210)"
-            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.25))" }}
-          >
-            {/* Body */}
-            <path
-              d="M0,-70 C18,-46 18,40 11,72 L-11,72 C-18,40 -18,-46 0,-70 Z"
-              fill="#1a1a2e"
-              stroke="var(--text-primary)"
-              strokeWidth="3"
-            />
-            {/* Nose */}
-            <circle cx="0" cy="-62" r="4" fill="var(--text-primary)" />
-            {/* Window */}
-            <circle cx="0" cy="-18" r="9" fill="none" stroke="#00e5ff" strokeWidth="2.5" />
-            {/* Fins */}
-            <path d="M-11,52 L-30,84 L-11,72 Z" fill="#ff2d7b" />
-            <path d="M11,52 L30,84 L11,72 Z" fill="#ff2d7b" />
-          </g>
-
-          {/* Thrust arrow: green, pointing UP (angle 270) */}
-          <ForceArrow
-            x={210}
-            y={150}
-            angle={270}
-            length={110}
-            color="#3dff9a"
-            label="thrust"
-            delay={0.8}
-            thickness={6}
+          <circle
+            cx={468}
+            cy={5}
+            r={3.5}
+            fill={PINK}
+            style={{
+              filter: "drop-shadow(0 0 6px #ff2d7b)",
+              animation: "pulse-glow 1.6s ease-in-out infinite",
+            }}
           />
 
-          {/* Gravity arrow: pink, pointing DOWN (angle 90) */}
-          <ForceArrow
-            x={210}
-            y={282}
-            angle={90}
-            length={90}
-            color="#ff2d7b"
-            label="gravity"
-            delay={1.1}
-            thickness={6}
+          {/* Sky-bridges connecting the towers */}
+          {bridges.map((b, i) => (
+            <rect
+              key={i}
+              x={b.x1 - 2}
+              y={b.y}
+              width={b.x2 - b.x1 + 4}
+              height={5}
+              rx={2.5}
+              fill="#00e5ff"
+              opacity={0.85}
+              style={{
+                filter: "drop-shadow(0 0 6px rgba(0,229,255,0.8))",
+                animation: `fade-in 0.5s ease ${1 + i * 0.12}s both`,
+              }}
+            />
+          ))}
+
+          {/* Glowing pads climbing the tower sides */}
+          {pads.map((p, i) => (
+            <rect
+              key={i}
+              x={p.x}
+              y={p.y}
+              width={12}
+              height={5}
+              rx={2.5}
+              fill={PINK}
+              style={{
+                filter: "drop-shadow(0 0 6px rgba(255,45,123,0.9))",
+                animation: `pulse-glow 2.2s ease-in-out ${i * 0.2}s infinite`,
+              }}
+            />
+          ))}
+
+          {/* Street level */}
+          <line
+            x1={10}
+            y1={330}
+            x2={630}
+            y2={330}
+            stroke="rgba(255,45,123,0.45)"
+            strokeWidth={2}
           />
         </svg>
       </div>
@@ -277,106 +257,355 @@ function HowRocketsWorkSlide({ active }: { active: boolean }) {
         size="var(--slide-body)"
         color="var(--text-primary)"
         delay={1.4}
-        style={{ marginTop: "1rem", maxWidth: "80%" }}
+        style={{ marginTop: "1rem", maxWidth: "82%" }}
       >
-        Thrust <span className="grammar-future">will</span> push harder than gravity pulls.
+        With limited land, our cities{" "}
+        <span className="grammar-future">will grow</span> toward the clouds.
       </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 4: Staying Alive Out There ─────────────────────────────── */
-function LifeSupportSlide({ active }: { active: boolean }) {
+/* ─── Slide 3: Transport Without Roads ─────────────────────────────── */
+function HoverTransportSlide({ active }: { active: boolean }) {
+  const lanes = [
+    { y: 110, color: "#00e5ff", label: "AIR LANE 01" },
+    { y: 185, color: "#ff2d7b", label: "AIR LANE 02" },
+    { y: 260, color: "#ffc107", label: "AIR LANE 03" },
+  ];
+
+  const vehicles = [
+    { x: 210, y: 110, dir: 1, delay: 0.9 },
+    { x: 430, y: 110, dir: -1, delay: 1.0 },
+    { x: 330, y: 185, dir: 1, delay: 1.1 },
+    { x: 190, y: 260, dir: -1, delay: 1.2 },
+  ];
+
+  return (
+    <SlideLayout accent="pink" active={active}>
+      <AnimatedText
+        size="var(--slide-title)"
+        color="var(--pink)"
+        glow
+        weight={800}
+        delay={0.1}
+      >
+        TRANSPORT WITHOUT ROADS
+      </AnimatedText>
+
+      <div style={{ marginTop: "1.25rem" }}>
+        <svg
+          width="620"
+          height="340"
+          viewBox="0 0 640 340"
+          style={{ overflow: "visible" }}
+        >
+          {/* Dim background towers in the city canyon */}
+          <rect
+            x={250}
+            y={150}
+            width={56}
+            height={170}
+            rx={3}
+            fill="#130d1b"
+            stroke="rgba(255,45,123,0.25)"
+            strokeWidth={1.5}
+            style={{ animation: "fade-in 0.6s ease 0.3s both" }}
+          />
+          <rect
+            x={336}
+            y={180}
+            width={48}
+            height={140}
+            rx={3}
+            fill="#130d1b"
+            stroke="rgba(255,45,123,0.25)"
+            strokeWidth={1.5}
+            style={{ animation: "fade-in 0.6s ease 0.4s both" }}
+          />
+
+          {/* Foreground towers framing the cross-section */}
+          {[
+            { x: 24, y: 70, w: 78, h: 250 },
+            { x: 538, y: 50, w: 78, h: 270 },
+          ].map((t, ti) => (
+            <g
+              key={ti}
+              style={{ animation: `fade-in-up 0.6s ease ${0.2 + ti * 0.15}s both` }}
+            >
+              <rect
+                x={t.x}
+                y={t.y}
+                width={t.w}
+                height={t.h}
+                rx={4}
+                fill="#16101f"
+                stroke={PINK}
+                strokeWidth={2}
+                style={{ filter: "drop-shadow(0 0 8px rgba(255,45,123,0.35))" }}
+              />
+              {Array.from({ length: Math.floor((t.h - 26) / 30) }, (_, r) => (
+                <rect
+                  key={r}
+                  x={t.x + 10}
+                  y={t.y + 18 + r * 30}
+                  width={t.w - 20}
+                  height={3.5}
+                  rx={1.5}
+                  fill="#00e5ff"
+                  opacity={0.28}
+                />
+              ))}
+            </g>
+          ))}
+
+          {/* Dashed flight lanes between the towers */}
+          {lanes.map((lane, i) => (
+            <g
+              key={i}
+              style={{ animation: `fade-in 0.6s ease ${0.5 + i * 0.18}s both` }}
+            >
+              <line
+                x1={104}
+                y1={lane.y}
+                x2={536}
+                y2={lane.y}
+                stroke={lane.color}
+                strokeWidth={2}
+                strokeDasharray="10,8"
+                opacity={0.55}
+              />
+              <text
+                x={112}
+                y={lane.y - 9}
+                fill={lane.color}
+                fontSize={11}
+                fontFamily="var(--font-mono)"
+                opacity={0.85}
+              >
+                {lane.label}
+              </text>
+            </g>
+          ))}
+
+          {/* Hover-vehicles riding the lanes */}
+          {vehicles.map((vh, i) => (
+            <g key={i} transform={`translate(${vh.x} ${vh.y}) scale(${vh.dir},1)`}>
+              <g style={{ animation: `fade-in 0.5s ease ${vh.delay}s both` }}>
+                <g
+                  style={{
+                    animation: `float 3s ease-in-out ${i * 0.45}s infinite`,
+                  }}
+                >
+                  {/* Wake trail */}
+                  <line
+                    x1={-54}
+                    y1={0}
+                    x2={-30}
+                    y2={0}
+                    stroke="#00e5ff"
+                    strokeWidth={2}
+                    strokeDasharray="4,4"
+                    opacity={0.5}
+                  />
+                  {/* Hull */}
+                  <ellipse
+                    cx={0}
+                    cy={0}
+                    rx={26}
+                    ry={10}
+                    fill="#1a1a2e"
+                    stroke={PINK}
+                    strokeWidth={2}
+                    style={{
+                      filter: "drop-shadow(0 0 7px rgba(255,45,123,0.6))",
+                    }}
+                  />
+                  {/* Canopy */}
+                  <path d="M2,-9 A12,9 0 0 1 16,-4 L2,-4 Z" fill="rgba(0,229,255,0.7)" />
+                  {/* Under-glow */}
+                  <ellipse
+                    cx={0}
+                    cy={13}
+                    rx={13}
+                    ry={3}
+                    fill={PINK}
+                    opacity={0.5}
+                    style={{ filter: "blur(2px)" }}
+                  />
+                </g>
+              </g>
+            </g>
+          ))}
+
+          {/* Empty street far below — no cars needed */}
+          <line
+            x1={104}
+            y1={320}
+            x2={536}
+            y2={320}
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth={2}
+          />
+          <text
+            x={320}
+            y={336}
+            fill="rgba(255,255,255,0.35)"
+            fontSize={11}
+            fontFamily="var(--font-mono)"
+            textAnchor="middle"
+          >
+            QUIET STREET BELOW
+          </text>
+        </svg>
+      </div>
+
+      <AnimatedText
+        size="var(--slide-body)"
+        color="var(--text-primary)"
+        delay={1.4}
+        style={{ marginTop: "1rem", maxWidth: "84%" }}
+      >
+        Flying taxis <span className="grammar-possibility">could</span> replace
+        cars, and traffic jams{" "}
+        <span className="grammar-future">will become</span> history.
+      </AnimatedText>
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 4: Homes That Think ────────────────────────────────────── */
+function SmartHomesSlide({ active }: { active: boolean }) {
   const icons = [
     {
-      label: "Oxygen",
+      label: "Adaptive Walls",
       delay: 0.5,
       svg: (
         <g>
-          {/* Air / oxygen: swirling molecule O2 */}
-          <circle cx="38" cy="42" r="20" fill="none" stroke="#00e5ff" strokeWidth="3" />
-          <circle cx="74" cy="42" r="20" fill="none" stroke="#00e5ff" strokeWidth="3" />
-          <text
-            x="38"
-            y="48"
-            fill="#00e5ff"
-            fontSize="18"
-            fontFamily="var(--font-mono)"
-            textAnchor="middle"
-          >
-            O
-          </text>
-          <text
-            x="74"
-            y="48"
-            fill="#00e5ff"
-            fontSize="18"
-            fontFamily="var(--font-mono)"
-            textAnchor="middle"
-          >
-            O
-          </text>
-          {/* Airflow arcs */}
+          {/* Room frame */}
+          <rect
+            x={14}
+            y={16}
+            width={84}
+            height={80}
+            rx={6}
+            fill="none"
+            stroke={PINK}
+            strokeWidth={3}
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,45,123,0.5))" }}
+          />
+          {/* Sliding panels */}
+          <rect
+            x={24}
+            y={28}
+            width={26}
+            height={56}
+            rx={3}
+            fill="rgba(255,45,123,0.15)"
+            stroke={PINK}
+            strokeWidth={2.5}
+          />
+          <rect
+            x={46}
+            y={36}
+            width={26}
+            height={48}
+            rx={3}
+            fill="rgba(0,229,255,0.12)"
+            stroke="#00e5ff"
+            strokeWidth={2.5}
+          />
+          {/* Slide direction chevron */}
           <path
-            d="M18,78 Q56,66 94,78"
+            d="M80,52 l9,8 l-9,8"
             fill="none"
             stroke="#00e5ff"
-            strokeWidth="2"
-            strokeDasharray="4,4"
-            opacity="0.6"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </g>
       ),
     },
     {
-      label: "Water",
+      label: "Helper Bot",
       delay: 0.7,
       svg: (
         <g>
-          {/* Water drop */}
-          <path
-            d="M56,14 C56,14 86,52 86,72 A30,30 0 1 1 26,72 C26,52 56,14 56,14 Z"
-            fill="rgba(0,229,255,0.12)"
-            stroke="#00b4ff"
-            strokeWidth="3"
-            style={{ filter: "drop-shadow(0 0 6px rgba(0,180,255,0.5))" }}
+          {/* Antenna */}
+          <line x1={56} y1={34} x2={56} y2={22} stroke={PINK} strokeWidth={2.5} />
+          <circle
+            cx={56}
+            cy={19}
+            r={3.5}
+            fill={PINK}
+            style={{
+              filter: "drop-shadow(0 0 5px #ff2d7b)",
+              animation: "pulse-glow 1.8s ease-in-out infinite",
+            }}
           />
-          {/* Highlight */}
+          {/* Round body */}
+          <circle
+            cx={56}
+            cy={60}
+            r={24}
+            fill="#1a1a2e"
+            stroke="#00e5ff"
+            strokeWidth={3}
+            style={{ filter: "drop-shadow(0 0 6px rgba(0,229,255,0.5))" }}
+          />
+          {/* Eyes + smile */}
+          <circle cx={47} cy={56} r={4} fill="#00e5ff" />
+          <circle cx={65} cy={56} r={4} fill="#00e5ff" />
           <path
-            d="M46,70 A14,14 0 0 1 60,58"
+            d="M48,70 Q56,76 64,70"
             fill="none"
-            stroke="#ffffff"
-            strokeWidth="2.5"
-            opacity="0.7"
+            stroke="#00e5ff"
+            strokeWidth={2.5}
             strokeLinecap="round"
+          />
+          {/* Hover glow */}
+          <ellipse
+            cx={56}
+            cy={94}
+            rx={18}
+            ry={4}
+            fill={PINK}
+            opacity={0.4}
+            style={{ filter: "blur(2px)" }}
           />
         </g>
       ),
     },
     {
-      label: "Food",
+      label: "Energy Skin",
       delay: 0.9,
       svg: (
         <g>
-          {/* Leaf (grown food in domes) */}
-          <path
-            d="M22,90 C22,40 62,18 92,20 C92,70 56,92 22,90 Z"
-            fill="rgba(61,255,154,0.12)"
-            stroke="#3dff9a"
-            strokeWidth="3"
-            style={{ filter: "drop-shadow(0 0 6px rgba(61,255,154,0.5))" }}
+          {/* Solar facade */}
+          <rect
+            x={28}
+            y={16}
+            width={56}
+            height={80}
+            rx={4}
+            fill="rgba(255,193,7,0.08)"
+            stroke="#ffc107"
+            strokeWidth={3}
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,193,7,0.5))" }}
           />
-          {/* Vein */}
+          {/* Cell grid */}
+          <line x1={47} y1={16} x2={47} y2={96} stroke="#ffc107" strokeWidth={1.5} opacity={0.5} />
+          <line x1={65} y1={16} x2={65} y2={96} stroke="#ffc107" strokeWidth={1.5} opacity={0.5} />
+          <line x1={28} y1={36} x2={84} y2={36} stroke="#ffc107" strokeWidth={1.5} opacity={0.5} />
+          <line x1={28} y1={56} x2={84} y2={56} stroke="#ffc107" strokeWidth={1.5} opacity={0.5} />
+          <line x1={28} y1={76} x2={84} y2={76} stroke="#ffc107" strokeWidth={1.5} opacity={0.5} />
+          {/* Energy bolt */}
           <path
-            d="M28,86 C50,64 72,42 88,26"
-            fill="none"
-            stroke="#3dff9a"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+            d="M58,34 L44,60 L54,60 L48,82 L66,52 L55,52 Z"
+            fill="#ffc107"
+            style={{ filter: "drop-shadow(0 0 8px #ffc107)" }}
           />
-          {/* Side veins */}
-          <path d="M52,64 L40,58" stroke="#3dff9a" strokeWidth="2" />
-          <path d="M66,48 L56,42" stroke="#3dff9a" strokeWidth="2" />
         </g>
       ),
     },
@@ -391,7 +620,7 @@ function LifeSupportSlide({ active }: { active: boolean }) {
         weight={800}
         delay={0.1}
       >
-        Staying Alive Out There
+        HOMES THAT THINK
       </AnimatedText>
 
       <div
@@ -438,54 +667,159 @@ function LifeSupportSlide({ active }: { active: boolean }) {
         delay={1.2}
         style={{ marginTop: "2rem", maxWidth: "84%" }}
       >
-        Colonists <span className="grammar-possibility">could</span> grow food in domes, and
-        they <span className="grammar-possibility">may</span> recycle every drop of water.
+        <span className="grammar-conditional">If your home knows you</span>, it{" "}
+        <span className="grammar-future">will prepare</span> everything before
+        you arrive.
       </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 5: Nine Months to Mars ─────────────────────────────────── */
-function TheTripSlide({ active }: { active: boolean }) {
+/* ─── Slide 5: Could You Live on Floor 500? ────────────────────────── */
+function CityQuestionSlide({ active }: { active: boolean }) {
+  const floors = [500, 400, 300, 200, 100];
+
   return (
     <SlideLayout accent="pink" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--pink)"
-        glow
-        weight={800}
-        delay={0.1}
-      >
-        Nine Months to Mars
-      </AnimatedText>
-
       <div
         style={{
-          marginTop: "2rem",
-          animation: "fade-in-up 0.6s ease 0.4s both",
+          fontSize: "var(--slide-huge)",
+          fontFamily: "var(--font-display)",
+          fontWeight: 900,
+          color: "var(--pink)",
+          textShadow:
+            "0 0 30px var(--pink), 0 0 60px var(--pink), 0 0 120px rgba(255,45,123,0.3)",
+          letterSpacing: "0.04em",
+          textAlign: "center",
+          lineHeight: 1.05,
+          maxWidth: "85%",
+          animation: "scale-in 0.7s ease 0.2s both",
+          zIndex: 1,
         }}
       >
-        <svg
-          width="640"
-          height="320"
-          viewBox="0 0 640 320"
-          style={{ overflow: "visible" }}
-        >
-          <defs>
-            <radialGradient id="s2-earth" cx="40%" cy="35%" r="75%">
-              <stop offset="0%" stopColor="#4db8ff" />
-              <stop offset="100%" stopColor="#0a3a66" />
-            </radialGradient>
-            <radialGradient id="s2-mars" cx="40%" cy="35%" r="75%">
-              <stop offset="0%" stopColor="#ff8a5c" />
-              <stop offset="100%" stopColor="#7a2410" />
-            </radialGradient>
-          </defs>
+        COULD YOU LIVE ON FLOOR 500?
+      </div>
 
+      <AnimatedText
+        size="var(--slide-subtitle)"
+        color="var(--text-secondary)"
+        delay={0.7}
+        style={{ marginTop: "1.5rem", zIndex: 1 }}
+      >
+        The elevators of 2200 go UP.
+      </AnimatedText>
+
+      {/* Decorative vertical glowing line with floor ticks */}
+      <div
+        style={{
+          position: "absolute",
+          left: "9%",
+          top: "14%",
+          height: "72%",
+          width: "2px",
+          background:
+            "linear-gradient(180deg, #ff2d7b, rgba(255,45,123,0.05))",
+          boxShadow: "0 0 12px rgba(255,45,123,0.6)",
+          pointerEvents: "none",
+          animation: "fade-in 0.8s ease 0.5s both",
+        }}
+      >
+        {/* Top beacon */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-7px",
+            left: "-5px",
+            width: "12px",
+            height: "12px",
+            borderRadius: "50%",
+            background: PINK,
+            boxShadow: "0 0 14px #ff2d7b",
+            animation: "pulse-glow 2s ease-in-out infinite",
+          }}
+        />
+        {floors.map((f, i) => (
+          <div
+            key={f}
+            style={{
+              position: "absolute",
+              top: `${i * 23}%`,
+              left: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: "16px",
+                height: "2px",
+                background: PINK,
+                boxShadow: "0 0 8px rgba(255,45,123,0.8)",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.85rem",
+                color: "var(--text-secondary)",
+                letterSpacing: "0.08em",
+              }}
+            >
+              {f}
+            </span>
+          </div>
+        ))}
+      </div>
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 6: Sky Climb Intro ─────────────────────────────────────── */
+function SkyClimbIntroSlide({ active }: { active: boolean }) {
+  // Hover-pads zigzagging up the tower edge
+  const pads = [
+    { x: 90, y: 296 },
+    { x: 166, y: 248 },
+    { x: 90, y: 200 },
+    { x: 166, y: 152 },
+    { x: 90, y: 104 },
+    { x: 166, y: 56 },
+  ];
+
+  return (
+    <SlideLayout accent="pink" active={active}>
+      <div
+        style={{
+          fontSize: "var(--slide-huge)",
+          fontFamily: "var(--font-display)",
+          fontWeight: 900,
+          color: "var(--pink)",
+          textShadow:
+            "0 0 30px var(--pink), 0 0 60px var(--pink), 0 0 120px rgba(255,45,123,0.3)",
+          letterSpacing: "0.06em",
+          animation: "scale-in 0.7s ease 0.1s both",
+          textAlign: "center",
+          lineHeight: 1.05,
+        }}
+      >
+        YOUR TURN
+      </div>
+
+      <AnimatedText
+        size="var(--slide-subtitle)"
+        color="var(--text-secondary)"
+        delay={0.5}
+        style={{ marginTop: "0.75rem" }}
+      >
+        Sky Climb — bounce up the hover-pads of the vertical city!
+      </AnimatedText>
+
+      <div style={{ marginTop: "1rem", animation: "fade-in-up 0.6s ease 0.7s both" }}>
+        <svg width="220" height="300" viewBox="0 0 250 330" style={{ overflow: "visible" }}>
           {/* Stars */}
           {[
-            [120, 40], [260, 70], [380, 50], [500, 90], [200, 250],
-            [440, 240], [560, 160], [90, 180],
+            [220, 30], [236, 110], [214, 190], [232, 260],
           ].map(([cx, cy], i) => (
             <circle
               key={i}
@@ -495,109 +829,146 @@ function TheTripSlide({ active }: { active: boolean }) {
               fill="#ffffff"
               opacity={0.65}
               style={{
-                animation: `pulse-glow 2.5s ease-in-out ${i * 0.3}s infinite`,
+                animation: `pulse-glow 2.6s ease-in-out ${i * 0.35}s infinite`,
               }}
             />
           ))}
 
-          {/* Earth */}
-          <circle
-            cx="90"
-            cy="220"
-            r="48"
-            fill="url(#s2-earth)"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 14px rgba(0,180,255,0.5))" }}
+          {/* Tower wall */}
+          <rect
+            x={18}
+            y={14}
+            width={52}
+            height={306}
+            rx={3}
+            fill="#150f1e"
+            stroke={PINK}
+            strokeWidth={2}
           />
-          <text
-            x="90"
-            y="296"
-            fill="#00e5ff"
-            fontSize="15"
-            fontFamily="var(--font-mono)"
-            textAnchor="middle"
-          >
-            EARTH
-          </text>
-
-          {/* Mars */}
-          <circle
-            cx="560"
-            cy="90"
-            r="36"
-            fill="url(#s2-mars)"
-            stroke="#ff8a5c"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 14px rgba(255,138,92,0.5))" }}
+          {Array.from({ length: 10 }, (_, r) => (
+            <rect
+              key={r}
+              x={28}
+              y={26 + r * 29}
+              width={24}
+              height={3.5}
+              rx={1.5}
+              fill="#00e5ff"
+              opacity={0.25}
+            />
+          ))}
+          {/* Glowing tower edge */}
+          <line
+            x1={70}
+            y1={14}
+            x2={70}
+            y2={320}
+            stroke={PINK}
+            strokeWidth={2.5}
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,45,123,0.8))" }}
           />
-          <text
-            x="560"
-            y="46"
-            fill="#ff8a5c"
-            fontSize="15"
-            fontFamily="var(--font-mono)"
-            textAnchor="middle"
-          >
-            MARS
-          </text>
 
-          {/* Dashed trajectory arc Earth → Mars */}
-          <path
-            d="M130,190 Q320,-40 528,108"
+          {/* Dotted bounce route through the pads */}
+          <polyline
+            points="112,292 188,244 112,196 188,148 112,100 188,52"
             fill="none"
-            stroke="#ff2d7b"
-            strokeWidth="2.5"
-            strokeDasharray="8,7"
-            style={{
-              filter: "drop-shadow(0 0 6px #ff2d7b)",
-              animation: "fade-in 0.6s ease 0.8s both",
-            }}
+            stroke="#00e5ff"
+            strokeWidth={2}
+            strokeDasharray="3,6"
+            opacity={0.35}
+            strokeLinecap="round"
           />
 
-          {/* Small ship at midpoint of the arc */}
+          {/* Zigzag hover-pads */}
+          {pads.map((p, i) => (
+            <g key={i}>
+              <rect
+                x={p.x}
+                y={p.y}
+                width={44}
+                height={7}
+                rx={3.5}
+                fill={PINK}
+                style={{
+                  filter: "drop-shadow(0 0 7px rgba(255,45,123,0.9))",
+                  animation: `pulse-glow 2s ease-in-out ${i * 0.22}s infinite`,
+                }}
+              />
+              <ellipse
+                cx={p.x + 22}
+                cy={p.y + 11}
+                rx={16}
+                ry={3}
+                fill={PINK}
+                opacity={0.3}
+                style={{ filter: "blur(2px)" }}
+              />
+            </g>
+          ))}
+
+          {/* Tiny climber, arms up, mid-route */}
           <g
-            transform="translate(320 64) rotate(55)"
-            style={{
-              filter: "drop-shadow(0 0 8px rgba(0,229,255,0.6))",
-              animation: "fade-in 0.5s ease 1.2s both",
-            }}
+            stroke="#00e5ff"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            fill="none"
+            style={{ filter: "drop-shadow(0 0 5px rgba(0,229,255,0.8))" }}
           >
-            <path
-              d="M0,-20 C7,-12 7,8 4,16 L-4,16 C-7,8 -7,-12 0,-20 Z"
-              fill="#1a1a2e"
-              stroke="#00e5ff"
-              strokeWidth="2"
-            />
-            <circle cx="0" cy="-2" r="3" fill="none" stroke="#00e5ff" strokeWidth="1.5" />
-            <path d="M-4,10 L-11,22 L-4,16 Z" fill="#ff2d7b" />
-            <path d="M4,10 L11,22 L4,16 Z" fill="#ff2d7b" />
-            <path
-              d="M-3,17 Q0,32 3,17 Z"
-              fill="#ffb800"
-              style={{ filter: "drop-shadow(0 0 5px #ffb800)" }}
-            />
+            <circle cx={112} cy={177} r={5} />
+            <line x1={112} y1={182} x2={112} y2={193} />
+            <line x1={112} y1={186} x2={104} y2={178} />
+            <line x1={112} y1={186} x2={120} y2={178} />
+            <line x1={112} y1={193} x2={106} y2={200} />
+            <line x1={112} y1={193} x2={118} y2={200} />
           </g>
         </svg>
       </div>
 
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1.3}
-        style={{ marginTop: "1.5rem", maxWidth: "80%" }}
+      <div
+        style={{
+          marginTop: "0.75rem",
+          fontSize: "var(--slide-body)",
+          color: PINK,
+          fontFamily: "var(--font-mono)",
+          animation: "pulse-glow 1.6s ease-in-out infinite",
+          textShadow: "0 0 12px #ff2d7b",
+        }}
       >
-        The trip <span className="grammar-future">is going to</span> take about nine months.
-      </AnimatedText>
+        Check your devices now!
+      </div>
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 7: Sky Climb Leaderboard ───────────────────────────────── */
+function SkyClimbLeaderboardSlide({ active }: { active: boolean }) {
+  const session = useQuery(api.sessions.getCurrent);
+  return (
+    <SlideLayout accent="pink" active={active}>
+      {session ? (
+        <GameLeaderboard
+          sessionId={session._id}
+          game="skyClimb"
+          title="SKY CLIMB LEADERBOARD"
+          accent="#ff2d7b"
+          scoreUnit="m"
+        />
+      ) : (
+        <AnimatedText color="#ff2d7b" size="var(--slide-body)">
+          Waiting for session...
+        </AnimatedText>
+      )}
     </SlideLayout>
   );
 }
 
 /* ─── Export ───────────────────────────────────────────────────────── */
 export const section2Slides: SlideDefinition[] = [
-  { id: "journey-title", section: 2, accent: "pink", component: JourneyTitleSlide },
-  { id: "escape-velocity", section: 2, accent: "pink", component: EscapeVelocitySlide, studentEvent: "lookUp" },
-  { id: "how-rockets-work", section: 2, accent: "pink", component: HowRocketsWorkSlide },
-  { id: "life-support", section: 2, accent: "pink", component: LifeSupportSlide },
-  { id: "the-trip", section: 2, accent: "pink", component: TheTripSlide },
+  { id: "cities-title", section: 2, accent: "pink", component: CitiesTitleSlide },
+  { id: "vertical-cities", section: 2, accent: "pink", component: VerticalCitiesSlide, studentEvent: "lookUp" },
+  { id: "hover-transport", section: 2, accent: "pink", component: HoverTransportSlide },
+  { id: "smart-homes", section: 2, accent: "pink", component: SmartHomesSlide },
+  { id: "city-question", section: 2, accent: "pink", component: CityQuestionSlide },
+  { id: "skyclimb-intro", section: 2, accent: "pink", component: SkyClimbIntroSlide, studentEvent: "skyClimb" },
+  { id: "skyclimb-leaderboard", section: 2, accent: "pink", component: SkyClimbLeaderboardSlide, studentEvent: "skyClimb" },
 ];
