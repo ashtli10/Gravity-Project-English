@@ -99,15 +99,196 @@ function TitleSlide({ active }: { active: boolean }) {
           delay={0.9}
           style={{ maxWidth: "80%" }}
         >
-          Humanity&apos;s Next Giant Leap
+          A Journey to the World of Tomorrow
         </AnimatedText>
       </div>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 2: The Future Is Off-World ─────────────────────────────── */
-function FutureOffworldSlide({ active }: { active: boolean }) {
+/* ─── Slide 2: Imagine the Year 2200 ───────────────────────────────── */
+function ImagineSlide({ active }: { active: boolean }) {
+  return (
+    <SlideLayout accent="cyan" active={active}>
+      {/* Decorative concentric rings */}
+      {[280, 430, 580].map((size, i) => (
+        <div
+          key={size}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: `${size}px`,
+            height: `${size}px`,
+            borderRadius: "50%",
+            border: "1.5px solid var(--cyan)",
+            opacity: 0.16 - i * 0.04,
+            animation: `pulse-glow ${3 + i * 0.6}s ease-in-out ${i * 0.5}s infinite`,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          zIndex: 1,
+        }}
+      >
+        <AnimatedText
+          size="var(--slide-title)"
+          color="var(--cyan)"
+          glow
+          weight={900}
+          delay={0.1}
+        >
+          IMAGINE THE YEAR 2200
+        </AnimatedText>
+
+        <AnimatedText
+          size="var(--slide-subtitle)"
+          color="var(--text-primary)"
+          delay={0.6}
+          weight={400}
+          style={{ marginTop: "2.2rem", maxWidth: "75%" }}
+        >
+          Close your eyes. The world you know{" "}
+          <span className="grammar-future">is going to</span> change
+          completely.
+        </AnimatedText>
+      </div>
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 3: What Will Tomorrow Look Like? ───────────────────────── */
+function PredictionsSlide({ active }: { active: boolean }) {
+  const cards = [
+    {
+      label: "Smart Cities",
+      delay: 0.6,
+      svg: (
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          {/* Ground */}
+          <line x1="10" y1="92" x2="100" y2="92" stroke={CYAN} strokeWidth="2" opacity="0.6" />
+          {/* Tower skyline */}
+          <rect x="14" y="46" width="16" height="46" fill="#0c1a22" stroke={CYAN} strokeWidth="2" />
+          <rect
+            x="36"
+            y="26"
+            width="20"
+            height="66"
+            fill="#0c1a22"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
+          />
+          <rect x="62" y="52" width="14" height="40" fill="#0c1a22" stroke={CYAN} strokeWidth="2" />
+          <rect x="80" y="38" width="18" height="54" fill="#0c1a22" stroke={CYAN} strokeWidth="2" />
+          {/* Antenna */}
+          <line x1="46" y1="26" x2="46" y2="14" stroke={CYAN} strokeWidth="2" />
+          <circle cx="46" cy="11" r="2.5" fill={CYAN} style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }} />
+          {/* Lit windows */}
+          {[
+            [18, 52], [24, 52], [18, 60], [24, 60], [18, 68],
+            [40, 32], [48, 32], [40, 40], [48, 40], [40, 48], [48, 48], [40, 56],
+            [65, 58], [70, 58], [65, 66],
+            [84, 44], [91, 44], [84, 52], [91, 52], [84, 60],
+          ].map(([x, y], i) => (
+            <rect key={i} x={x} y={y} width="3.5" height="3.5" fill={CYAN} opacity="0.85" />
+          ))}
+        </svg>
+      ),
+    },
+    {
+      label: "Thinking Machines",
+      delay: 0.8,
+      svg: (
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          {/* Chip body */}
+          <rect
+            x="32"
+            y="32"
+            width="46"
+            height="46"
+            rx="6"
+            fill="#0c1a22"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
+          />
+          {/* Pins */}
+          {[42, 55, 68].map((o) => (
+            <g key={o} stroke={CYAN} strokeWidth="2" opacity="0.8">
+              <line x1={o} y1="32" x2={o} y2="22" />
+              <line x1={o} y1="78" x2={o} y2="88" />
+              <line x1="32" y1={o} x2="22" y2={o} />
+              <line x1="78" y1={o} x2="88" y2={o} />
+            </g>
+          ))}
+          {/* Neural traces inside */}
+          {[
+            [45, 46], [64, 44], [48, 64], [66, 62],
+          ].map(([x, y], i) => (
+            <g key={i}>
+              <line
+                x1={x}
+                y1={y}
+                x2="55"
+                y2="54"
+                stroke={CYAN}
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <circle cx={x} cy={y} r="3" fill={CYAN} opacity="0.9" />
+            </g>
+          ))}
+          <line x1="45" y1="46" x2="64" y2="44" stroke={CYAN} strokeWidth="1" opacity="0.35" />
+          <circle cx="55" cy="54" r="3.5" fill={CYAN} style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }} />
+        </svg>
+      ),
+    },
+    {
+      label: "New Worlds",
+      delay: 1.0,
+      svg: (
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          {/* Stars */}
+          <circle cx="14" cy="16" r="1.5" fill={CYAN} opacity="0.7" />
+          <circle cx="90" cy="20" r="2" fill={CYAN} opacity="0.6" />
+          <circle cx="98" cy="70" r="1.5" fill={CYAN} opacity="0.7" />
+          <circle cx="12" cy="56" r="1.5" fill={CYAN} opacity="0.5" />
+          {/* Planet */}
+          <circle
+            cx="55"
+            cy="62"
+            r="30"
+            fill="#0c1a22"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
+          />
+          <path d="M28,54 Q52,44 82,56" fill="none" stroke={CYAN} strokeWidth="1.5" opacity="0.4" />
+          <path d="M30,74 Q55,82 80,72" fill="none" stroke={CYAN} strokeWidth="1.5" opacity="0.3" />
+          {/* Habitat dome on the surface */}
+          <path
+            d="M43,34.5 A12,12 0 0,1 67,34.5"
+            fill={CYAN}
+            fillOpacity="0.15"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <line x1="43" y1="34.5" x2="67" y2="34.5" stroke={CYAN} strokeWidth="2" />
+          <circle cx="55" cy="29" r="2" fill={CYAN} opacity="0.9" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <SlideLayout accent="cyan" active={active}>
       <AnimatedText
@@ -117,91 +298,354 @@ function FutureOffworldSlide({ active }: { active: boolean }) {
         weight={900}
         delay={0.1}
       >
-        THE FUTURE IS OFF-WORLD
+        WHAT WILL TOMORROW LOOK LIKE?
       </AnimatedText>
 
-      {/* Starfield + orbiting world */}
       <div
         style={{
+          display: "flex",
+          gap: "2.5rem",
           marginTop: "2.5rem",
-          animation: "fade-in-up 0.6s ease 0.5s both",
+          alignItems: "stretch",
+          flexWrap: "wrap",
+          justifyContent: "center",
         }}
       >
-        <svg width="260" height="160" viewBox="0 0 260 160">
-          {[
-            [30, 30],
-            [70, 18],
-            [210, 40],
-            [240, 90],
-            [20, 110],
-            [190, 130],
-            [120, 22],
-          ].map(([cx, cy], i) => (
-            <circle
-              key={i}
-              cx={cx}
-              cy={cy}
-              r={1.5 + (i % 2)}
-              fill="#00e5ff"
-              opacity={0.5 + (i % 3) * 0.15}
-            />
-          ))}
-          {/* Orbit */}
-          <ellipse
-            cx="130"
-            cy="80"
-            rx="90"
-            ry="32"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="1.5"
-            opacity="0.4"
-          />
-          {/* Planet */}
-          <circle
-            cx="130"
-            cy="80"
-            r="34"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 10px #00e5ff)" }}
-          />
-          <path
-            d="M104,72 Q120,64 140,70 Q156,76 156,86"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="1.5"
-            opacity="0.5"
-          />
-          {/* Colony dome */}
-          <circle
-            cx="220"
-            cy="80"
-            r="7"
-            fill="#00e5ff"
-            style={{ filter: "drop-shadow(0 0 8px #00e5ff)" }}
-          />
-        </svg>
+        {cards.map((card) => (
+          <div
+            key={card.label}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.8rem",
+              padding: "1.6rem 1.4rem 1.2rem",
+              borderRadius: "16px",
+              border: "1px solid rgba(0,229,255,0.25)",
+              background:
+                "linear-gradient(180deg, rgba(0,229,255,0.06), rgba(0,229,255,0.02))",
+              boxShadow: "0 0 24px rgba(0,229,255,0.08)",
+              width: "210px",
+              animation: `fade-in-up 0.6s ease ${card.delay}s both`,
+            }}
+          >
+            {card.svg}
+            <span
+              style={{
+                color: "var(--text-primary)",
+                fontSize: "var(--slide-small)",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                textAlign: "center",
+              }}
+            >
+              {card.label}
+            </span>
+          </div>
+        ))}
       </div>
 
       <AnimatedText
-        size="var(--slide-subtitle)"
+        size="var(--slide-body)"
         color="var(--text-primary)"
-        delay={0.9}
-        weight={400}
+        delay={1.3}
         style={{ marginTop: "2rem", maxWidth: "80%" }}
       >
-        By 2200, humans{" "}
-        <span className="grammar-future">will live</span> among the
-        stars.
+        Nobody knows for sure — but we{" "}
+        <span className="grammar-possibility">can</span> make predictions.
       </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 3: Big Stat ────────────────────────────────────────────── */
-function BigStatSlide({ active }: { active: boolean }) {
+/* ─── Slide 4: Technology Never Stops ──────────────────────────────── */
+function TechEvolutionSlide({ active }: { active: boolean }) {
+  const milestones = [
+    {
+      x: 80,
+      year: "400,000 BC",
+      name: "FIRE",
+      icon: (
+        <g>
+          <path
+            d="M0,-16 Q10,-4 8,6 Q6,15 0,16 Q-8,14 -9,4 Q-10,-5 0,-16 Z"
+            fill="#0c1a22"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <path
+            d="M0,-4 Q4,2 2,7 Q0,10 -2,8 Q-5,4 0,-4 Z"
+            fill={CYAN}
+            opacity="0.5"
+          />
+        </g>
+      ),
+    },
+    {
+      x: 224,
+      year: "3500 BC",
+      name: "WHEEL",
+      icon: (
+        <g stroke={CYAN} strokeWidth="2">
+          <circle
+            cx="0"
+            cy="0"
+            r="13"
+            fill="#0c1a22"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <line x1="-13" y1="0" x2="13" y2="0" strokeWidth="1.5" opacity="0.7" />
+          <line x1="0" y1="-13" x2="0" y2="13" strokeWidth="1.5" opacity="0.7" />
+          <line x1="-9" y1="-9" x2="9" y2="9" strokeWidth="1.5" opacity="0.7" />
+          <line x1="-9" y1="9" x2="9" y2="-9" strokeWidth="1.5" opacity="0.7" />
+          <circle cx="0" cy="0" r="3" fill={CYAN} stroke="none" />
+        </g>
+      ),
+    },
+    {
+      x: 368,
+      year: "1769",
+      name: "ENGINE",
+      icon: (
+        <g stroke={CYAN} strokeWidth="2">
+          {[
+            [10, 0, 15, 0],
+            [7.1, 7.1, 10.6, 10.6],
+            [0, 10, 0, 15],
+            [-7.1, 7.1, -10.6, 10.6],
+            [-10, 0, -15, 0],
+            [-7.1, -7.1, -10.6, -10.6],
+            [0, -10, 0, -15],
+            [7.1, -7.1, 10.6, -10.6],
+          ].map(([x1, y1, x2, y2], i) => (
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />
+          ))}
+          <circle
+            cx="0"
+            cy="0"
+            r="10"
+            fill="#0c1a22"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <circle cx="0" cy="0" r="3.5" fill="none" strokeWidth="1.5" />
+        </g>
+      ),
+    },
+    {
+      x: 512,
+      year: "1946",
+      name: "COMPUTER",
+      icon: (
+        <g stroke={CYAN} strokeWidth="2">
+          <rect
+            x="-14"
+            y="-14"
+            width="28"
+            height="20"
+            rx="2"
+            fill="#0c1a22"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <line x1="-9" y1="-8" x2="9" y2="-8" strokeWidth="1.5" opacity="0.5" />
+          <line x1="-9" y1="-3" x2="4" y2="-3" strokeWidth="1.5" opacity="0.35" />
+          <line x1="0" y1="6" x2="0" y2="12" />
+          <line x1="-8" y1="12" x2="8" y2="12" />
+        </g>
+      ),
+    },
+    {
+      x: 656,
+      year: "2025",
+      name: "AI",
+      icon: (
+        <g stroke={CYAN} strokeWidth="1.5">
+          <rect
+            x="-11"
+            y="-11"
+            width="22"
+            height="22"
+            rx="3"
+            fill="#0c1a22"
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          {[-6, 0, 6].map((o) => (
+            <g key={o}>
+              <line x1={o} y1="-11" x2={o} y2="-16" />
+              <line x1={o} y1="11" x2={o} y2="16" />
+              <line x1="-11" y1={o} x2="-16" y2={o} />
+              <line x1="11" y1={o} x2="16" y2={o} />
+            </g>
+          ))}
+          <circle cx="0" cy="0" r="4.5" fill="none" />
+          <circle cx="0" cy="0" r="1.5" fill={CYAN} stroke="none" />
+        </g>
+      ),
+    },
+  ];
+
+  return (
+    <SlideLayout accent="cyan" active={active}>
+      <AnimatedText
+        size="var(--slide-title)"
+        color="var(--cyan)"
+        glow
+        weight={900}
+        delay={0.1}
+      >
+        TECHNOLOGY NEVER STOPS
+      </AnimatedText>
+
+      <div
+        style={{
+          marginTop: "2.2rem",
+          animation: "fade-in-up 0.6s ease 0.4s both",
+        }}
+      >
+        <svg
+          width="880"
+          height="190"
+          viewBox="0 0 880 190"
+          style={{ maxWidth: "92vw", height: "auto" }}
+        >
+          {/* Timeline baseline */}
+          <line
+            x1="30"
+            y1="118"
+            x2="846"
+            y2="118"
+            stroke={CYAN}
+            strokeWidth="2"
+            opacity="0.35"
+          />
+          <polygon points="862,118 846,111 846,125" fill={CYAN} opacity="0.6" />
+
+          {milestones.map((m, i) => (
+            <g key={m.name} style={{ animation: `fade-in 0.5s ease ${0.6 + i * 0.18}s both` }}>
+              <g transform={`translate(${m.x},72)`}>{m.icon}</g>
+              <line
+                x1={m.x}
+                y1="96"
+                x2={m.x}
+                y2="112"
+                stroke={CYAN}
+                strokeWidth="1.5"
+                opacity="0.3"
+              />
+              <circle
+                cx={m.x}
+                cy="118"
+                r="5"
+                fill={CYAN}
+                style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
+              />
+              <text
+                x={m.x}
+                y="146"
+                textAnchor="middle"
+                fill={CYAN}
+                opacity="0.9"
+                fontSize="13"
+                fontFamily="var(--font-mono)"
+              >
+                {m.year}
+              </text>
+              <text
+                x={m.x}
+                y="166"
+                textAnchor="middle"
+                fill="var(--text-secondary)"
+                fontSize="11"
+                letterSpacing="0.1em"
+              >
+                {m.name}
+              </text>
+            </g>
+          ))}
+
+          {/* Glowing 2200? node */}
+          <g style={{ animation: "fade-in 0.5s ease 1.6s both" }}>
+            <g style={{ animation: "pulse-glow 2s ease-in-out infinite" }}>
+              <circle
+                cx="800"
+                cy="72"
+                r="22"
+                fill="#0c1a22"
+                stroke={CYAN}
+                strokeWidth="2.5"
+                style={{ filter: "drop-shadow(0 0 12px #00e5ff)" }}
+              />
+              <text
+                x="800"
+                y="80"
+                textAnchor="middle"
+                fill={CYAN}
+                fontSize="24"
+                fontWeight="900"
+                fontFamily="var(--font-mono)"
+              >
+                ?
+              </text>
+            </g>
+            <line
+              x1="800"
+              y1="96"
+              x2="800"
+              y2="112"
+              stroke={CYAN}
+              strokeWidth="1.5"
+              opacity="0.3"
+            />
+            <circle
+              cx="800"
+              cy="118"
+              r="5"
+              fill={CYAN}
+              style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
+            />
+            <text
+              x="800"
+              y="146"
+              textAnchor="middle"
+              fill={CYAN}
+              fontSize="14"
+              fontWeight="700"
+              fontFamily="var(--font-mono)"
+              style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
+            >
+              2200?
+            </text>
+            <text
+              x="800"
+              y="166"
+              textAnchor="middle"
+              fill="var(--text-secondary)"
+              fontSize="11"
+              letterSpacing="0.1em"
+            >
+              NEXT
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <AnimatedText
+        size="var(--slide-body)"
+        color="var(--text-primary)"
+        delay={1.8}
+        style={{ marginTop: "1.5rem", maxWidth: "80%" }}
+      >
+        Each invention <span className="grammar-future">will lead</span> to
+        the next one.
+      </AnimatedText>
+    </SlideLayout>
+  );
+}
+
+/* ─── Slide 5: The Speed of Change ─────────────────────────────────── */
+function SpeedOfChangeSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="cyan" active={active}>
       <div
@@ -214,9 +658,11 @@ function BigStatSlide({ active }: { active: boolean }) {
             "0 0 30px var(--cyan), 0 0 60px var(--cyan), 0 0 100px rgba(0,229,255,0.25)",
           animation: "number-count 0.8s ease 0.2s both",
           letterSpacing: "0.04em",
+          textAlign: "center",
+          lineHeight: 1.05,
         }}
       >
-        1,000,000
+        100 YEARS
       </div>
 
       <AnimatedText
@@ -226,7 +672,7 @@ function BigStatSlide({ active }: { active: boolean }) {
         weight={500}
         style={{ marginTop: "1.5rem", maxWidth: "80%" }}
       >
-        people will call Mars home
+        of progress now happens in just 10
       </AnimatedText>
 
       {/* Decorative bar */}
@@ -248,243 +694,11 @@ function BigStatSlide({ active }: { active: boolean }) {
         delay={1.2}
         style={{ maxWidth: "80%" }}
       >
-        We <span className="grammar-future">are going to</span> build
-        cities beyond Earth.
-      </AnimatedText>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 4: Why We'll Leave Earth ───────────────────────────────── */
-function WhyLeaveEarthSlide({ active }: { active: boolean }) {
-  const icons = [
-    {
-      label: "Room to Grow",
-      delay: 0.8,
-      svg: (
-        <svg width="90" height="90" viewBox="0 0 90 90">
-          <circle
-            cx="45"
-            cy="45"
-            r="30"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-          />
-          {/* Crowd of dots */}
-          {[
-            [34, 40],
-            [45, 36],
-            [56, 40],
-            [38, 50],
-            [52, 50],
-            [45, 46],
-            [30, 48],
-            [60, 48],
-          ].map(([cx, cy], i) => (
-            <circle key={i} cx={cx} cy={cy} r="3.2" fill="#00e5ff" opacity="0.85" />
-          ))}
-        </svg>
-      ),
-    },
-    {
-      label: "New Resources",
-      delay: 1.0,
-      svg: (
-        <svg width="90" height="90" viewBox="0 0 90 90">
-          {/* Resource crystal */}
-          <polygon
-            points="45,8 64,32 54,80 36,80 26,32"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-          />
-          <line x1="45" y1="8" x2="45" y2="80" stroke="#00e5ff" strokeWidth="1.5" opacity="0.5" />
-          <line x1="26" y1="32" x2="64" y2="32" stroke="#00e5ff" strokeWidth="1.5" opacity="0.5" />
-          <line x1="45" y1="8" x2="36" y2="80" stroke="#00e5ff" strokeWidth="1" opacity="0.3" />
-          <line x1="45" y1="8" x2="54" y2="80" stroke="#00e5ff" strokeWidth="1" opacity="0.3" />
-        </svg>
-      ),
-    },
-    {
-      label: "Backup for Humanity",
-      delay: 1.2,
-      svg: (
-        <svg width="90" height="90" viewBox="0 0 90 90">
-          {/* Shield */}
-          <path
-            d="M45,8 L72,20 L72,46 Q72,72 45,84 Q18,72 18,46 L18,20 Z"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-          />
-          <path
-            d="M33,46 L42,57 L60,32"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
-  ];
-
-  return (
-    <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
-      >
-        WHY WE&apos;LL LEAVE EARTH
-      </AnimatedText>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "3.5rem",
-          marginTop: "2.5rem",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
-        {icons.map((icon) => (
-          <div
-            key={icon.label}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              animation: `fade-in-up 0.6s ease ${icon.delay}s both`,
-            }}
-          >
-            {icon.svg}
-            <span
-              style={{
-                color: "var(--text-secondary)",
-                fontSize: "var(--slide-small)",
-                marginTop: "0.6rem",
-                maxWidth: "120px",
-                textAlign: "center",
-              }}
-            >
-              {icon.label}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1.5}
-        style={{ marginTop: "2rem", maxWidth: "80%" }}
-      >
-        Earth alone <span className="grammar-possibility">might</span>{" "}
-        not hold us all.
-      </AnimatedText>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 5: Gravity Rules Space ─────────────────────────────────── */
-function GravityInSpaceSlide({ active }: { active: boolean }) {
-  return (
-    <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
-      >
-        GRAVITY RULES SPACE
-      </AnimatedText>
-
-      <div
-        style={{
-          fontSize: "var(--slide-subtitle)",
-          fontFamily: "var(--font-mono)",
-          fontWeight: 700,
-          color: "var(--cyan)",
-          textShadow: "0 0 18px var(--cyan), 0 0 36px var(--cyan)",
-          marginTop: "1.5rem",
-          letterSpacing: "0.04em",
-          animation: "fade-in-up 0.6s ease 0.5s both",
-        }}
-      >
-        escape velocity = 11.2 km/s
-      </div>
-
-      {/* Rocket arcing away from a planet */}
-      <div
-        style={{
-          marginTop: "2rem",
-          animation: "fade-in-up 0.6s ease 0.8s both",
-        }}
-      >
-        <svg width="320" height="180" viewBox="0 0 320 180">
-          {/* Planet */}
-          <circle
-            cx="60"
-            cy="140"
-            r="48"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 8px #00e5ff)" }}
-          />
-          <path
-            d="M22,128 Q50,118 78,126"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="1.5"
-            opacity="0.4"
-          />
-          {/* Escape arc trajectory */}
-          <path
-            d="M70,96 Q150,10 300,20"
-            fill="none"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            strokeDasharray="6,5"
-            opacity="0.6"
-            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
-          />
-          {/* Rocket near top of arc */}
-          <g transform="translate(252,22) rotate(35)">
-            <path
-              d="M0,-14 Q6,-4 6,8 L-6,8 Q-6,-4 0,-14 Z"
-              fill="#0c1a22"
-              stroke="#00e5ff"
-              strokeWidth="2"
-              style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-            />
-            <polygon points="-6,8 -11,16 -3,12" fill="#00e5ff" />
-            <polygon points="6,8 11,16 3,12" fill="#00e5ff" />
-            <circle cx="0" cy="-3" r="2.5" fill="#00e5ff" />
-            {/* Exhaust */}
-            <polygon points="-3,12 0,26 3,12" fill="#00e5ff" opacity="0.6" />
-          </g>
-        </svg>
-      </div>
-
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1.2}
-        style={{ marginTop: "1.5rem", maxWidth: "80%" }}
-      >
-        To leave Earth, a ship <span className="grammar-future">will</span>{" "}
-        reach 11.2 km/s.
+        <span className="grammar-conditional">
+          If progress keeps accelerating
+        </span>
+        , the next century <span className="grammar-future">will</span>{" "}
+        arrive early.
       </AnimatedText>
     </SlideLayout>
   );
@@ -525,506 +739,201 @@ function TransitionSlide({ active }: { active: boolean }) {
           zIndex: 1,
         }}
       >
-        Let&apos;s run an experiment&hellip;
+        Can YOU build the future?
       </div>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 7: Airlock Intro ───────────────────────────────────────── */
-function AirlockIntroSlide({ active }: { active: boolean }) {
-  const objects = [
-    {
-      label: "Ice Shard",
-      delay: 0.8,
-      svg: (
-        <svg width="60" height="80" viewBox="0 0 60 80">
-          <polygon
-            points="30,8 44,34 36,70 24,70 16,34"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
-          />
-          <line x1="30" y1="8" x2="30" y2="70" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-        </svg>
-      ),
-    },
-    {
-      label: "Wrench",
-      delay: 0.95,
-      svg: (
-        <svg width="60" height="80" viewBox="0 0 60 80">
-          <path
-            d="M20,12 a10,10 0 1,0 8,16 L40,52 a6,6 0 0,0 10,-2 a6,6 0 0,0 -8,-6 L30,20 a10,10 0 0,0 -10,-8 Z"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
-          />
-        </svg>
-      ),
-    },
-    {
-      label: "Helmet",
-      delay: 1.1,
-      svg: (
-        <svg width="60" height="80" viewBox="0 0 60 80">
-          <circle
-            cx="30"
-            cy="40"
-            r="26"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
-          />
-          {/* Visor */}
-          <path
-            d="M16,34 Q30,24 44,34 L44,46 Q30,52 16,46 Z"
-            fill="#00e5ff"
-            opacity="0.25"
-            stroke="#00e5ff"
-            strokeWidth="1.5"
-          />
-        </svg>
-      ),
-    },
-    {
-      label: "Sensor Drone",
-      delay: 1.25,
-      svg: (
-        <svg width="60" height="80" viewBox="0 0 60 80">
-          <rect
-            x="20"
-            y="30"
-            width="20"
-            height="20"
-            rx="4"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
-          />
-          <circle cx="30" cy="40" r="4" fill="#00e5ff" />
-          {/* Rotors */}
-          <line x1="20" y1="30" x2="8" y2="20" stroke="#00e5ff" strokeWidth="2" />
-          <line x1="40" y1="30" x2="52" y2="20" stroke="#00e5ff" strokeWidth="2" />
-          <ellipse cx="8" cy="20" rx="8" ry="2.5" fill="none" stroke="#00e5ff" strokeWidth="1.5" opacity="0.6" />
-          <ellipse cx="52" cy="20" rx="8" ry="2.5" fill="none" stroke="#00e5ff" strokeWidth="1.5" opacity="0.6" />
-        </svg>
-      ),
-    },
-    {
-      label: "Solar Sail",
-      delay: 1.4,
-      svg: (
-        <svg width="60" height="80" viewBox="0 0 60 80">
-          <rect
-            x="10"
-            y="12"
-            width="40"
-            height="40"
-            rx="2"
-            fill="#0c1a22"
-            stroke="#00e5ff"
-            strokeWidth="2"
-            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
-          />
-          <line x1="30" y1="12" x2="30" y2="52" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-          <line x1="10" y1="32" x2="50" y2="32" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-          {/* Mast */}
-          <line x1="30" y1="52" x2="30" y2="72" stroke="#00e5ff" strokeWidth="2" />
-        </svg>
-      ),
-    },
-  ];
-
+/* ─── Slide 7: Tech Merge Intro ────────────────────────────────────── */
+function TechMergeIntroSlide({ active }: { active: boolean }) {
   return (
     <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
+      <div
+        style={{
+          fontSize: "var(--slide-huge)",
+          fontFamily: "var(--font-display)",
+          fontWeight: 900,
+          color: "var(--cyan)",
+          textShadow:
+            "0 0 30px var(--cyan), 0 0 60px var(--cyan), 0 0 120px rgba(0,229,255,0.3)",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          animation: "scale-in 0.8s ease 0.1s both",
+          textAlign: "center",
+          lineHeight: 1.05,
+        }}
       >
-        THE AIRLOCK TEST
-      </AnimatedText>
+        Tech Merge 2200
+      </div>
 
       <AnimatedText
         size="var(--slide-subtitle)"
         color="var(--text-primary)"
-        delay={0.45}
+        delay={0.6}
         weight={400}
-        style={{ marginTop: "1rem" }}
+        style={{ marginTop: "1.5rem", maxWidth: "80%" }}
       >
-        Which object hits the ground first?
+        Merge technologies to reach the year 2200!
       </AnimatedText>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "2.5rem",
-          marginTop: "2.5rem",
-          alignItems: "flex-end",
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
-        {objects.map((obj) => (
-          <div
-            key={obj.label}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              animation: `fade-in-up 0.6s ease ${obj.delay}s both`,
-            }}
-          >
-            {obj.svg}
-            <span
-              style={{
-                color: "var(--text-secondary)",
-                fontSize: "var(--slide-small)",
-                marginTop: "0.4rem",
-              }}
-            >
-              {obj.label}
-            </span>
-          </div>
-        ))}
-      </div>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 8: Vacuum Result ───────────────────────────────────────── */
-function VacuumResultSlide({ active }: { active: boolean }) {
-  const labels = ["Ice Shard", "Wrench", "Helmet", "Drone", "Solar Sail"];
-  return (
-    <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
-      >
-        They ALL hit at the same time!
-      </AnimatedText>
-
-      {/* Five equal-length down-arrows landing on a line */}
-      <div
-        style={{
-          display: "flex",
-          gap: "3rem",
-          marginTop: "2rem",
-          animation: "fade-in-up 0.6s ease 0.5s both",
-        }}
-      >
-        {labels.map((label, i) => (
-          <div
-            key={label}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              animation: `fade-in-up 0.5s ease ${0.6 + i * 0.12}s both`,
-            }}
-          >
-            <svg width="30" height="80" viewBox="0 0 30 80">
-              <line
-                x1="15"
-                y1="5"
-                x2="15"
-                y2="60"
-                stroke="#00e5ff"
-                strokeWidth="3"
-                strokeLinecap="round"
-                style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
-              />
-              <polygon
-                points="15,75 7,58 23,58"
-                fill="#00e5ff"
-                style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-              />
-            </svg>
-            <span
-              style={{
-                color: "var(--text-secondary)",
-                fontSize: "var(--slide-small)",
-                marginTop: "0.3rem",
-              }}
-            >
-              {label}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Ground line */}
-      <div
-        style={{
-          width: "62%",
-          height: "3px",
-          background: "var(--cyan)",
-          boxShadow: "0 0 10px var(--cyan)",
-          borderRadius: "2px",
-          marginTop: "0.5rem",
-          animation: "fade-in 0.4s ease 1.3s both",
-        }}
-      />
-
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1.4}
-        style={{ marginTop: "1.5rem", maxWidth: "82%" }}
-      >
-        With no air, every mass <span className="grammar-future">will</span>{" "}
-        fall at the same rate.
-      </AnimatedText>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 9: Now, Inside the Dome ────────────────────────────────── */
-function AirlockAirSlide({ active }: { active: boolean }) {
-  return (
-    <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
-      >
-        NOW, INSIDE THE DOME
-      </AnimatedText>
-
-      {/* Air swirl / flow lines */}
+      {/* Two tech tiles merging into a bigger one */}
       <div
         style={{
           marginTop: "2rem",
-          animation: "fade-in-up 0.6s ease 0.5s both",
+          animation: "fade-in-up 0.6s ease 0.9s both",
         }}
       >
-        <svg width="320" height="200" viewBox="0 0 320 200">
-          {/* Dome outline */}
-          <path
-            d="M30,170 A130,130 0 0,1 290,170 Z"
-            fill="#00e5ff08"
-            stroke="#00e5ff"
+        <svg width="360" height="200" viewBox="0 0 360 200">
+          {/* Tile A: gear */}
+          <rect
+            x="24"
+            y="22"
+            width="64"
+            height="64"
+            rx="10"
+            fill="#0c1a22"
+            stroke={CYAN}
             strokeWidth="2"
-            opacity="0.5"
+            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
           />
-          <line x1="20" y1="170" x2="300" y2="170" stroke="#00e5ff" strokeWidth="2" opacity="0.5" />
-          {/* Swirling air currents */}
-          {[
-            { d: "M70,70 Q120,40 170,70 Q220,100 270,70", o: 0.6, delay: 0.6 },
-            { d: "M60,110 Q110,80 160,110 Q210,140 260,110", o: 0.45, delay: 0.8 },
-            { d: "M80,140 Q130,115 180,140 Q230,165 270,140", o: 0.3, delay: 1.0 },
-          ].map((p, i) => (
-            <path
-              key={i}
-              d={p.d}
-              fill="none"
-              stroke="#00e5ff"
-              strokeWidth="2"
-              opacity={p.o}
-              strokeLinecap="round"
-              style={{
-                filter: "drop-shadow(0 0 4px #00e5ff)",
-                animation: `slide-in-left 0.9s ease ${p.delay}s both`,
-              }}
-            />
-          ))}
-          {/* Spiral swirl accent */}
+          <g transform="translate(56,54)" stroke={CYAN} strokeWidth="2">
+            {[
+              [9, 0, 14, 0],
+              [6.4, 6.4, 9.9, 9.9],
+              [0, 9, 0, 14],
+              [-6.4, 6.4, -9.9, 9.9],
+              [-9, 0, -14, 0],
+              [-6.4, -6.4, -9.9, -9.9],
+              [0, -9, 0, -14],
+              [6.4, -6.4, 9.9, -9.9],
+            ].map(([x1, y1, x2, y2], i) => (
+              <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />
+            ))}
+            <circle cx="0" cy="0" r="9" fill="#0c1a22" />
+            <circle cx="0" cy="0" r="3" fill="none" strokeWidth="1.5" />
+          </g>
+
+          {/* Tile B: chip */}
+          <rect
+            x="24"
+            y="114"
+            width="64"
+            height="64"
+            rx="10"
+            fill="#0c1a22"
+            stroke={CYAN}
+            strokeWidth="2"
+            style={{ filter: "drop-shadow(0 0 5px #00e5ff)" }}
+          />
+          <g transform="translate(56,146)" stroke={CYAN} strokeWidth="1.5">
+            <rect x="-11" y="-11" width="22" height="22" rx="3" fill="#0c1a22" strokeWidth="2" />
+            {[-6, 0, 6].map((o) => (
+              <g key={o}>
+                <line x1={o} y1="-11" x2={o} y2="-16" />
+                <line x1={o} y1="11" x2={o} y2="16" />
+                <line x1="-11" y1={o} x2="-16" y2={o} />
+                <line x1="11" y1={o} x2="16" y2={o} />
+              </g>
+            ))}
+            <circle cx="0" cy="0" r="3" fill={CYAN} stroke="none" />
+          </g>
+
+          {/* Flow arrows converging */}
           <path
-            d="M160,95 q14,-14 0,-26 q-18,0 -18,16 q0,20 24,20 q26,0 26,-26"
+            d="M96,54 C150,54 165,90 188,98"
             fill="none"
-            stroke="#00e5ff"
-            strokeWidth="1.5"
-            opacity="0.4"
-            style={{ animation: "fade-in 0.5s ease 1.2s both" }}
+            stroke={CYAN}
+            strokeWidth="2"
+            strokeDasharray="6,5"
+            opacity="0.7"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
           />
+          <path
+            d="M96,146 C150,146 165,110 188,102"
+            fill="none"
+            stroke={CYAN}
+            strokeWidth="2"
+            strokeDasharray="6,5"
+            opacity="0.7"
+            style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
+          />
+          <polygon
+            points="206,100 190,91 190,109"
+            fill={CYAN}
+            style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
+          />
+
+          {/* Big merged tile */}
+          <g style={{ animation: "pulse-glow 2s ease-in-out infinite" }}>
+            <rect
+              x="216"
+              y="48"
+              width="104"
+              height="104"
+              rx="14"
+              fill="#0c1a22"
+              stroke={CYAN}
+              strokeWidth="2.5"
+              style={{ filter: "drop-shadow(0 0 14px #00e5ff)" }}
+            />
+            {/* Starburst core */}
+            <g stroke={CYAN} strokeWidth="3" strokeLinecap="round">
+              <line x1="268" y1="76" x2="268" y2="124" />
+              <line x1="244" y1="100" x2="292" y2="100" />
+              <line x1="252" y1="84" x2="284" y2="116" strokeWidth="2" opacity="0.6" />
+              <line x1="284" y1="84" x2="252" y2="116" strokeWidth="2" opacity="0.6" />
+            </g>
+            <circle
+              cx="268"
+              cy="100"
+              r="7"
+              fill={CYAN}
+              style={{ filter: "drop-shadow(0 0 8px #00e5ff)" }}
+            />
+          </g>
+
+          {/* Sparkles */}
+          <g stroke={CYAN} strokeWidth="2" strokeLinecap="round" opacity="0.8">
+            <line x1="336" y1="54" x2="336" y2="66" />
+            <line x1="330" y1="60" x2="342" y2="60" />
+            <line x1="332" y1="148" x2="332" y2="156" />
+            <line x1="328" y1="152" x2="336" y2="152" />
+          </g>
         </svg>
       </div>
 
-      <AnimatedText
-        size="var(--slide-subtitle)"
-        color="var(--text-secondary)"
-        delay={1.0}
-        weight={400}
-        style={{ marginTop: "1rem" }}
-      >
-        What happens with air?
-      </AnimatedText>
-    </SlideLayout>
-  );
-}
-
-/* ─── Slide 10: Air Result ─────────────────────────────────────────── */
-function AirResultSlide({ active }: { active: boolean }) {
-  return (
-    <SlideLayout accent="cyan" active={active}>
-      <AnimatedText
-        size="var(--slide-title)"
-        color="var(--cyan)"
-        glow
-        weight={900}
-        delay={0.1}
-      >
-        Atmosphere changes everything!
-      </AnimatedText>
-
       <div
         style={{
-          display: "flex",
-          gap: "5rem",
-          marginTop: "2rem",
-          alignItems: "flex-start",
-          animation: "fade-in-up 0.6s ease 0.5s both",
+          fontSize: "var(--slide-body)",
+          fontFamily: "var(--font-mono)",
+          fontWeight: 700,
+          color: "var(--cyan)",
+          textShadow: "0 0 16px var(--cyan), 0 0 32px var(--cyan)",
+          letterSpacing: "0.08em",
+          marginTop: "1.5rem",
+          animation: "pulse-glow 1.6s ease-in-out infinite",
+          textAlign: "center",
         }}
       >
-        {/* Ice Shard — fast, straight */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <svg width="100" height="200" viewBox="0 0 100 200">
-            {/* Ice shard */}
-            <polygon
-              points="50,8 62,30 56,52 44,52 38,30"
-              fill="#0c1a22"
-              stroke="#00e5ff"
-              strokeWidth="2"
-              style={{ filter: "drop-shadow(0 0 6px #00e5ff)" }}
-            />
-            <line x1="50" y1="8" x2="50" y2="52" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-            {/* Long straight arrow down */}
-            <line
-              x1="50"
-              y1="58"
-              x2="50"
-              y2="165"
-              stroke="#00e5ff"
-              strokeWidth="4"
-              strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 8px #00e5ff)" }}
-            />
-            <polygon
-              points="50,180 38,158 62,158"
-              fill="#00e5ff"
-              style={{ filter: "drop-shadow(0 0 8px #00e5ff)" }}
-            />
-          </svg>
-          <span
-            style={{
-              color: "var(--cyan)",
-              fontSize: "var(--slide-body)",
-              fontWeight: 700,
-              marginTop: "0.5rem",
-            }}
-          >
-            FAST
-          </span>
-        </div>
-
-        {/* VS divider */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            height: "200px",
-            color: "var(--text-secondary)",
-            fontSize: "var(--slide-subtitle)",
-            fontWeight: 300,
-            opacity: 0.5,
-          }}
-        >
-          vs
-        </div>
-
-        {/* Solar Sail — slow, drifting zigzag */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <svg width="100" height="200" viewBox="0 0 100 200">
-            {/* Sail */}
-            <rect
-              x="34"
-              y="10"
-              width="32"
-              height="32"
-              rx="2"
-              fill="#0c1a22"
-              stroke="#00e5ff"
-              strokeWidth="2"
-              opacity="0.8"
-              style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
-            />
-            <line x1="50" y1="10" x2="50" y2="42" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-            <line x1="34" y1="26" x2="66" y2="26" stroke="#00e5ff" strokeWidth="1" opacity="0.4" />
-            {/* Drifting zigzag path */}
-            <path
-              d="M50,48 Q66,75 40,100 Q62,128 46,155"
-              stroke="#00e5ff"
-              strokeWidth="2"
-              fill="none"
-              opacity="0.6"
-              strokeDasharray="5,4"
-              style={{ filter: "drop-shadow(0 0 4px #00e5ff)" }}
-            />
-            <polygon points="46,170 38,152 54,152" fill="#00e5ff" opacity="0.6" />
-          </svg>
-          <span
-            style={{
-              color: "var(--text-secondary)",
-              fontSize: "var(--slide-body)",
-              fontWeight: 700,
-              marginTop: "0.5rem",
-            }}
-          >
-            SLOW
-          </span>
-        </div>
+        Check your devices now!
       </div>
-
-      <AnimatedText
-        size="var(--slide-body)"
-        color="var(--text-primary)"
-        delay={1.0}
-        style={{ marginTop: "1.5rem", maxWidth: "85%" }}
-      >
-        In air, shape and surface area{" "}
-        <span className="grammar-future">will</span> decide what falls
-        fastest.
-      </AnimatedText>
     </SlideLayout>
   );
 }
 
-/* ─── Slide 11: Airlock Leaderboard ────────────────────────────────── */
-function AirlockLeaderboardSlide({ active }: { active: boolean }) {
+/* ─── Slide 8: Tech Merge Leaderboard ──────────────────────────────── */
+function TechMergeLeaderboardSlide({ active }: { active: boolean }) {
   const session = useQuery(api.sessions.getCurrent);
   return (
     <SlideLayout accent="cyan" active={active}>
       {session ? (
         <GameLeaderboard
           sessionId={session._id}
-          game="dropTestAir"
-          title="AIRLOCK TEST LEADERBOARD"
+          game="techMerge"
+          title="TECH MERGE LEADERBOARD"
           accent={CYAN}
-          scoreUnit="/10"
+          scoreUnit="pts"
         />
       ) : (
         <AnimatedText color={CYAN} size="var(--slide-body)">
@@ -1038,14 +947,11 @@ function AirlockLeaderboardSlide({ active }: { active: boolean }) {
 /* ─── Export ───────────────────────────────────────────────────────── */
 export const section1Slides: SlideDefinition[] = [
   { id: "title", section: 1, accent: "cyan", component: TitleSlide },
-  { id: "future-offworld", section: 1, accent: "cyan", component: FutureOffworldSlide },
-  { id: "big-stat", section: 1, accent: "cyan", component: BigStatSlide },
-  { id: "why-leave-earth", section: 1, accent: "cyan", component: WhyLeaveEarthSlide },
-  { id: "gravity-in-space", section: 1, accent: "cyan", component: GravityInSpaceSlide },
+  { id: "imagine", section: 1, accent: "cyan", component: ImagineSlide },
+  { id: "predictions", section: 1, accent: "cyan", component: PredictionsSlide },
+  { id: "tech-evolution", section: 1, accent: "cyan", component: TechEvolutionSlide },
+  { id: "speed-of-change", section: 1, accent: "cyan", component: SpeedOfChangeSlide },
   { id: "transition", section: 1, accent: "cyan", component: TransitionSlide },
-  { id: "airlock-intro", section: 1, accent: "cyan", component: AirlockIntroSlide, studentEvent: "dropTest_vacuum" },
-  { id: "vacuum-result", section: 1, accent: "cyan", component: VacuumResultSlide, studentEvent: "dropShow_vacuum" },
-  { id: "airlock-air", section: 1, accent: "cyan", component: AirlockAirSlide, studentEvent: "dropTest_air" },
-  { id: "air-result", section: 1, accent: "cyan", component: AirResultSlide, studentEvent: "dropShow_air" },
-  { id: "airlock-leaderboard", section: 1, accent: "cyan", component: AirlockLeaderboardSlide, studentEvent: "dropShow_air" },
+  { id: "techmerge-intro", section: 1, accent: "cyan", component: TechMergeIntroSlide, studentEvent: "techMerge" },
+  { id: "techmerge-leaderboard", section: 1, accent: "cyan", component: TechMergeLeaderboardSlide, studentEvent: "techMerge" },
 ];
