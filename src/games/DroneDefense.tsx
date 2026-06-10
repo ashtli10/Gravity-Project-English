@@ -528,6 +528,13 @@ export default function DroneDefense({
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  // Track the latest callback so a parent re-render (new closure identity)
+  // never tears down and restarts a run in progress.
+  const onGameOverRef = useRef(onGameOver);
+  useEffect(() => {
+    onGameOverRef.current = onGameOver;
+  }, [onGameOver]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -844,7 +851,7 @@ export default function DroneDefense({
                 // ignore persistence failure
               }
             }
-            onGameOver(game.score);
+            onGameOverRef.current(game.score);
           }
         }
       }
@@ -876,7 +883,9 @@ export default function DroneDefense({
       window.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("resize", onResize);
     };
-  }, [onGameOver]);
+    // Mount-once: input, loop and world live for the component's lifetime.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>

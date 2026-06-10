@@ -9,7 +9,7 @@ export interface Particle {
   maxLife: number;
   size: number;
   color: string;
-  gravity: number;
+  fall: number;
 }
 
 export class Particles {
@@ -21,7 +21,7 @@ export class Particles {
     y: number,
     count: number,
     color: string,
-    opts: { speed?: number; size?: number; gravity?: number; life?: number } = {}
+    opts: { speed?: number; size?: number; fall?: number; life?: number } = {}
   ) {
     const speed = opts.speed ?? 320;
     for (let i = 0; i < count; i++) {
@@ -37,7 +37,7 @@ export class Particles {
         maxLife: life,
         size: (opts.size ?? 4) * (0.5 + Math.random()),
         color,
-        gravity: opts.gravity ?? 0,
+        fall: opts.fall ?? 0,
       });
     }
   }
@@ -53,7 +53,7 @@ export class Particles {
       maxLife: life,
       size,
       color,
-      gravity: 0,
+      fall: 0,
     });
   }
 
@@ -65,7 +65,7 @@ export class Particles {
         this.list.splice(i, 1);
         continue;
       }
-      p.vy += p.gravity * dt;
+      p.vy += p.fall * dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
     }
