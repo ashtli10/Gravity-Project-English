@@ -19,18 +19,16 @@ export default function SlideLayout({ accent, children, active, justify = "cente
   const color = accentColors[accent];
 
   return (
+    // Scroll container (block flow): if a slide's content is taller than the
+    // viewport it scrolls instead of clipping; scrollbar is hidden globally.
     <div
       style={{
         width: "100vw",
         height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: justify,
-        alignItems: "center",
-        padding: "3rem 4rem",
+        overflowY: "auto",
+        overflowX: "hidden",
         background: `radial-gradient(ellipse at 50% 80%, ${color}08 0%, #0a0a0f 70%)`,
         position: "relative",
-        overflow: "hidden",
       }}
     >
       {/* Subtle accent glow at top */}
@@ -46,7 +44,23 @@ export default function SlideLayout({ accent, children, active, justify = "cente
           opacity: 0.4,
         }}
       />
-      {children}
+      {/* Content: min-height 100% centers vertically when it fits, grows (and
+          lets the parent scroll) when it doesn't — so nothing ever clips. */}
+      <div
+        style={{
+          minHeight: "100%",
+          width: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: justify,
+          alignItems: "center",
+          gap: "clamp(0.6rem, 1.6vh, 1.4rem)",
+          padding: "clamp(1.25rem, 4vh, 3rem) clamp(1rem, 4vw, 4rem)",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }

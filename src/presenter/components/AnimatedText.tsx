@@ -31,8 +31,9 @@ export default function AnimatedText({
         textShadow: glow ? `0 0 20px ${color}, 0 0 40px ${color}` : "none",
         animation: `fade-in-up 0.6s ease ${delay}s both`,
         textAlign: "center",
-        lineHeight: 1.4,
-        maxWidth: "90%",
+        lineHeight: 1.25,
+        maxWidth: "min(92%, 1100px)",
+        overflowWrap: "break-word",
         ...style,
       }}
     >

@@ -18,11 +18,11 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Sizing for classroom readability */
-  --slide-title: clamp(2.5rem, 6vw, 5rem);
-  --slide-subtitle: clamp(1.5rem, 3.5vw, 2.8rem);
-  --slide-body: clamp(1.2rem, 2.5vw, 2rem);
+  --slide-title: clamp(2.2rem, 5.2vw, 4.4rem);
+  --slide-subtitle: clamp(1.4rem, 3.2vw, 2.6rem);
+  --slide-body: clamp(1.1rem, 2.4vw, 1.9rem);
   --slide-small: clamp(0.9rem, 1.5vw, 1.2rem);
-  --slide-huge: clamp(4rem, 12vw, 10rem);
+  --slide-huge: clamp(3rem, 9vw, 7rem);
 }
 
 * {

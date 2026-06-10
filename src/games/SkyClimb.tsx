@@ -24,9 +24,14 @@ const DRAG_ACCEL = 1080;
 const PAD_W = 65;
 const PAD_H = 20;
 const EDGE = 25; // min distance of pads from screen edges
-const MIN_SPACE_0 = 15; // initial min/max vertical gap between pads
-const MAX_SPACE_0 = 20;
+// A single bounce rises ~237 design px (BOUNCE_VEL² / 2·FALL_ACCEL). Pad gaps
+// must be a real fraction of that so the player has to AIM each bounce —
+// otherwise pads stack so densely you rise on autopilot. Kept well under the
+// reachable height (cap below) so every climb stays possible.
+const MIN_SPACE_0 = 60; // initial min/max vertical gap between pads
+const MAX_SPACE_0 = 110;
 const SPACE_GROWTH = 0.5; // added to min/max gap per spawned pad
+const MAX_SPACE_CAP = 150; // design px; +pad height stays under the ~237 reach
 const PLAYER_W = 40;
 const PLAYER_H = 60;
 const PX_PER_M = 10; // design px per meter of altitude
@@ -358,7 +363,7 @@ export default function SkyClimb({
           );
           topY = ny;
           minSpace += SPACE_GROWTH * uy;
-          maxSpace = Math.min(maxSpace + SPACE_GROWTH * uy, H / 2);
+          maxSpace = Math.min(maxSpace + SPACE_GROWTH * uy, MAX_SPACE_CAP * uy);
         }
       } else {
         pY += pVY * dt;

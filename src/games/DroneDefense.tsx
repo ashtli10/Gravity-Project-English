@@ -27,6 +27,7 @@ const BEST_KEY = "droneDefense_best";
 
 // ── Tunables (CSS px / seconds) ──────────────────────────────────────────────
 const COLS = 8; // formation columns, as in the original grid
+const FIELD_MAX = 600; // max playfield width (CSS px); centered on wide iPads
 const PATROL_RANGE = 30; // patrol amplitude (~30 px)
 const FLIP_DESCENT = 12; // added: gentle sink on every patrol direction flip
 const FIRE_PERIOD = 0.35; // interceptor auto-fire cadence
@@ -216,7 +217,7 @@ class Player extends Body {
 
   constructor(private game: Game) {
     super();
-    this.center = { x: game.W / 2, y: game.defenseY - 34 };
+    this.center = { x: game.fieldX + game.fieldW / 2, y: game.defenseY - 34 };
   }
 
   update(dt: number) {
@@ -226,8 +227,8 @@ class Player extends Body {
     if (controls.right) controls.targetX += KEY_SPEED * dt;
     controls.targetX = clamp(
       controls.targetX,
-      this.size.x / 2 + 6,
-      this.game.W - this.size.x / 2 - 6
+      this.game.fieldX + this.size.x / 2 + 6,
+      this.game.fieldX + this.game.fieldW - this.size.x / 2 - 6
     );
     // Follow the pointer's X quickly but smoothly.
     const ease = 1 - Math.exp(-16 * dt);
@@ -314,6 +315,10 @@ class Game {
   boltSpeed = 170;
   droneSize: Vec;
   spacingX: number;
+  // Centered, capped playfield so the swarm fills the arena and the player
+  // can't simply slide to an empty screen edge to dodge everything.
+  fieldW: number;
+  fieldX: number;
 
   constructor(
     public W: number,
@@ -322,7 +327,9 @@ class Game {
     public particles: Particles,
     public controls: Controls
   ) {
-    this.spacingX = Math.min(46, (W - 52 - PATROL_RANGE) / (COLS - 1));
+    this.fieldW = Math.min(W, FIELD_MAX);
+    this.fieldX = (W - this.fieldW) / 2;
+    this.spacingX = Math.min(56, (this.fieldW - 52 - PATROL_RANGE) / (COLS - 1));
     this.droneSize = { x: Math.min(30, this.spacingX - 7), y: 20 };
     this.player = new Player(this);
     // Ported: the world is one flat array of bodies — drones plus the player.
@@ -336,8 +343,11 @@ class Game {
     this.fireRate = Math.min(0.16 + 0.05 * (wave - 1), 0.42);
     this.boltSpeed = Math.min(170 + 14 * (wave - 1), 270);
     const drones: Body[] = [];
+    // Center the formation within the playfield, leaving room for the patrol.
+    const formW = (COLS - 1) * this.spacingX;
+    const startX = this.fieldX + (this.fieldW - formW) / 2;
     for (let i = 0; i < COLS * rows; i++) {
-      const x = 26 + (i % COLS) * this.spacingX;
+      const x = startX + (i % COLS) * this.spacingX;
       const y = 92 + Math.floor(i / COLS) * 32;
       drones.push(new Drone(this, { x, y }, Math.floor(i / COLS)));
     }
@@ -467,11 +477,17 @@ class Game {
   }
 
   resize(W: number, H: number, defenseY: number) {
-    const scaleX = W / this.W;
+    const oldFX = this.fieldX;
+    const oldFW = this.fieldW;
     this.W = W;
     this.H = H;
     this.defenseY = defenseY;
-    for (const body of this.bodies) body.center.x *= scaleX;
+    this.fieldW = Math.min(W, FIELD_MAX);
+    this.fieldX = (W - this.fieldW) / 2;
+    // Remap positions relative to the (re)centered playfield, not raw width.
+    for (const body of this.bodies) {
+      body.center.x = this.fieldX + ((body.center.x - oldFX) / oldFW) * this.fieldW;
+    }
     this.player.center.y = defenseY - 34;
   }
 
@@ -813,12 +829,34 @@ export default function DroneDefense({
       }
     }
 
+    function drawBezels() {
+      const fx = game.fieldX;
+      const fw = game.fieldW;
+      if (fx <= 0.5) return; // playfield already fills the screen
+      ctx.fillStyle = "#06060c";
+      ctx.fillRect(0, 0, fx, H);
+      ctx.fillRect(fx + fw, 0, W - fx - fw, H);
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,193,7,0.35)";
+      ctx.lineWidth = 2;
+      ctx.shadowColor = GOLD;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(fx, 0);
+      ctx.lineTo(fx, H);
+      ctx.moveTo(fx + fw, 0);
+      ctx.lineTo(fx + fw, H);
+      ctx.stroke();
+      ctx.restore();
+    }
+
     function render() {
       drawBackground();
       drawSkyline();
       drawDefenseLine();
       game.draw(ctx, time);
       particles.draw(ctx);
+      drawBezels();
       if (game.hitFlash > 0) {
         ctx.fillStyle = `rgba(255,60,60,${(0.22 * clamp(game.hitFlash, 0, 1)).toFixed(3)})`;
         ctx.fillRect(0, 0, W, H);

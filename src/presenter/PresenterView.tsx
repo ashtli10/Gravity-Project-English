@@ -44,15 +44,16 @@ export default function PresenterView() {
   }, [key]);
 
   const handleNav = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
+    (e: React.PointerEvent) => {
       if (!session || !authorized || navLock.current) return;
       e.preventDefault();
-      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientX = e.clientX;
       const half = window.innerWidth / 2;
 
-      // Brief lock to prevent double-tap (150ms, not 400ms)
+      // One nav per gesture: pointerup fires once for touch AND mouse (no
+      // synthesized-click double-fire), plus a short lock against fast doubles.
       navLock.current = true;
-      setTimeout(() => { navLock.current = false; }, 150);
+      setTimeout(() => { navLock.current = false; }, 350);
 
       if (clientX > half) {
         if (slideIndex < slides.length - 1) {
@@ -125,9 +126,8 @@ export default function PresenterView() {
 
   return (
     <div
-      onClick={handleNav}
-      onTouchStart={handleNav}
-      style={{ width: "100vw", height: "100vh", cursor: "pointer", position: "relative", overflow: "hidden" }}
+      onPointerUp={handleNav}
+      style={{ width: "100vw", height: "100vh", cursor: "pointer", position: "relative", overflow: "hidden", touchAction: "none" }}
     >
       <div key={slideIndex} style={{ animation: "fade-in 0.25s ease forwards" }}>
         <SlideComponent active={true} />
