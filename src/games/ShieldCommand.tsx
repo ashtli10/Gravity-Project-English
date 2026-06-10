@@ -162,6 +162,8 @@ export default function ShieldCommand({
     // ---- Mutable game state -------------------------------------------------
     let phase: Phase = "start";
     let score = 0;
+    let liveTimer = 0; // throttle for live score reporting
+    let liveBest = 0; // highest score already reported this run
     let wave = 1;
     let best = loadBest();
     let calledGameOver = false;
@@ -203,6 +205,8 @@ export default function ShieldCommand({
 
     function reset() {
       score = 0;
+      liveTimer = 0;
+      liveBest = 0;
       calledGameOver = false;
       for (const d of domes) d.alive = true;
       for (const t of towers) {
@@ -848,6 +852,17 @@ export default function ShieldCommand({
     // ---- Loop / resize / cleanup --------------------------------------------
     const loop = new Loop((dt: number) => {
       update(dt);
+      // Live scoring: report the running score while playing (server keeps max).
+      if (phase === "playing") {
+        liveTimer += dt;
+        if (liveTimer >= 0.7) {
+          liveTimer = 0;
+          if (score > liveBest) {
+            liveBest = score;
+            onGameOver(score);
+          }
+        }
+      }
       render();
     });
     loop.start();

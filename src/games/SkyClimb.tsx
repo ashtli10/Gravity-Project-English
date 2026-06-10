@@ -124,6 +124,8 @@ export default function SkyClimb({
       best = 0;
     }
     let deathScore = 0;
+    let liveTimer = 0; // throttle for live score reporting
+    let liveBest = 0; // highest score already reported this run
     let newBest = false;
     let deathTimer = 0;
 
@@ -209,6 +211,8 @@ export default function SkyClimb({
       resetWorld();
       newBest = false;
       deathScore = 0;
+      liveTimer = 0;
+      liveBest = 0;
       pointerDirs.clear();
       phase = "playing";
     }
@@ -769,6 +773,18 @@ export default function SkyClimb({
     resetWorld();
     const loop = new Loop((dt) => {
       update(dt);
+      // Live scoring: report the climb height while playing (server keeps max).
+      if (phase === "playing") {
+        liveTimer += dt;
+        if (liveTimer >= 0.7) {
+          liveTimer = 0;
+          const m = metersNow();
+          if (m > liveBest) {
+            liveBest = m;
+            onGameOver(m);
+          }
+        }
+      }
       render();
     });
     loop.start();

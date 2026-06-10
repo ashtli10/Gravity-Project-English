@@ -204,22 +204,40 @@ export const getTotalLeaderboard = query({
       p.gameNormalized[s.game] = max > 0 ? (s.rawScore / max) * 1000 : 0;
     }
 
-    // Build sorted result — use normalized scores so all games feel equally weighted
-    const results = Array.from(playerMap.entries()).map(([, p]) => ({
-      playerName: p.playerName,
-      totalScore: Math.round(
-        p.gameNormalized.techMerge +
-          p.gameNormalized.skyClimb +
-          p.gameNormalized.droneDefense +
-          p.gameNormalized.shieldCommand
-      ),
-      gameScores: {
-        techMerge: Math.round(p.gameNormalized.techMerge),
-        skyClimb: Math.round(p.gameNormalized.skyClimb),
-        droneDefense: Math.round(p.gameNormalized.droneDefense),
-        shieldCommand: Math.round(p.gameNormalized.shieldCommand),
-      },
-    }));
+    // Per-game difficulty weights. Each game's best raw score normalizes to
+    // 1000; we then scale that contribution by how demanding the game is, so a
+    // harder game is worth more toward the overall champion total.
+    const DIFFICULTY: Record<GameName, number> = {
+      techMerge: 1.0, // puzzle: steady skill + a little luck
+      skyClimb: 1.15, // reflex platformer: one slip ends the run
+      shieldCommand: 1.2, // defend many targets at once
+      droneDefense: 1.35, // full shmup: dodging + aiming under pressure
+    };
+
+    // Build sorted result — normalized per game, then weighted by difficulty.
+    const results = Array.from(playerMap.entries()).map(([, p]) => {
+      const weighted = {
+        techMerge: p.gameNormalized.techMerge * DIFFICULTY.techMerge,
+        skyClimb: p.gameNormalized.skyClimb * DIFFICULTY.skyClimb,
+        droneDefense: p.gameNormalized.droneDefense * DIFFICULTY.droneDefense,
+        shieldCommand: p.gameNormalized.shieldCommand * DIFFICULTY.shieldCommand,
+      };
+      return {
+        playerName: p.playerName,
+        totalScore: Math.round(
+          weighted.techMerge +
+            weighted.skyClimb +
+            weighted.droneDefense +
+            weighted.shieldCommand
+        ),
+        gameScores: {
+          techMerge: Math.round(weighted.techMerge),
+          skyClimb: Math.round(weighted.skyClimb),
+          droneDefense: Math.round(weighted.droneDefense),
+          shieldCommand: Math.round(weighted.shieldCommand),
+        },
+      };
+    });
 
     results.sort((a, b) => b.totalScore - a.totalScore);
 

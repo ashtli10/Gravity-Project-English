@@ -660,6 +660,12 @@ export default function TechMerge({
         writeBest(game.score);
       }
 
+      // Live scoring: report on every move that raised the score (server keeps max).
+      if (game.score > reported.current.score) {
+        reported.current.score = game.score;
+        onGameOverRef.current(game.score);
+      }
+
       if (game.over && !reported.current.gameOver) {
         reported.current.gameOver = true;
         reported.current.score = game.score;
